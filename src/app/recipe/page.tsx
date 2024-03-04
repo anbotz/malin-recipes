@@ -8,7 +8,7 @@ const RecipePage = async ({
   searchParams: { [key: string]: string | undefined };
 }) => {
   const recipes = await recipeCache.getCachedRecipes({
-    search: searchParams.quer,
+    search: searchParams.query,
   });
 
   return (
