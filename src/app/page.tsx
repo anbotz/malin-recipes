@@ -1,13 +1,20 @@
-import { PageComponent } from "@/_components/page";
-import RecipesGrid from "@/_components/recipes-grid";
+import { ButtonContainerComponent } from "@/_components/container/button-container";
+import { PageLayoutComponent } from "@/_components/layout/page-layout";
+import RecipesGrid from "@/_components/container/recipes-grid";
 import recipe from "@/server/recipe";
+import { Button, Typography } from "@mui/material";
+import { HomeButtons } from "@/_components/buttons/home-buttons";
 
 export default async function Home() {
   const latestRecipes = await recipe.getLatestRecipes();
 
   return (
-    <PageComponent title="Home">
+    <PageLayoutComponent title="Home">
+      <Typography variant="h4" gutterBottom>
+        Latest hottest :
+      </Typography>
       <RecipesGrid recipes={latestRecipes} />
-    </PageComponent>
+      <HomeButtons />
+    </PageLayoutComponent>
   );
 }

@@ -1,5 +1,6 @@
-import { PageComponent } from "@/_components/page";
-import RecipesGrid from "@/_components/recipes-grid";
+import { PageLayoutComponent } from "@/_components/layout/page-layout";
+import RecipesGrid from "@/_components/container/recipes-grid";
+import { SearchBar } from "@/_components/search";
 import recipeCache from "@/server/recipe/cache";
 
 const RecipePage = async ({
@@ -12,9 +13,10 @@ const RecipePage = async ({
   });
 
   return (
-    <PageComponent title="Recipes">
+    <PageLayoutComponent title="Recipes">
+      <SearchBar />
       <RecipesGrid recipes={recipes} />
-    </PageComponent>
+    </PageLayoutComponent>
   );
 };
 

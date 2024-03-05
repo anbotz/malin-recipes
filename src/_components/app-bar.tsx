@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -6,17 +7,39 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Add, Kitchen, Microwave } from "@mui/icons-material";
+import { usePathname } from "next/navigation";
 
 import Link from "next/link";
 import { Tab, Tabs } from "@mui/material";
-import { SearchBar } from "./search";
+import UserMenu from "./user-menu";
 
+const getTabIndexFromPath = (path: string) => {
+  switch (path) {
+    case "/create":
+      return 3;
+    case "/batch":
+      return 2;
+    case "/recipe":
+      return 1;
+    case "/":
+      return 0;
+    default:
+      return false;
+  }
+};
 export default function AppBarComponent() {
+  const pathname = usePathname();
+  const [selected, setSelected] = React.useState<number | boolean>(false);
+
+  React.useEffect(() => {
+    setSelected(getTabIndexFromPath(pathname));
+  }, [pathname]);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Tabs value={1}>
+          <Tabs value={selected} onChange={(_e, v) => setSelected(v)}>
             <Tab
               component={Link}
               href="/"
@@ -45,31 +68,10 @@ export default function AppBarComponent() {
               icon={<Microwave />}
               iconPosition="start"
             />
+            <Tab component={Link} href="/create" icon={<Add />} />
           </Tabs>
-          <SearchBar />
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" }, margin: "0px 10px" }}>
-            <Link href="/create">
-              <IconButton
-                size="large"
-                edge="end"
-                aria-haspopup="true"
-                color="inherit"
-              >
-                <Add />
-              </IconButton>
-            </Link>
-          </Box>
-          <Box sx={{ display: { xs: "none", md: "flex" }, margin: "0px 10px" }}>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </Box>
+          <UserMenu />
         </Toolbar>
       </AppBar>
     </Box>

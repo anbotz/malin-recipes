@@ -1,4 +1,4 @@
-import { PageComponent } from "@/_components/page";
+import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import recipeCache from "@/server/recipe/cache";
 import {
   Divider,
@@ -19,7 +19,7 @@ export default async function Page({
   if (recipe === null) return null;
 
   return (
-    <PageComponent title={recipe.name}>
+    <PageLayoutComponent title={recipe.name}>
       <Typography variant="h5" gutterBottom>
         Ingredients :
       </Typography>
@@ -48,6 +48,6 @@ export default async function Page({
           <>No instruction listed</>
         )}
       </List>
-    </PageComponent>
+    </PageLayoutComponent>
   );
 }

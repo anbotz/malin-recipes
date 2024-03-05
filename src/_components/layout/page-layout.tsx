@@ -1,7 +1,7 @@
-import { Divider, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import React from "react";
 
-export const PageComponent = ({
+export const PageLayoutComponent = ({
   title,
   children,
 }: {

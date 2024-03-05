@@ -13,6 +13,7 @@ const Search = styled("div")(({ theme }) => ({
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
+  marginBottom: theme.spacing(2),
   width: "100%",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(3),
@@ -38,9 +39,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
   },
 }));
 
@@ -48,7 +46,7 @@ export const SearchBar = () => {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
 
-  function handleSearch(formData: FormData) {
+  const handleSearch = (formData: FormData) => {
     const term = formData.get("search") as string;
     const params = new URLSearchParams(searchParams);
     if (term) {
@@ -57,7 +55,8 @@ export const SearchBar = () => {
       params.delete("query");
     }
     replace(`/recipe?${params.toString()}`);
-  }
+  };
+
   return (
     <Search>
       <SearchIconWrapper>
@@ -68,6 +67,7 @@ export const SearchBar = () => {
           placeholder="Search…"
           inputProps={{ "aria-label": "search" }}
           name="search"
+          fullWidth
         />
       </form>
     </Search>

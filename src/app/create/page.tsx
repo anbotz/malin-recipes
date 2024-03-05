@@ -1,10 +1,10 @@
 import { CreateRecipeForm } from "@/_components/forms/create-recipe";
-import { PageComponent } from "@/_components/page";
+import { PageLayoutComponent } from "@/_components/layout/page-layout";
 
 export default function CreatePage() {
   return (
-    <PageComponent title="Créer une nouvelle recette">
+    <PageLayoutComponent title="Créer une nouvelle recette">
       <CreateRecipeForm />
-    </PageComponent>
+    </PageLayoutComponent>
   );
 }

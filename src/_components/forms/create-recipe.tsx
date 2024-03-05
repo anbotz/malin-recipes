@@ -1,5 +1,6 @@
 import recipe from "@/server/recipe";
-import { Button, Container, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
+import { FormLayoutComponent } from "../layout/form-layout";
 
 export const CreateRecipeForm = () => {
   const submit = async (formData: FormData) => {
@@ -13,57 +14,51 @@ export const CreateRecipeForm = () => {
   };
 
   return (
-    <form action={submit}>
-      <Container
-        maxWidth="sm"
-        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-      >
-        <TextField
-          id="outlined-basic"
-          label="Nom de la recette"
-          variant="outlined"
-          placeholder="Nom de la recette"
-          name="name"
-          margin="dense"
-          required
-          fullWidth
-        />
+    <FormLayoutComponent
+      submit={submit}
+      buttons={
+        <>
+          <Button variant="contained" type="submit">
+            Ajouter
+          </Button>
+          <Button variant="contained" color="secondary">
+            Retour
+          </Button>
+        </>
+      }
+    >
+      <TextField
+        id="outlined-basic"
+        label="Nom de la recette"
+        variant="outlined"
+        placeholder="Nom de la recette"
+        name="name"
+        margin="dense"
+        required
+        fullWidth
+      />
 
-        <TextField
-          id="outlined-multiline-flexible"
-          label="Ingrédients"
-          multiline
-          maxRows={10}
-          name="ingredients"
-          margin="dense"
-          required
-          fullWidth
-          minRows={4}
-        />
-        <TextField
-          id="outlined-multiline-flexible"
-          label="Instructions"
-          multiline
-          maxRows={10}
-          name="instructions"
-          margin="dense"
-          fullWidth
-          minRows={4}
-        />
-      </Container>
-      <Container
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Button variant="contained" type="submit">
-          Ajouter
-        </Button>
-        <Button variant="contained">Retour</Button>
-      </Container>
-    </form>
+      <TextField
+        id="outlined-multiline-flexible"
+        label="Ingrédients"
+        multiline
+        maxRows={10}
+        name="ingredients"
+        margin="dense"
+        required
+        fullWidth
+        minRows={4}
+      />
+      <TextField
+        id="outlined-multiline-flexible"
+        label="Instructions"
+        multiline
+        maxRows={10}
+        name="instructions"
+        margin="dense"
+        fullWidth
+        minRows={4}
+      />
+    </FormLayoutComponent>
   );
 };

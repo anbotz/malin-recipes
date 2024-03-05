@@ -1,7 +1,7 @@
-import { PageComponent } from "@/_components/page";
+import { PageLayoutComponent } from "@/_components/layout/page-layout";
 
-const BatchPage = async () => {
-  return <PageComponent title="batch">batch</PageComponent>;
+const BatchPage = () => {
+  return <PageLayoutComponent title="batch">batch</PageLayoutComponent>;
 };
 
 export default BatchPage;
