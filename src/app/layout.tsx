@@ -5,6 +5,8 @@ import darkTheme from "../theme";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import AppBarComponent from "../_components/app-bar";
+import SessionProvider from "../_components/session-provider";
+import { getRequiredSession } from "@/lib/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,18 +15,22 @@ export const metadata: Metadata = {
   description: "Best recipes from Malin",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getRequiredSession();
+
   return (
     <html lang="en">
       <body className={inter.className}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={darkTheme}>
-            <AppBarComponent />
-            {children}
+            <SessionProvider session={session}>
+              <AppBarComponent />
+              {children}
+            </SessionProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
