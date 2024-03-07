@@ -7,11 +7,17 @@ import { MultilineTextFieldComponent } from "../inputs/multiline-text-field";
 import { createRecipeAction } from "@/lib/recipe/action";
 
 export const CreateRecipeForm = () => {
-  const { back } = useRouter();
+  const { back, push } = useRouter();
+
+  const create = async (formData: FormData) => {
+    createRecipeAction(formData);
+
+    return push("/recipe");
+  };
 
   return (
     <FormLayoutComponent
-      action={createRecipeAction}
+      action={create}
       buttons={
         <>
           <Button variant="contained" type="submit">

@@ -16,7 +16,7 @@ export default async function EditRecipePage({
 
   return (
     <PageLayoutComponent title={"Modifier la recette " + recipe.name}>
-      <EditRecipeForm recipeId={recipeId} />
+      <EditRecipeForm recipe={recipe} />
     </PageLayoutComponent>
   );
 }

@@ -5,15 +5,24 @@ import { useRouter } from "next/navigation";
 import { MultilineTextFieldComponent } from "../inputs/multiline-text-field";
 import { TextFieldComponent } from "../inputs/text-field";
 import { updateRecipeAction } from "@/lib/recipe/action";
+import Recipe from "@/_types/recipe";
 
-export const EditRecipeForm = ({ recipeId }: { recipeId: string }) => {
-  const { back } = useRouter();
-  const submit = async (formData: FormData) =>
-    updateRecipeAction(recipeId, formData);
+export const EditRecipeForm = ({ recipe }: { recipe: Recipe }) => {
+  const { back, push } = useRouter();
+
+  const { id, name, ingredients, instructions } = recipe;
+
+  const initialStringifiedIngredients = ingredients.join("\n");
+  const initialStringifiedInstructions = instructions.join("\n");
+
+  const update = async (formData: FormData) => {
+    updateRecipeAction(id, formData);
+    return push(`/recipe/${id}`);
+  };
 
   return (
     <FormLayoutComponent
-      action={submit}
+      action={update}
       buttons={
         <>
           <Button variant="contained" type="submit">
@@ -29,18 +38,21 @@ export const EditRecipeForm = ({ recipeId }: { recipeId: string }) => {
         label="Nom de la recette"
         placeholder="Nom de la recette"
         name="name"
+        defaultValue={name}
         required
       />
       <MultilineTextFieldComponent
         label="Ingrédients"
         name="ingredients"
         placeholder=""
+        defaultValue={initialStringifiedIngredients}
         required
       />
       <MultilineTextFieldComponent
         label="Instructions"
         name="instructions"
         placeholder=""
+        defaultValue={initialStringifiedInstructions}
       />
     </FormLayoutComponent>
   );
