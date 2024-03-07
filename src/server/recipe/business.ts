@@ -1,6 +1,8 @@
 import Query, { MongoId } from "@/_types/query";
 import Recipe from "@/_types/recipe";
 import RecipeModel from "./model";
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { s3Client } from "@/lib/s3/s3client";
 
 const createRecipe = async (
   name: string,
@@ -28,8 +30,20 @@ const getRecipeById = async (id: MongoId): Promise<Recipe | null> => {
   return recipe;
 };
 
-const deleteRecipeById = async (id: MongoId): Promise<Recipe | null> =>
-  await RecipeModel.deleteById(id);
+const deleteRecipeById = async (id: MongoId): Promise<Recipe | null> => {
+  const deletedRecipe = await RecipeModel.deleteById(id);
+
+  if (deletedRecipe) {
+    const deleteObjectCommand = new DeleteObjectCommand({
+      Bucket: process.env.AWS_BUCKET_NAME!,
+      Key: id,
+    });
+
+    await s3Client.send(deleteObjectCommand);
+  }
+
+  return deletedRecipe;
+};
 
 const updateRecipeById = async (
   id: MongoId,

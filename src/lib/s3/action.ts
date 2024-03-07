@@ -1,8 +1,9 @@
 "use server";
 import { getAuthSession } from "@/lib/auth";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import crypto from "crypto";
+import { s3Client } from "./s3client";
 
 const allowedFileTypes = ["image/jpeg", "image/png"];
 
@@ -14,14 +15,6 @@ type GetSignedURLParams = {
   checksum: string;
   key?: string;
 };
-
-const s3Client = new S3Client({
-  region: process.env.AWS_BUCKET_REGION!,
-  credentials: {
-    accessKeyId: process.env.AWS_BUCKET_ID!,
-    secretAccessKey: process.env.AWS_BUCKET_SECRET!,
-  },
-});
 
 const generateFileName = (bytes = 32): string =>
   crypto.randomBytes(bytes).toString("hex");
