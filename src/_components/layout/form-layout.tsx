@@ -2,16 +2,16 @@ import { Container } from "@mui/material";
 import { ButtonContainerComponent } from "../container/button-container";
 
 export const FormLayoutComponent = ({
-  submit,
+  action,
   children,
   buttons,
 }: {
-  submit: (formData: FormData) => Promise<void>;
+  action: (formData: FormData) => Promise<any>;
   children: React.ReactNode;
   buttons: React.ReactNode;
 }) => {
   return (
-    <form action={submit}>
+    <form action={action}>
       <Container
         maxWidth="sm"
         sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}

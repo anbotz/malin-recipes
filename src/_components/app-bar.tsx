@@ -1,16 +1,10 @@
 "use client";
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import AccountCircle from "@mui/icons-material/AccountCircle";
+import { AppBar, Box, Toolbar, Typography, Tab, Tabs } from "@mui/material";
 import { Add, Kitchen, Microwave } from "@mui/icons-material";
 import { usePathname } from "next/navigation";
 
 import Link from "next/link";
-import { Tab, Tabs } from "@mui/material";
 import UserMenu from "./user-menu";
 
 const getTabIndexFromPath = (path: string) => {

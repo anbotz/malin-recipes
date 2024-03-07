@@ -1,3 +1,3 @@
-import service from "./service";
+import business from "./business";
 
-export default service;
+export default business;

@@ -8,6 +8,7 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { Button } from "@mui/material";
 
 const settings = [{ title: "logout", onClick: () => signOut() }];
 
@@ -28,9 +29,9 @@ const UserMenu = () => {
   if (!session) {
     return (
       <Tooltip title="Sign In">
-        <IconButton onClick={() => signIn()} sx={{ p: 0 }}>
-          <Avatar />
-        </IconButton>
+        <Button onClick={() => signIn()} variant="contained">
+          Sign in
+        </Button>
       </Tooltip>
     );
   }

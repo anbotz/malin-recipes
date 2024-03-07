@@ -1,7 +1,7 @@
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import RecipesGrid from "@/_components/container/recipes-grid";
 import { SearchBar } from "@/_components/search";
-import recipeCache from "@/server/recipe/cache";
+import recipeCache from "@/lib/recipe/cache";
 
 const RecipePage = async ({
   searchParams,

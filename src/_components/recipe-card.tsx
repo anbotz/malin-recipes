@@ -4,21 +4,22 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { CardActionArea, Tooltip } from "@mui/material";
+import { Button, CardActionArea, CardActions, Tooltip } from "@mui/material";
 import Recipe from "@/_types/recipe";
 import { useRouter } from "next/navigation";
 
 export default function RecipeCard({ recipe }: { recipe: Recipe }) {
   const { push } = useRouter();
   const { name } = recipe;
+
   return (
     <Tooltip title={name}>
-      <Card sx={{ maxWidth: 350, width: "15vw", height: "30vh" }}>
+      <Card sx={{ maxWidth: 350, width: "15vw" }}>
         <CardActionArea onClick={() => push("/recipe/" + recipe.id)}>
           <CardMedia
             component="img"
             height="150"
-            image="diner.png"
+            src="diner.png"
             alt="default diner"
           />
           <CardContent>
@@ -27,6 +28,11 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
             </Typography>
           </CardContent>
         </CardActionArea>
+        {/* <CardActions>
+          <Button size="small" color="primary">
+            Share
+          </Button>
+        </CardActions> */}
       </Card>
     </Tooltip>
   );

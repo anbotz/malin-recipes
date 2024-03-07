@@ -28,5 +28,31 @@ const getRecipeById = async (id: MongoId): Promise<Recipe | null> => {
   return recipe;
 };
 
-const service = { createRecipe, searchRecipe, getLatestRecipes, getRecipeById };
-export default service;
+const deleteRecipeById = async (id: MongoId): Promise<Recipe | null> =>
+  await RecipeModel.deleteById(id);
+
+const updateRecipeById = async (
+  id: MongoId,
+  updatedData: {
+    name?: string;
+    ingredientsStr?: string;
+    instructionsStr?: string;
+  }
+): Promise<Recipe | null> => {
+  const ingredients = updatedData.ingredientsStr?.split("\n") || undefined;
+  const instructions = updatedData.instructionsStr?.split("\n") || undefined;
+  const data = { name: updatedData.name, ingredients, instructions };
+  const recipe = await RecipeModel.updateById({ id, data });
+  return recipe;
+};
+
+const business = {
+  createRecipe,
+  searchRecipe,
+  getLatestRecipes,
+  getRecipeById,
+  deleteRecipeById,
+  updateRecipeById,
+};
+
+export default business;

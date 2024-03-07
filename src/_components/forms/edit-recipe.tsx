@@ -2,23 +2,25 @@
 import { Button } from "@mui/material";
 import { FormLayoutComponent } from "../layout/form-layout";
 import { useRouter } from "next/navigation";
-import { TextFieldComponent } from "../inputs/text-field";
 import { MultilineTextFieldComponent } from "../inputs/multiline-text-field";
-import { createRecipeAction } from "@/lib/recipe/action";
+import { TextFieldComponent } from "../inputs/text-field";
+import { updateRecipeAction } from "@/lib/recipe/action";
 
-export const CreateRecipeForm = () => {
+export const EditRecipeForm = ({ recipeId }: { recipeId: string }) => {
   const { back } = useRouter();
+  const submit = async (formData: FormData) =>
+    updateRecipeAction(recipeId, formData);
 
   return (
     <FormLayoutComponent
-      action={createRecipeAction}
+      action={submit}
       buttons={
         <>
           <Button variant="contained" type="submit">
-            Ajouter
+            Modifier
           </Button>
           <Button variant="contained" color="secondary" onClick={back}>
-            Retour
+            Annuler
           </Button>
         </>
       }

@@ -1,25 +1,30 @@
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
-import recipeCache from "@/server/recipe/cache";
-import {
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-} from "@mui/material";
+import { ManageRecipeComponent } from "@/app/recipe/[recipeId]/manage-recipe";
+import recipeCache from "@/lib/recipe/cache";
+import { Divider, List, ListItem, Typography } from "@mui/material";
+import { redirect } from "next/navigation";
 
-export default async function Page({
+export default async function RecipePage({
   params,
 }: {
   params: { recipeId: string };
 }) {
   const { recipeId } = params;
+
   const recipe = await recipeCache.getCachedRecipeById(recipeId);
 
-  if (recipe === null) return null;
+  if (recipe === null) return redirect("/recipe");
 
   return (
-    <PageLayoutComponent title={recipe.name}>
+    <PageLayoutComponent
+      title={recipe.name}
+      buttons={
+        <ManageRecipeComponent
+          deletedItemName={recipe.name}
+          recipeId={recipeId}
+        />
+      }
+    >
       <Typography variant="h5" gutterBottom>
         Ingredients :
       </Typography>
