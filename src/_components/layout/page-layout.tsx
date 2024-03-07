@@ -24,7 +24,14 @@ export const PageLayoutComponent = ({
         />
         <Box>{buttons}</Box>
       </Box>
-      {children}
+      <Box
+        display="flex"
+        flexGrow={1}
+        flexDirection="column"
+        justifyContent="space-between"
+      >
+        {children}
+      </Box>
     </>
   );
 };

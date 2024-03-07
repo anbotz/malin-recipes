@@ -23,12 +23,21 @@ const create = async (recipe: {
     data: recipe,
   });
 
-const search = async ({ from, size, search }: Query): Promise<Recipe[]> =>
-  await db.recipe.findMany({
-    skip: from,
-    take: size,
+const search = async ({
+  from,
+  size,
+  search,
+}: Query): Promise<{ data: Recipe[]; total: number }> => {
+  const query = {
     ...(search ? { where: { name: { contains: search } } } : {}),
-  });
+  };
+  const [data, total] = await db.$transaction([
+    db.recipe.findMany({ skip: from * size, take: size, ...query }),
+    db.recipe.count({ where: query.where }),
+  ]);
+
+  return { data, total };
+};
 
 const getLatestRecipes = async (): Promise<Recipe[]> =>
   await db.recipe.findMany({

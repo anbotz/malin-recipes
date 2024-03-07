@@ -15,7 +15,9 @@ const createRecipe = async (
   await RecipeModel.create({ name, ingredients, instructions });
 };
 
-const searchRecipe = async (query: Query): Promise<Recipe[]> => {
+const searchRecipe = async (
+  query: Query
+): Promise<{ data: Recipe[]; total: number }> => {
   const recipes = await RecipeModel.search(query);
   return recipes;
 };

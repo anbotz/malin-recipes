@@ -4,8 +4,14 @@ import { MongoId } from "@/_types/query";
 import service from "./service";
 
 const getCachedRecipes = cache(
-  async ({ search }: { search: string | undefined }): Promise<Recipe[]> =>
-    await service.searchRecipe({ from: 0, size: 10, search })
+  async ({
+    search,
+    from,
+  }: {
+    search: string | undefined;
+    from: number;
+  }): Promise<{ data: Recipe[]; total: number }> =>
+    await service.searchRecipe({ from, size: 10, search })
 );
 
 const getCachedRecipeById = cache(
