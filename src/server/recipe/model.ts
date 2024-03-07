@@ -26,7 +26,7 @@ const search = async ({ from, size, search }: Query): Promise<Recipe[]> =>
   await db.recipe.findMany({
     skip: from,
     take: size,
-    ...(search ? { where: { name: search } } : {}),
+    ...(search ? { where: { name: { contains: search } } } : {}),
   });
 
 const getLatestRecipes = async (): Promise<Recipe[]> =>
