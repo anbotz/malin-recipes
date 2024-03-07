@@ -15,7 +15,11 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-export const UploadButton = () => {
+export const UploadButton = ({
+  onChange,
+}: {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => {
   return (
     <Button
       component="label"
@@ -25,7 +29,11 @@ export const UploadButton = () => {
       startIcon={<CloudUpload />}
     >
       Upload image
-      <VisuallyHiddenInput type="file" />
+      <VisuallyHiddenInput
+        type="file"
+        onChange={onChange}
+        accept="image/jpeg,image/png"
+      />
     </Button>
   );
 };

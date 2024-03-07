@@ -11,6 +11,7 @@ export default async function RecipePage({
 }) {
   const { recipeId } = params;
 
+  // FIXME diner again
   const recipe = await recipeCache.getCachedRecipeById(recipeId);
 
   if (recipe === null) return redirect("/recipe");

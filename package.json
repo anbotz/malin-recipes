@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.5.0",
+    "@aws-sdk/client-s3": "^3.525.0",
+    "@aws-sdk/s3-request-presigner": "^3.525.0",
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
@@ -17,6 +19,7 @@
     "@mui/material": "^5.15.11",
     "@mui/material-nextjs": "^5.15.11",
     "@prisma/client": "^5.10.2",
+    "crypto": "^1.0.1",
     "next": "14.1.0",
     "next-auth": "^4.24.6",
     "react": "^18",

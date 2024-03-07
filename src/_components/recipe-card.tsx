@@ -4,13 +4,13 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, CardActions, Tooltip } from "@mui/material";
+import { CardActionArea, Tooltip } from "@mui/material";
 import Recipe from "@/_types/recipe";
 import { useRouter } from "next/navigation";
 
 export default function RecipeCard({ recipe }: { recipe: Recipe }) {
   const { push } = useRouter();
-  const { name } = recipe;
+  const { name, imageUrl } = recipe;
 
   return (
     <Tooltip title={name}>
@@ -19,7 +19,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
           <CardMedia
             component="img"
             height="150"
-            src="diner.png"
+            image={imageUrl ?? "diner.png"}
             alt="default diner"
           />
           <CardContent>

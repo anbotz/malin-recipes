@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React from "react";
 
 export const PageLayoutComponent = ({
@@ -12,10 +12,18 @@ export const PageLayoutComponent = ({
 }) => {
   return (
     <>
-      <Typography variant="h3" gutterBottom>
-        {title}
-        {buttons}
-      </Typography>
+      <Box display="flex" alignItems="center" justifyContent="space-between">
+        <Typography variant="h3" gutterBottom>
+          {title}
+        </Typography>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          flexGrow={1}
+        />
+        <Box>{buttons}</Box>
+      </Box>
       {children}
     </>
   );

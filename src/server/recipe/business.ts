@@ -37,15 +37,22 @@ const updateRecipeById = async (
     name?: string;
     ingredientsStr?: string;
     instructionsStr?: string;
+    imageUrl?: string;
   }
 ): Promise<Recipe | null> => {
   const ingredients = updatedData.ingredientsStr?.split("\n") || undefined;
   const instructions = updatedData.instructionsStr?.split("\n") || undefined;
-  const data = { name: updatedData.name, ingredients, instructions };
+  const data = {
+    name: updatedData.name,
+    ingredients,
+    instructions,
+    imageUrl: updatedData.imageUrl,
+  };
   const recipe = await RecipeModel.updateById({ id, data });
   return recipe;
 };
 
+const uploadImageRecipe = async () => {};
 const business = {
   createRecipe,
   searchRecipe,

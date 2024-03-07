@@ -11,6 +11,7 @@ const mockRecipe: Recipe = {
   instructions: [],
   createdAt: new Date(),
   updatedAt: new Date(),
+  imageUrl: "diner.png",
 };
 
 const create = async (recipe: {

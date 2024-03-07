@@ -30,6 +30,16 @@ export const updateRecipeAction = (id: MongoId, formData: FormData) => {
   }
 };
 
+export const uploadImageRecipeAction = (id: MongoId, imageUrl: string) => {
+  try {
+    return service.updateRecipeById(id, {
+      imageUrl,
+    });
+  } catch (e) {
+    throw new Error(`Failed to upload image recipe (_id: ${id}`);
+  }
+};
+
 export const deleteRecipeAction = async (id: MongoId) => {
   return await service.deleteRecipeById(id);
 };
