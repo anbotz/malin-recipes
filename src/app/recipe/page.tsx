@@ -3,6 +3,7 @@ import RecipesGrid from "@/_components/container/recipes-grid";
 import { SearchBar } from "@/_components/search";
 import recipeCache from "@/lib/recipe/cache";
 import { PaginationComponent } from "@/_components/pagination";
+import { GridComponent } from "@/_components/container/grid";
 
 const RecipePage = async ({
   searchParams,
@@ -18,8 +19,10 @@ const RecipePage = async ({
 
   return (
     <PageLayoutComponent title="Recipes" buttons={<SearchBar />}>
-      <RecipesGrid recipes={recipes} />
-      <PaginationComponent count={total} size={10} />
+      <GridComponent>
+        <RecipesGrid recipes={recipes} />
+        <PaginationComponent count={total} size={10} />
+      </GridComponent>
     </PageLayoutComponent>
   );
 };

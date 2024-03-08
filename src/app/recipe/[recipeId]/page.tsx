@@ -28,13 +28,13 @@ export default async function RecipePage({
     >
       <ListLayout
         items={recipe.ingredients}
-        title="Ingredients :"
-        noContent="No ingredient listed"
+        title="Ingrédients :"
+        noContent="Aucun ingrédient indiqué"
       />
       <ListLayout
         items={recipe.instructions}
         title="Instructions :"
-        noContent="No instructions listed"
+        noContent="Aucune instruction indiquée"
       />
     </PageLayoutComponent>
   );

@@ -64,7 +64,7 @@ export const SearchBar = () => {
       </SearchIconWrapper>
       <form action={handleSearch}>
         <StyledInputBase
-          placeholder="Search…"
+          placeholder="Recherche ..."
           inputProps={{ "aria-label": "search" }}
           name="search"
           fullWidth

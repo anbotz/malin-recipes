@@ -10,7 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "@mui/material";
 
-const settings = [{ title: "logout", onClick: () => signOut() }];
+const settings = [{ title: "Déconnexion", onClick: () => signOut() }];
 
 const UserMenu = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -28,9 +28,9 @@ const UserMenu = () => {
 
   if (!session) {
     return (
-      <Tooltip title="Sign In">
+      <Tooltip title="Connexion">
         <Button onClick={() => signIn()} variant="contained">
-          Sign in
+          Connexion
         </Button>
       </Tooltip>
     );
@@ -42,7 +42,7 @@ const UserMenu = () => {
 
   return (
     <Box sx={{ flexGrow: 0 }}>
-      <Tooltip title="Open settings">
+      <Tooltip title="Ouvrir le menu">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
           <Avatar alt={name} src={image} />
         </IconButton>

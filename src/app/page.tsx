@@ -8,9 +8,9 @@ export default async function Home() {
   const latestRecipes = await recipeCache.getCachedLastRecipeById();
 
   return (
-    <PageLayoutComponent title="Home">
+    <PageLayoutComponent title="Accueil">
       <TypographyComponent variant="h4" gutterBottom>
-        Latest hottest :
+        Dernières recettes :
       </TypographyComponent>
       <RecipesGrid recipes={latestRecipes} />
       <HomeButtons />

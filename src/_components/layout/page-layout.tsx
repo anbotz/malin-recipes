@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
 
 export const PageLayoutComponent = ({
@@ -10,9 +10,10 @@ export const PageLayoutComponent = ({
   children: React.ReactNode;
   buttons?: React.ReactNode;
 }) => {
+  const MARGIN = 8;
   return (
-    <>
-      <Box display="flex" alignItems="center" justifyContent="space-between">
+    <Grid display="flex" flexDirection="column" margin={`${MARGIN}px`}>
+      <Grid display="flex" alignItems="center" justifyContent="space-between">
         <Typography variant="h3" gutterBottom>
           {title}
         </Typography>
@@ -23,15 +24,12 @@ export const PageLayoutComponent = ({
           flexGrow={1}
         />
         <Box>{buttons}</Box>
-      </Box>
-      <Box
-        display="flex"
-        flexGrow={1}
-        flexDirection="column"
-        justifyContent="space-between"
+      </Grid>
+      <Grid
+        height={`calc(100vh - 150px - ${2 * MARGIN}px)`} // 2*75px for appheader and h3, 2*8px for margin
       >
         {children}
-      </Box>
-    </>
+      </Grid>
+    </Grid>
   );
 };

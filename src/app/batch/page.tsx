@@ -3,7 +3,7 @@ import { PageLayoutComponent } from "@/_components/layout/page-layout";
 
 const BatchPage = () => {
   return (
-    <PageLayoutComponent title="batch">
+    <PageLayoutComponent title="Batch">
       <ProtectedContentContainer>batch content</ProtectedContentContainer>
     </PageLayoutComponent>
   );

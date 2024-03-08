@@ -4,15 +4,15 @@ import Recipe from "@/_types/recipe";
 
 const RecipesGrid = async ({ recipes }: { recipes: Recipe[] }) => {
   return (
-    <Grid spacing={2} container alignItems="center" justifyContent="center">
+    <Grid spacing={2} columns={5} container alignItems="center">
       {recipes.length > 0 ? (
         recipes.map((a) => (
-          <Grid item key={a.id}>
+          <Grid item key={a.id} xs={1}>
             <RecipeCard recipe={a} />
           </Grid>
         ))
       ) : (
-        <>No recipe found</>
+        <>Aucune recette trouvée</>
       )}
     </Grid>
   );

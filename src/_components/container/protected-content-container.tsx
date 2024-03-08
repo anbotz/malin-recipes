@@ -23,9 +23,9 @@ const ProtectedContentContainer = ({
           flexGrow: 1,
         }}
       >
-        Must be logged in to access this content
+        Il faut se connecter pour accéder à ce contenu
         <Button onClick={() => signIn()} variant="contained" size="large">
-          Log In
+          Connexion
         </Button>
       </Container>
     );

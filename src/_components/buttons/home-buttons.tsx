@@ -13,10 +13,10 @@ export const HomeButtons = () => {
       }}
     >
       <Button variant="contained" size="large" onClick={() => push("/recipe")}>
-        Discover more Recipe
+        Découvre d&apos;autres recettes
       </Button>
       <Button variant="contained" size="large" onClick={() => push("/batch")}>
-        Start to batch
+        Commence le batch
       </Button>
     </ButtonContainerComponent>
   );

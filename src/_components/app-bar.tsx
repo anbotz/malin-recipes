@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { AppBar, Box, Toolbar, Typography, Tab, Tabs } from "@mui/material";
+import { AppBar, Box, Typography, Tab, Tabs } from "@mui/material";
 import { Add, Kitchen, Microwave } from "@mui/icons-material";
 import { usePathname } from "next/navigation";
 
@@ -30,9 +30,14 @@ export default function AppBarComponent() {
   }, [pathname]);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
+    <>
+      <AppBar position="fixed">
+        <Box
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
+          marginRight="10px"
+        >
           <Tabs value={selected} onChange={(_e, v) => setSelected(v)}>
             <Tab
               component={Link}
@@ -51,7 +56,7 @@ export default function AppBarComponent() {
             <Tab
               component={Link}
               href="/recipe"
-              label="Recipe"
+              label="Recettes"
               icon={<Kitchen />}
               iconPosition="start"
             />
@@ -66,8 +71,9 @@ export default function AppBarComponent() {
           </Tabs>
           <Box sx={{ flexGrow: 1 }} />
           <UserMenu />
-        </Toolbar>
+        </Box>
       </AppBar>
-    </Box>
+      <Box height="75px" />
+    </>
   );
 }
