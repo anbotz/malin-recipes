@@ -1,11 +1,10 @@
 "use client";
-import { CloudUpload, Delete, Edit } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
 import { DeleteModal } from "@/_components/modals/delete-modal";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { MongoId } from "@/_types/query";
 import { deleteRecipeAction } from "@/lib/recipe/action";
+import { IconButtonComponent } from "@/_components/buttons/icon-button";
 
 export const ManageRecipeComponent = ({
   deletedItemName,
@@ -31,15 +30,21 @@ export const ManageRecipeComponent = ({
         onDelete={onDelete}
         deletedItemName={deletedItemName}
       />
-      <IconButton onClick={() => push(`/recipe/${recipeId}/upload-image`)}>
-        <CloudUpload />
-      </IconButton>
-      <IconButton onClick={() => push(`/recipe/${recipeId}/edit`)}>
-        <Edit />
-      </IconButton>
-      <IconButton onClick={() => setDeleteModalOpen(true)}>
-        <Delete />
-      </IconButton>
+      <IconButtonComponent
+        onClick={() => push(`/recipe/${recipeId}/upload-image`)}
+        icon="cloud"
+        title="Téléverser une image"
+      />
+      <IconButtonComponent
+        onClick={() => push(`/recipe/${recipeId}/edit`)}
+        icon="edit"
+        title="Modifier"
+      />
+      <IconButtonComponent
+        onClick={() => setDeleteModalOpen(true)}
+        icon="delete"
+        title="Supprimer"
+      />
     </>
   );
 };

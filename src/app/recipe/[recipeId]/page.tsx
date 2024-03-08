@@ -1,7 +1,7 @@
+import { ListLayout } from "@/_components/layout/list-layout";
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import { ManageRecipeComponent } from "@/app/recipe/[recipeId]/manage-recipe";
 import recipeCache from "@/lib/recipe/cache";
-import { Divider, List, ListItem, Typography } from "@mui/material";
 import { redirect } from "next/navigation";
 
 export default async function RecipePage({
@@ -26,34 +26,16 @@ export default async function RecipePage({
         />
       }
     >
-      <Typography variant="h5" gutterBottom>
-        Ingredients :
-      </Typography>
-      <Divider />
-      <List dense>
-        {recipe.ingredients.length > 0 ? (
-          recipe.ingredients.map((ingredient) => (
-            <ListItem key={ingredient}>{ingredient}</ListItem>
-          ))
-        ) : (
-          <>No ingredient listed</>
-        )}
-      </List>
-      <Divider />
-      <Typography variant="h5" gutterBottom>
-        Instructions :
-      </Typography>
-      <Divider />
-
-      <List dense>
-        {recipe.instructions.length > 0 ? (
-          recipe.instructions.map((instruction) => (
-            <ListItem key={instruction}>{instruction}</ListItem>
-          ))
-        ) : (
-          <>No instruction listed</>
-        )}
-      </List>
+      <ListLayout
+        items={recipe.ingredients}
+        title="Ingredients :"
+        noContent="No ingredient listed"
+      />
+      <ListLayout
+        items={recipe.instructions}
+        title="Instructions :"
+        noContent="No instructions listed"
+      />
     </PageLayoutComponent>
   );
 }
