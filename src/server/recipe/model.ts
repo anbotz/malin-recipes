@@ -4,10 +4,10 @@ import { UpdatedRecipeData } from "@/_types/recipe";
 import { db } from "@/lib/db";
 import { Recipe } from "@prisma/client";
 
-const mockRecipe: Recipe = {
+export const mockRecipe: Recipe = {
   id: "1",
   name: "mockRecipe",
-  ingredients: [],
+  ingredients: ["toto", "45cs de titi"],
   instructions: [],
   createdAt: new Date(),
   updatedAt: new Date(),

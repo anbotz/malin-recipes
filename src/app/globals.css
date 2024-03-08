@@ -106,3 +106,8 @@ a {
     color-scheme: dark;
   }
 }
+
+.floatting-day {
+  position: absolute;
+  margin: 8px;
+}
