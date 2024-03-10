@@ -3,6 +3,17 @@ import Query from "@/_types/query";
 import { UpdatedRecipeData } from "@/_types/recipe";
 import { db } from "@/lib/db";
 import { Recipe } from "@prisma/client";
+import { ObjectId } from "bson";
+
+type RawRecipe = {
+  _id: { $oid: ObjectId };
+  name: string;
+  ingredients: string[];
+  instructions: string[];
+  imageUrl: string | null;
+  createdAt: { $date: Date };
+  updatedAt: { $date: Date };
+};
 
 export const mockRecipe: Recipe = {
   id: "1",
@@ -37,6 +48,22 @@ const search = async ({
   ]);
 
   return { data, total };
+};
+
+const batch = async (size: number): Promise<Recipe[]> => {
+  const data = (await db.recipe.aggregateRaw({
+    pipeline: [{ $sample: { size } }],
+  })) as unknown as RawRecipe[];
+
+  const recipes = data?.map((r) => {
+    const { _id, ...rest } = r;
+    const id = _id.$oid.toString();
+    const createdAt = rest.createdAt.$date;
+    const updatedAt = rest.updatedAt.$date;
+    return { ...rest, id, createdAt, updatedAt };
+  });
+
+  return recipes;
 };
 
 const getLatestRecipes = async (): Promise<Recipe[]> =>
@@ -85,6 +112,7 @@ const RecipeModel = {
   getById,
   deleteById,
   updateById,
+  batch,
 };
 
 // const RecipeModel = {

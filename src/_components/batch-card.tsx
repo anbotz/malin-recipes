@@ -1,20 +1,24 @@
-"use client";
-import * as React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActions, Container, Tooltip } from "@mui/material";
-import Recipe from "@/_types/recipe";
-import { Shuffle } from "@mui/icons-material";
+import { CardActions, Paper } from "@mui/material";
+import recipeCache from "@/lib/recipe/cache";
+import { shuffleOneRecipeFromBatch } from "@/lib/batch/action";
+import { BatchButton } from "./buttons/batch-button";
 
-export default function BatchCard({
-  recipe,
+export default async function BatchCard({
+  recipeId,
   day,
+  recipeIndex,
 }: {
-  recipe: Recipe;
+  recipeId: string;
   day: string;
+  recipeIndex: number;
 }) {
+  const recipe = await recipeCache.getCachedRecipeById(recipeId);
+
+  if (!recipe) throw new Error("Error on batch card RSC : No recipe found");
   const { name, imageUrl } = recipe;
 
   return (
@@ -29,11 +33,9 @@ export default function BatchCard({
         overflow: "visible",
       }}
     >
-      <div className="floatting-day">
-        <Typography gutterBottom variant="h5">
-          {day}
-        </Typography>
-      </div>
+      <Paper sx={{ padding: "0 10px", position: "absolute", margin: "8px" }}>
+        <Typography variant="h5">{day}</Typography>
+      </Paper>
       <CardMedia
         component="img"
         height="250"
@@ -44,26 +46,24 @@ export default function BatchCard({
         <Typography gutterBottom variant="h5" component="div" noWrap>
           {name}
         </Typography>
-        <Typography gutterBottom variant="body2" color="text.secondary" noWrap>
-          {recipe.ingredients.map((i) => (
-            <div key={i}>
-              {i}
-              <br />
-            </div>
-          ))}
-        </Typography>
+        {recipe.ingredients.map((i) => (
+          <Typography
+            gutterBottom
+            variant="body2"
+            color="text.secondary"
+            noWrap
+            key={i}
+          >
+            {i}
+            <br />
+          </Typography>
+        ))}
       </CardContent>
       <CardActions sx={{ justifyContent: "center" }}>
-        <Tooltip title="Change cette recette par une autre recette aléatoire">
-          <Button
-            variant="contained"
-            size="large"
-            color="secondary"
-            startIcon={<Shuffle />}
-          >
-            Switch !
-          </Button>
-        </Tooltip>
+        <BatchButton
+          onShuffleClick={shuffleOneRecipeFromBatch}
+          recipeIndex={recipeIndex}
+        />
       </CardActions>
     </Card>
   );

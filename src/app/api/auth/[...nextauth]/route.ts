@@ -22,6 +22,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    // FIXME : remove jwt ???
     async jwt({ token }) {
       const dbUser = await db.user.findUnique({
         where: {
@@ -32,12 +33,14 @@ export const authOptions: NextAuthOptions = {
       const permissions = getPermissions(dbUser?.role);
 
       token.permissions = permissions;
+      token.id = dbUser?.id;
 
       return token;
     },
     async session({ token, session }) {
       if (token && session.user) {
         session.user.permissions = token.permissions;
+        session.user.id = token.id;
       }
 
       return session;

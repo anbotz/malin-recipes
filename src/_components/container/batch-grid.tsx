@@ -1,14 +1,13 @@
-import { Box, Container, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import BatchCard from "../batch-card";
-import { mockRecipe } from "@/server/recipe/model";
 
-const BatchGrid = ({ days }: { days: string[] }) => {
+const BatchGrid = ({ days, batch }: { days: string[]; batch: string[] }) => {
   return (
     <Grid spacing={2} columns={5} container alignItems="center" height="80%">
       {days.length > 0 &&
-        days.map((a) => (
+        days.map((a, index) => (
           <Grid item key={a} xs={1} height="100%">
-            <BatchCard recipe={mockRecipe} day={a} />
+            <BatchCard recipeId={batch[index]} day={a} recipeIndex={index} />
           </Grid>
         ))}
     </Grid>

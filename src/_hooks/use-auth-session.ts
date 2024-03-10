@@ -5,7 +5,7 @@ export const useAuthSession = (): { user: User; permissions: string[] } => {
   const { data } = useSession();
 
   const user = data?.user;
-  const permissions = user.permissions;
+  const permissions = user?.permissions ?? [];
 
   return { user, permissions };
 };
