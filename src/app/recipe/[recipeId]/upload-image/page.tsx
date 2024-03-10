@@ -1,3 +1,4 @@
+import { BackButton } from "@/_components/buttons/back-button";
 import { UploadImageForm } from "@/_components/forms/upload-image";
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import recipeCache from "@/lib/recipe/cache";
@@ -15,7 +16,14 @@ export default async function UploadImagePage({
   if (recipe === null) return redirect("/recipe");
 
   return (
-    <PageLayoutComponent title={"Ajouter une image pour la recette " + recipe.name}>
+    <PageLayoutComponent
+      title={
+        <>
+          <BackButton />
+          Ajouter une image pour la recette {recipe.name}
+        </>
+      }
+    >
       <UploadImageForm recipe={recipe} />
     </PageLayoutComponent>
   );

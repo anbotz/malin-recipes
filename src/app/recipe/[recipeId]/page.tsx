@@ -1,3 +1,4 @@
+import { BackButton } from "@/_components/buttons/back-button";
 import { ListLayout } from "@/_components/layout/list-layout";
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import { ManageRecipeComponent } from "@/app/recipe/[recipeId]/manage-recipe";
@@ -18,7 +19,12 @@ export default async function RecipePage({
 
   return (
     <PageLayoutComponent
-      title={recipe.name}
+      title={
+        <>
+          <BackButton />
+          {recipe.name}
+        </>
+      }
       buttons={
         <ManageRecipeComponent
           deletedItemName={recipe.name}

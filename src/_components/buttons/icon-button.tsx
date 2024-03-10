@@ -1,5 +1,10 @@
 "use client";
-import { CloudUpload, Delete, Edit } from "@mui/icons-material";
+import {
+  CloudUpload,
+  Delete,
+  Edit,
+  KeyboardBackspace,
+} from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 
 const Icon = ({ icon }: { icon: string }) => {
@@ -10,6 +15,8 @@ const Icon = ({ icon }: { icon: string }) => {
       return <Edit />;
     case "delete":
       return <Delete />;
+    case "back":
+      return <KeyboardBackspace />;
     default:
       return;
   }

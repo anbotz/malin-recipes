@@ -3,17 +3,15 @@ import { Grid } from "@mui/material";
 import Recipe from "@/_types/recipe";
 
 const RecipesGrid = async ({ recipes }: { recipes: Recipe[] }) => {
+  if (recipes.length === 0) return <>Aucune recette trouvée</>;
+
   return (
     <Grid spacing={2} columns={5} container alignItems="center">
-      {recipes.length > 0 ? (
-        recipes.map((a) => (
-          <Grid item key={a.id} xs={1}>
-            <RecipeCard recipe={a} />
-          </Grid>
-        ))
-      ) : (
-        <>Aucune recette trouvée</>
-      )}
+      {recipes.map((a) => (
+        <Grid item key={a.id} xs={1}>
+          <RecipeCard recipe={a} />
+        </Grid>
+      ))}
     </Grid>
   );
 };
