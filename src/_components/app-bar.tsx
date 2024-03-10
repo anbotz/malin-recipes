@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 
 import Link from "next/link";
 import UserMenu from "./user-menu";
+import { useAuthSession } from "@/_hooks/use-auth-session";
 
 const getTabIndexFromPath = (path: string) => {
   switch (path) {
@@ -23,6 +24,8 @@ const getTabIndexFromPath = (path: string) => {
 };
 export default function AppBarComponent() {
   const pathname = usePathname();
+  const { permissions } = useAuthSession();
+
   const [selected, setSelected] = React.useState<number | boolean>(false);
 
   React.useEffect(() => {
@@ -67,7 +70,9 @@ export default function AppBarComponent() {
               icon={<Microwave />}
               iconPosition="start"
             />
-            <Tab component={Link} href="/create" icon={<Add />} />
+            {permissions.includes("RECIPE.CREATE") && (
+              <Tab component={Link} href="/create" icon={<Add />} />
+            )}
           </Tabs>
           <Box sx={{ flexGrow: 1 }} />
           <UserMenu />

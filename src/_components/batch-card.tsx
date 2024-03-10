@@ -46,10 +46,10 @@ export default function BatchCard({
         </Typography>
         <Typography gutterBottom variant="body2" color="text.secondary" noWrap>
           {recipe.ingredients.map((i) => (
-            <>
+            <div key={i}>
               {i}
               <br />
-            </>
+            </div>
           ))}
         </Typography>
       </CardContent>

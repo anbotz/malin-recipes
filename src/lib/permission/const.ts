@@ -1,0 +1,7 @@
+const RECIPE = {
+  CREATE: "RECIPE.CREATE",
+  UPDATE: "RECIPE.UPDATE",
+  DELETE: "RECIPE.DELETE",
+};
+
+export const PERMISSIONS = { RECIPE };
