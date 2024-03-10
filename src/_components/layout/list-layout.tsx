@@ -10,7 +10,6 @@ export const ListLayout = ({
   noContent: string;
 }) => {
   return (
-    // FIXME : noContent bug cause of ['']
     <>
       <Typography variant="h5" gutterBottom>
         {title}

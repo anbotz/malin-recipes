@@ -9,8 +9,10 @@ const createRecipe = async (
   ingredientsStr: string,
   instructionsStr: string
 ) => {
-  const ingredients = ingredientsStr.split("\n");
-  const instructions = instructionsStr.split("\n");
+  const ingredients =
+    ingredientsStr.length > 0 ? ingredientsStr.split("\n") : [];
+  const instructions =
+    instructionsStr.length > 0 ? instructionsStr.split("\n") : [];
 
   await RecipeModel.create({ name, ingredients, instructions });
 };
@@ -56,19 +58,27 @@ const updateRecipeById = async (
     imageUrl?: string;
   }
 ): Promise<Recipe | null> => {
-  const ingredients = updatedData.ingredientsStr?.split("\n") || undefined;
-  const instructions = updatedData.instructionsStr?.split("\n") || undefined;
+  const ingredients =
+    updatedData.ingredientsStr && updatedData.ingredientsStr.length > 0
+      ? updatedData.ingredientsStr?.split("\n")
+      : undefined;
+
+  const instructions =
+    updatedData.instructionsStr && updatedData.instructionsStr.length > 0
+      ? updatedData.instructionsStr?.split("\n")
+      : undefined;
+
   const data = {
     name: updatedData.name,
     ingredients,
     instructions,
     imageUrl: updatedData.imageUrl,
   };
+
   const recipe = await RecipeModel.updateById({ id, data });
   return recipe;
 };
 
-const uploadImageRecipe = async () => {};
 const business = {
   createRecipe,
   searchRecipe,
