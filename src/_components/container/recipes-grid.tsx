@@ -3,6 +3,7 @@ import { Grid } from "@mui/material";
 import Recipe from "@/_types/recipe";
 
 const RecipesGrid = async ({ recipes }: { recipes: Recipe[] }) => {
+  // FIXME: Warning: Failed prop type: Invalid prop `children` supplied to `ForwardRef(Box)`, expected a ReactNode.
   if (recipes.length === 0) return <>Aucune recette trouvée</>;
 
   return (

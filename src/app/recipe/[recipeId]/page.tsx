@@ -3,6 +3,7 @@ import { ListLayout } from "@/_components/layout/list-layout";
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import { ManageRecipeComponent } from "@/app/recipe/[recipeId]/manage-recipe";
 import recipeCache from "@/lib/recipe/cache";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 
 export default async function RecipePage({
@@ -32,6 +33,15 @@ export default async function RecipePage({
         />
       }
     >
+      {recipe.imageUrl && (
+        <Image
+          className="floatting-image"
+          src={recipe.imageUrl}
+          alt="recipe image"
+          width="200"
+          height="200"
+        />
+      )}
       <ListLayout
         items={recipe.ingredients}
         title="Ingrédients :"

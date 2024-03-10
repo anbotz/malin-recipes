@@ -78,13 +78,13 @@ export const UploadImageForm = ({ recipe }: { recipe: Recipe }) => {
     >
       <UploadButton onChange={handleChange} />
       {previewUrl && file && (
-        <div className="mt-4">
+        <div>
           {file.type.startsWith("image/") ? (
             <Image
               src={previewUrl}
               alt="Selected file"
-              width="100"
-              height="100"
+              width="200"
+              height="200"
             />
           ) : null}
         </div>
