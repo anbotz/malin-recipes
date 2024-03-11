@@ -14,7 +14,9 @@ const createRecipe = async (
   const instructions =
     instructionsStr.length > 0 ? instructionsStr.split("\n") : [];
 
-  await RecipeModel.create({ name, ingredients, instructions });
+  // FIXME create qtCounter on both forms
+  const qtCounter = 2;
+  await RecipeModel.create({ name, ingredients, instructions, qtCounter });
 };
 
 const searchRecipe = async (

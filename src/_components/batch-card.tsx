@@ -21,6 +21,11 @@ export default async function BatchCard({
   if (!recipe) throw new Error("Error on batch card RSC : No recipe found");
   const { name, imageUrl } = recipe;
 
+  const ingredients =
+    recipe.ingredients.length > 5
+      ? recipe.ingredients.splice(0, 5).concat("...")
+      : recipe.ingredients;
+
   return (
     <Card
       sx={{
@@ -33,7 +38,7 @@ export default async function BatchCard({
         overflow: "visible",
       }}
     >
-      <Paper sx={{ padding: "0 10px", position: "absolute", margin: "8px" }}>
+      <Paper sx={{ padding: "0 10px", position: "static", margin: "8px" }}>
         <Typography variant="h5">{day}</Typography>
       </Paper>
       <CardMedia
@@ -46,7 +51,7 @@ export default async function BatchCard({
         <Typography gutterBottom variant="h5" component="div" noWrap>
           {name}
         </Typography>
-        {recipe.ingredients.map((i) => (
+        {ingredients.map((i) => (
           <Typography
             gutterBottom
             variant="body2"

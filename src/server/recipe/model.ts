@@ -13,6 +13,7 @@ type RawRecipe = {
   imageUrl: string | null;
   createdAt: { $date: Date };
   updatedAt: { $date: Date };
+  qtCounter: number;
 };
 
 export const mockRecipe: Recipe = {
@@ -23,12 +24,14 @@ export const mockRecipe: Recipe = {
   createdAt: new Date(),
   updatedAt: new Date(),
   imageUrl: "diner.png",
+  qtCounter: 2,
 };
 
 const create = async (recipe: {
   name: string;
   ingredients: string[];
   instructions: string[];
+  qtCounter: number;
 }): Promise<Recipe> =>
   await db.recipe.create({
     data: recipe,

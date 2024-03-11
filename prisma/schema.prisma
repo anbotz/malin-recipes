@@ -21,6 +21,7 @@ model Recipe {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   imageUrl String?
+  qtCounter Int
 }
 
 model Account {
