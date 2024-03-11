@@ -4,7 +4,7 @@ import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import { ManageRecipeComponent } from "@/app/recipe/[recipeId]/manage-recipe";
 import recipeCache from "@/lib/recipe/cache";
 import Image from "next/image";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 export default async function RecipePage({
   params,
@@ -13,10 +13,9 @@ export default async function RecipePage({
 }) {
   const { recipeId } = params;
 
-  // FIXME diner again
   const recipe = await recipeCache.getCachedRecipeById(recipeId);
 
-  if (recipe === null) return redirect("/recipe");
+  if (recipe === null) return notFound();
 
   return (
     <PageLayoutComponent

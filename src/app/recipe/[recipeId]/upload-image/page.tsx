@@ -2,7 +2,7 @@ import { BackButton } from "@/_components/buttons/back-button";
 import { UploadImageForm } from "@/_components/forms/upload-image";
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import recipeCache from "@/lib/recipe/cache";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 export default async function UploadImagePage({
   params,
@@ -13,7 +13,7 @@ export default async function UploadImagePage({
 
   const recipe = await recipeCache.getCachedRecipeById(recipeId);
 
-  if (recipe === null) return redirect("/recipe");
+  if (recipe === null) return notFound();
 
   return (
     <PageLayoutComponent

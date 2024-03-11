@@ -2,21 +2,13 @@
 import { ButtonComponent } from "@/_components/buttons/button";
 import { GridComponent } from "@/_components/container/grid";
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
-import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-export default function Error({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
+export default function NotFound() {
+  const { push } = useRouter();
 
   return (
-    <PageLayoutComponent title="Quelque chose s'est mal passé !">
+    <PageLayoutComponent title="404 Not Found">
       <GridComponent
         sx={{
           height: "20%",
@@ -24,7 +16,7 @@ export default function Error({
           flexDirection: "row",
         }}
       >
-        <ButtonComponent onClick={() => reset()}>Réessayer</ButtonComponent>
+        <ButtonComponent onClick={() => push("/")}>Accueil</ButtonComponent>
       </GridComponent>
     </PageLayoutComponent>
   );
