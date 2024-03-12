@@ -1,5 +1,4 @@
 import { MongoId, ServiceResponse } from "@/types/query";
-import UserModel from "../../model/user.model";
 import RecipeModel from "../../model/recipe.model";
 import { Batch, Recipe, User } from "@prisma/client";
 import BatchModel from "../../model/batch.model";
@@ -23,7 +22,7 @@ const shuffleUserBatch = async (
 
     const recipeIds = recipes.map((recipes) => recipes.id.toString());
 
-    await UserModel.updateById(id, { batch: recipeIds });
+    await userService.updateById(id, { batch: recipeIds });
 
     return { data: recipeIds };
   } catch (error) {
@@ -148,10 +147,12 @@ const updateOneRecipeFromUserBatch = async (
 
     batch[index] = newRecipe.id;
 
-    const data = await UserModel.updateById(user.id, { batch });
+    const { data: updatedUser } = await userService.updateById(user.id, {
+      batch,
+    });
 
     return {
-      data,
+      data: updatedUser,
       success: `User ${user.id} batch recipe at index ${index} succesfully updated`,
     };
   } catch (error) {

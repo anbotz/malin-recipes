@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth-options";
 import UserModel from "@/model/user.model";
 import { User } from "@prisma/client";
-import { ServiceResponse } from "@/types/query";
+import { MongoId, ServiceResponse } from "@/types/query";
 import { errorMessage } from "../utils";
 
 const ERROR_MESSAGE = "Error on user.service.";
@@ -26,8 +26,23 @@ const getSessionUser = async (): Promise<ServiceResponse<User>> => {
     return errorMessage(error, `${ERROR_MESSAGE}getSessionUser`);
   }
 };
+
+const updateById = async (
+  id: MongoId,
+  data: { batch: string[] }
+): Promise<ServiceResponse<User>> => {
+  try {
+    const updatedUser = await UserModel.updateById(id, data);
+
+    return { data: updatedUser };
+  } catch (error) {
+    return errorMessage(error, `${ERROR_MESSAGE}updateUserById`);
+  }
+};
+
 const service = {
   getSessionUser,
+  updateById,
 };
 
 export default service;
