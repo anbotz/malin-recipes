@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { MongoId } from "@/_types/query";
+import { MongoId } from "@/types/query";
 import service from "./service";
 import { Batch } from "@prisma/client";
 

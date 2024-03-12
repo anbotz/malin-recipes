@@ -5,7 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea, Tooltip } from "@mui/material";
-import Recipe from "@/_types/recipe";
+import Recipe from "@/types/recipe";
 import { useRouter } from "next/navigation";
 
 export default function RecipeCard({ recipe }: { recipe: Recipe }) {

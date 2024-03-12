@@ -1,5 +1,5 @@
 "use server";
-import { MongoId } from "@/_types/query";
+import { MongoId } from "@/types/query";
 import service from "./service";
 import { revalidatePath } from "next/cache";
 

@@ -2,10 +2,10 @@
 import { DeleteModal } from "@/_components/modals/delete-modal";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { MongoId } from "@/_types/query";
+import { MongoId } from "@/types/query";
 import { deleteRecipeAction } from "@/lib/recipe/action";
 import { IconButtonComponent } from "@/_components/buttons/icon-button";
-import { useAuthSession } from "@/_hooks/use-auth-session";
+import { useAuthSession } from "@/hooks/use-auth-session";
 import { PERMISSIONS } from "@/lib/permission/const";
 
 const { RECIPE } = PERMISSIONS;

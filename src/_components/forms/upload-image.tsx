@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { uploadImageRecipeAction } from "@/lib/recipe/action";
-import Recipe from "@/_types/recipe";
+import Recipe from "@/types/recipe";
 import { useState } from "react";
 import { getSignedURL } from "@/lib/s3/action";
 import { FormLayoutComponent } from "../layout/form-layout";

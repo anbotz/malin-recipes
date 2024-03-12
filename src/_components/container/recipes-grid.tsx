@@ -1,6 +1,6 @@
 import RecipeCard from "@/_components/recipe-card";
 import { Grid } from "@mui/material";
-import Recipe from "@/_types/recipe";
+import Recipe from "@/types/recipe";
 
 const RecipesGrid = async ({ recipes }: { recipes: Recipe[] }) => {
   // FIXME: Warning: Failed prop type: Invalid prop `children` supplied to `ForwardRef(Box)`, expected a ReactNode.

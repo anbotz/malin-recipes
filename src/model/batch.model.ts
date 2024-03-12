@@ -1,5 +1,5 @@
-import { CreateBatchData } from "@/_types/batch";
-import { MongoId } from "@/_types/query";
+import { CreateBatchData } from "@/types/batch";
+import { MongoId } from "@/types/query";
 import { db } from "@/lib/db";
 import { Batch } from "@prisma/client";
 

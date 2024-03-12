@@ -1,8 +1,8 @@
 "use client";
 import { Button, Tooltip } from "@mui/material";
 import { Shuffle } from "@mui/icons-material";
-import { MongoId } from "@/_types/query";
-import { useAuthSession } from "@/_hooks/use-auth-session";
+import { MongoId } from "@/types/query";
+import { useAuthSession } from "@/hooks/use-auth-session";
 
 export const BatchButton = ({
   onShuffleClick,

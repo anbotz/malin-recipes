@@ -1,6 +1,6 @@
-import { MongoId } from "../_types/query";
-import Query from "@/_types/query";
-import { UpdatedRecipeData } from "@/_types/recipe";
+import { MongoId } from "../types/query";
+import Query from "@/types/query";
+import { UpdatedRecipeData } from "@/types/recipe";
 import { db } from "@/lib/db";
 import { Recipe } from "@prisma/client";
 import { ObjectId } from "bson";

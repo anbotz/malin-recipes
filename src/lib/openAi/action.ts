@@ -1,5 +1,5 @@
 "use server";
-import { MongoId } from "@/_types/query";
+import { MongoId } from "@/types/query";
 import { userMessage, systemMessage } from "./utils";
 import { openai } from "./openAiclient";
 import batchService from "@/lib/batch/service";

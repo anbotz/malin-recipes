@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { MultilineTextFieldComponent } from "../inputs/multiline-text-field";
 import { TextFieldComponent } from "../inputs/text-field";
 import { updateRecipeAction } from "@/lib/recipe/action";
-import Recipe from "@/_types/recipe";
+import Recipe from "@/types/recipe";
 
 export const EditRecipeForm = ({ recipe }: { recipe: Recipe }) => {
   const { back, push } = useRouter();

@@ -1,6 +1,6 @@
 "use client";
 import { ButtonContainerComponent } from "@/_components/container/button-container";
-import { useAuthSession } from "@/_hooks/use-auth-session";
+import { useAuthSession } from "@/hooks/use-auth-session";
 import { shuffleWholeBatch } from "@/lib/batch/action";
 import { cook } from "@/lib/openAi/action";
 import { Flatware, Shuffle } from "@mui/icons-material";

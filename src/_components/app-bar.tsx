@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 
 import Link from "next/link";
 import UserMenu from "./user-menu";
-import { useAuthSession } from "@/_hooks/use-auth-session";
+import { useAuthSession } from "@/hooks/use-auth-session";
 
 const getTabIndexFromPath = (path: string) => {
   switch (path) {

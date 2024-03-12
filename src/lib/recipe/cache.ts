@@ -1,6 +1,6 @@
 import { cache } from "react";
-import Recipe from "@/_types/recipe";
-import { MongoId } from "@/_types/query";
+import Recipe from "@/types/recipe";
+import { MongoId } from "@/types/query";
 import service from "./service";
 
 const getCachedRecipes = cache(

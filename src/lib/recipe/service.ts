@@ -1,5 +1,5 @@
-import Query, { MongoId } from "@/_types/query";
-import Recipe from "@/_types/recipe";
+import Query, { MongoId } from "@/types/query";
+import Recipe from "@/types/recipe";
 import RecipeModel from "../../model/recipe.model";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client } from "@/lib/s3/s3client";
