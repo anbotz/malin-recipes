@@ -14,17 +14,7 @@ type RawRecipe = {
   createdAt: { $date: Date };
   updatedAt: { $date: Date };
   qtCounter: number;
-};
-
-export const mockRecipe: Recipe = {
-  id: "1",
-  name: "mockRecipe",
-  ingredients: ["toto", "45cs de titi"],
-  instructions: [],
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  imageUrl: "diner.png",
-  qtCounter: 2,
+  batchIds: string[];
 };
 
 const create = async (recipe: {
@@ -53,7 +43,7 @@ const search = async ({
   return { data, total };
 };
 
-const batch = async (size: number): Promise<Recipe[]> => {
+const getManyRandom = async (size: number): Promise<Recipe[]> => {
   const data = (await db.recipe.aggregateRaw({
     pipeline: [{ $sample: { size } }],
   })) as unknown as RawRecipe[];
@@ -108,6 +98,13 @@ const updateById = async ({
     },
   });
 
+const getManyRecipeByIds = async (ids: MongoId[]) =>
+  await db.recipe.findMany({
+    where: {
+      id: { in: ids },
+    },
+  });
+
 const RecipeModel = {
   create,
   search,
@@ -115,21 +112,8 @@ const RecipeModel = {
   getById,
   deleteById,
   updateById,
-  batch,
+  getManyRandom,
+  getManyRecipeByIds,
 };
-
-// const RecipeModel = {
-//   create: (recipe: {
-//     name: string;
-//     ingredients: string[];
-//     instructions: string[];
-//   }) => Promise.resolve(mockRecipe),
-//   search: (q: Query) => Promise.resolve([mockRecipe]),
-//   getLatestRecipes: () => Promise.resolve([mockRecipe]),
-//   getById: (id: MongoId) => Promise.resolve(mockRecipe),
-//   deleteById: (id: MongoId) => Promise.resolve(mockRecipe),
-//   updateById: ({ id, data }: { id: MongoId; data: UpdatedRecipeData }) =>
-//     Promise.resolve(mockRecipe),
-// };
 
 export default RecipeModel;
