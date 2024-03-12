@@ -7,3 +7,8 @@ export const computeSHA256 = async (file: File) => {
     .join("");
   return hashHex;
 };
+
+export const errorMessage = (error: any, msg: string) => {
+  console.error(error);
+  return { error: msg };
+};

@@ -3,12 +3,17 @@ import { MongoId } from "@/types/query";
 import service from "./service";
 import { Batch } from "@prisma/client";
 
-const getCachedRecipeById = cache(
-  async (id: MongoId): Promise<Batch | null> => await service.getBatchById(id)
-);
+const getCachedBatchById = cache(async (id: MongoId): Promise<Batch> => {
+  const { data } = await service.getBatchById(id);
+  if (data) {
+    return data;
+  } else {
+    throw new Error("Error while retrieving cached recipe");
+  }
+});
 
 const batchCache = {
-  getCachedRecipeById,
+   getCachedBatchById,
 };
 
 export default batchCache;

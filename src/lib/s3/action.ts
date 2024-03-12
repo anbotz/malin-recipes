@@ -1,10 +1,13 @@
 "use server";
-import { getAuthSession } from "@/lib/auth";
+import userService from "@/lib/user/service";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { v4 } from "uuid";
 
 import { s3Client } from "./s3client";
+import { errorMessage } from "../utils";
+
+const ERROR_MESSAGE = "Error on s3.service.";
 
 const allowedFileTypes = ["image/jpeg", "image/png"];
 
@@ -25,36 +28,38 @@ export const getSignedURL = async ({
   checksum,
   key,
 }: GetSignedURLParams) => {
-  const session = await getAuthSession();
+  try {
+    const { data: user } = await userService.getSessionUser();
 
-  if (!session) {
-    return { failure: "not authenticated" };
+    if (!user) {
+      throw new Error("No user found");
+    }
+
+    if (!allowedFileTypes.includes(fileType)) {
+      return { failure: "File type not allowed" };
+    }
+
+    if (fileSize > maxFileSize) {
+      return { failure: "File size too large" };
+    }
+
+    const putObjectCommand = new PutObjectCommand({
+      Bucket: process.env.AWS_BUCKET_NAME!,
+      Key: key ?? generateFileName(),
+      ContentType: fileType,
+      ContentLength: fileSize,
+      ChecksumSHA256: checksum,
+      Metadata: {
+        userId: user.id,
+      },
+    });
+
+    const url = await getSignedUrl(s3Client, putObjectCommand, {
+      expiresIn: 60,
+    });
+
+    return { success: { url, imageUrl: url.split("?")[0] } };
+  } catch (error) {
+    return errorMessage(error, `${ERROR_MESSAGE}getSignedURL`);
   }
-
-  if (!allowedFileTypes.includes(fileType)) {
-    return { failure: "File type not allowed" };
-  }
-
-  if (fileSize > maxFileSize) {
-    return { failure: "File size too large" };
-  }
-
-  const putObjectCommand = new PutObjectCommand({
-    Bucket: process.env.AWS_BUCKET_NAME!,
-    Key: key ?? generateFileName(),
-    ContentType: fileType,
-    ContentLength: fileSize,
-    ChecksumSHA256: checksum,
-    // FIXME
-    // Let's also add some metadata which is stored in s3.
-    // Metadata: {
-    //   userId: session.user.name,
-    // },
-  });
-
-  const url = await getSignedUrl(s3Client, putObjectCommand, {
-    expiresIn: 60,
-  });
-
-  return { success: { url, imageUrl: url.split("?")[0] } };
 };

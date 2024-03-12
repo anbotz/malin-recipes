@@ -1,6 +1,6 @@
 import { PERMISSIONS } from "@/lib/permission/const";
 
-const { RECIPE } = PERMISSIONS;
+const { RECIPE, BATCH } = PERMISSIONS;
 
 export const getPermissions = (role: string | null | undefined) => {
   const permissions = [];
@@ -9,6 +9,7 @@ export const getPermissions = (role: string | null | undefined) => {
     permissions.push(RECIPE.CREATE);
     permissions.push(RECIPE.UPDATE);
     permissions.push(RECIPE.DELETE);
+    permissions.push(BATCH.COOK);
   }
 
   if ((role = "creator")) {

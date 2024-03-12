@@ -1,17 +1,18 @@
 "use client";
 import { ButtonContainerComponent } from "@/_components/container/button-container";
 import { useAuthSession } from "@/hooks/use-auth-session";
-import { shuffleWholeBatch } from "@/lib/batch/action";
-import { cook } from "@/lib/openAi/action";
+import { shuffleWholeBatchAction } from "@/lib/batch/action";
+import { PERMISSIONS } from "@/lib/permission/const";
 import { Flatware, Shuffle } from "@mui/icons-material";
 import { Button, Tooltip } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { useFormStatus } from "react-dom";
 
 export const BatchButtons = ({ size }: { size: number }) => {
   const {
     user: { id },
+    permissions,
   } = useAuthSession();
-  const { push } = useRouter();
+  const { pending } = useFormStatus();
 
   return (
     <ButtonContainerComponent
@@ -19,17 +20,20 @@ export const BatchButtons = ({ size }: { size: number }) => {
         marginTop: "10vh",
       }}
     >
-      <Tooltip title="Génére les instructions pour réaliser le batch">
-        <Button
-          variant="contained"
-          size="large"
-          onClick={() => cook({ userId: id, qt: 2 })}
-          startIcon={<Flatware />}
-          color="success"
-        >
-          En cuisine !
-        </Button>
-      </Tooltip>
+      {permissions.includes(PERMISSIONS.BATCH.COOK) && (
+        <Tooltip title="Génére les instructions pour réaliser le batch">
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            startIcon={<Flatware />}
+            color="success"
+            disabled={pending}
+          >
+            {pending ? "Chargement" : "En cuisine !"}
+          </Button>
+        </Tooltip>
+      )}
       <Tooltip
         title="Change l'ensemble des recettes actuelles par des autres recettes aléatoires"
         placement="top"
@@ -37,9 +41,10 @@ export const BatchButtons = ({ size }: { size: number }) => {
         <Button
           variant="contained"
           size="large"
-          onClick={() => shuffleWholeBatch(id, size)}
+          onClick={() => shuffleWholeBatchAction(id, size)}
           startIcon={<Shuffle />}
           color="secondary"
+          disabled={pending}
         >
           Batch au hasard
         </Button>

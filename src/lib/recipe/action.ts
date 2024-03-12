@@ -1,45 +1,61 @@
 "use server";
 import { MongoId } from "@/types/query";
 import service from "./service";
+import { revalidatePath } from "next/cache";
 
-export const createRecipeAction = (formData: FormData) => {
-  try {
-    const name = formData.get("name") as string;
-    const ingredients = formData.get("ingredients") as string;
-    const instructions = formData.get("instructions") as string;
+export const createRecipeAction = async (formData: FormData) => {
+  const name = formData.get("name") as string;
+  const ingredients = formData.get("ingredients") as string;
+  const instructions = formData.get("instructions") as string;
 
-    return service.createRecipe(name, ingredients, instructions);
-  } catch (e) {
-    throw new Error("Failed to create recipe");
+  const data = await service.createRecipe(name, ingredients, instructions);
+
+  if (data) {
+    return revalidatePath("/");
+  } else {
+    return console.error(`Failed to create recipe`);
   }
 };
 
-export const updateRecipeAction = (id: MongoId, formData: FormData) => {
-  try {
-    const name = formData.get("name") as string;
-    const ingredientsStr = formData.get("ingredients") as string;
-    const instructionsStr = formData.get("instructions") as string;
+export const updateRecipeAction = async (id: MongoId, formData: FormData) => {
+  const name = formData.get("name") as string;
+  const ingredientsStr = formData.get("ingredients") as string;
+  const instructionsStr = formData.get("instructions") as string;
 
-    return service.updateRecipeById(id, {
-      name,
-      ingredientsStr,
-      instructionsStr,
-    });
-  } catch (e) {
-    throw new Error(`Failed to update recipe (_id: ${id}`);
+  const data = await service.updateRecipeById(id, {
+    name,
+    ingredientsStr,
+    instructionsStr,
+  });
+
+  if (data) {
+    return revalidatePath("/");
+  } else {
+    return console.error(`Failed to update recipe`);
   }
 };
 
-export const uploadImageRecipeAction = (id: MongoId, imageUrl: string) => {
-  try {
-    return service.updateRecipeById(id, {
-      imageUrl,
-    });
-  } catch (e) {
-    throw new Error(`Failed to upload image recipe (_id: ${id}`);
+export const uploadImageRecipeAction = async (
+  id: MongoId,
+  imageUrl: string
+) => {
+  const data = await service.updateRecipeById(id, {
+    imageUrl,
+  });
+
+  if (data) {
+    return revalidatePath("/");
+  } else {
+    return console.error(`Failed to update recipe image`);
   }
 };
 
 export const deleteRecipeAction = async (id: MongoId) => {
-  return await service.deleteRecipeById(id);
+  const data = await service.deleteRecipeById(id);
+
+  if (data) {
+    return revalidatePath("/");
+  } else {
+    return console.error(`Failed to delete recipe`);
+  }
 };

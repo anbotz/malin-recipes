@@ -2,30 +2,43 @@
 import { MongoId } from "@/types/query";
 import service from "./service";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-export const shuffleWholeBatch = async (
+export const shuffleWholeBatchAction = async (
   id: MongoId,
   size: number
 ): Promise<void> => {
-  try {
-    await service.shuffleUserBatch(id, size);
+  const data = await service.shuffleUserBatch(id, size);
+
+  if (data) {
     return revalidatePath("/");
-  } catch (e) {
-    throw new Error(`Failed to shuffle whole batch for user (_id: ${id}`);
+  } else {
+    return console.error(`Failed to shuffle whole batch for user (_id: ${id}`);
   }
 };
 
-export const shuffleOneRecipeFromBatch = async (
+export const shuffleOneRecipeAction = async (
   id: MongoId,
   index: number
 ): Promise<void> => {
   try {
-    await service.updateOneRecipeFromUserBatch(id, index);
+    await service.updateOneRecipeFromUserBatch(index);
 
     return revalidatePath("/");
   } catch (e) {
     throw new Error(
       `Failed to shuffle one recipe from batch for user (_id: ${id}`
     );
+  }
+};
+
+export const cookAction = async (): Promise<void> => {
+  const qt = 2;
+  const { data } = await service.cook({ qt });
+
+  if (data) {
+    return redirect(`/batch/${data.id}`);
+  } else {
+    return console.error("Failed to cook");
   }
 };

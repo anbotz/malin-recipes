@@ -4,7 +4,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActions, Paper } from "@mui/material";
 import recipeCache from "@/lib/recipe/cache";
-import { shuffleOneRecipeFromBatch } from "@/lib/batch/action";
+import { shuffleOneRecipeAction } from "@/lib/batch/action";
 import { BatchButton } from "./buttons/batch-button";
 
 export default async function BatchCard({
@@ -66,7 +66,7 @@ export default async function BatchCard({
       </CardContent>
       <CardActions sx={{ justifyContent: "center" }}>
         <BatchButton
-          onShuffleClick={shuffleOneRecipeFromBatch}
+          onShuffleClick={shuffleOneRecipeAction}
           recipeIndex={recipeIndex}
         />
       </CardActions>

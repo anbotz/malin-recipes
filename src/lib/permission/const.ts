@@ -4,4 +4,8 @@ const RECIPE = {
   DELETE: "RECIPE.DELETE",
 };
 
-export const PERMISSIONS = { RECIPE };
+const BATCH = {
+  COOK: "BATCH.COOK",
+};
+
+export const PERMISSIONS = { RECIPE, BATCH };

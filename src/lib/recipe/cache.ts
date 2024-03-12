@@ -10,20 +10,36 @@ const getCachedRecipes = cache(
   }: {
     search: string | undefined;
     from: number;
-  }): Promise<{ data: Recipe[]; total: number }> =>
-    await service.searchRecipe({ from, size: 10, search })
+  }): Promise<{ data: Recipe[]; total: number }> => {
+    const { data } = await service.searchRecipe({ from, size: 10, search });
+
+    if (data) {
+      return data;
+    } else {
+      throw new Error("Error while retrieving cached recipes");
+    }
+  }
 );
 
 const getCachedRecipeById = cache(
   async (id: MongoId): Promise<Recipe | null> => {
-    const item = await service.getRecipeById(id);
-    return item;
+    const { data } = await service.getRecipeById(id);
+    if (data) {
+      return data;
+    } else {
+      throw new Error("Error while retrieving cached recipe");
+    }
   }
 );
 
-const getCachedLastRecipeById = cache(
-  async (): Promise<Recipe[]> => await service.getLatestRecipes()
-);
+const getCachedLastRecipeById = cache(async (): Promise<Recipe[]> => {
+  const { data } = await service.getLatestRecipes();
+  if (data) {
+    return data;
+  } else {
+    throw new Error("Error while retrieving cached last recipes");
+  }
+});
 
 const recipeCache = {
   getCachedRecipes,

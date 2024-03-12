@@ -1,14 +1,19 @@
-import { MongoId } from "@/types/query";
+import { MongoId, ServiceResponse } from "@/types/query";
 import UserModel from "../../model/user.model";
 import RecipeModel from "../../model/recipe.model";
-import { Batch, Recipe } from "@prisma/client";
+import { Batch, Recipe, User } from "@prisma/client";
 import BatchModel from "../../model/batch.model";
+import openAiService from "@/lib/openAi/service";
+import userService from "@/lib/user/service";
 import { CreateBatchData } from "@/types/batch";
+import { errorMessage } from "../utils";
+
+const ERROR_MESSAGE = "Error on batch.service.";
 
 const shuffleUserBatch = async (
   id: MongoId,
   size: number
-): Promise<string[]> => {
+): Promise<ServiceResponse<string[]>> => {
   try {
     const recipes = await RecipeModel.getManyRandom(size);
 
@@ -20,18 +25,17 @@ const shuffleUserBatch = async (
 
     await UserModel.updateById(id, { batch: recipeIds });
 
-    return recipeIds;
+    return { data: recipeIds };
   } catch (error) {
-    return [];
+    return errorMessage(error, `${ERROR_MESSAGE}shuffleUserBatch`);
   }
 };
 
 const getUserBatch = async (
-  id: MongoId,
   size: number
-): Promise<string[] | null> => {
+): Promise<ServiceResponse<string[]>> => {
   try {
-    const user = await UserModel.getById(id);
+    const { data: user } = await userService.getSessionUser();
 
     if (!user) {
       throw new Error("No user found");
@@ -40,22 +44,21 @@ const getUserBatch = async (
     const batch = user.batch;
 
     if (batch.length === 0 || batch.length !== size) {
-      return await shuffleUserBatch(id, size);
+      const { data } = await shuffleUserBatch(user.id, size);
+      return { data };
     }
 
-    return batch;
-  } catch (e) {
-    return [];
+    return { data: batch };
+  } catch (error) {
+    return errorMessage(error, `${ERROR_MESSAGE}getUserBatch`);
   }
 };
 
-const getRecipesFromBatch = async ({
-  userId,
-}: {
-  userId: MongoId;
-}): Promise<{ recipes: Recipe[]; recipeIds: string[] } | null> => {
+const getRecipesFromBatch = async (): Promise<
+  ServiceResponse<{ recipes: Recipe[]; recipeIds: string[] }>
+> => {
   try {
-    const user = await UserModel.getById(userId);
+    const { data: user } = await userService.getSessionUser();
 
     if (!user) {
       throw new Error("No user found");
@@ -68,21 +71,32 @@ const getRecipesFromBatch = async ({
     }
     const recipes = await RecipeModel.getManyRecipeByIds(batch);
 
-    return { recipes, recipeIds: batch };
-  } catch (e) {
-    return null;
+    return { data: { recipes, recipeIds: batch } };
+  } catch (error) {
+    return errorMessage(error, `${ERROR_MESSAGE}getRecipesFromBatch`);
   }
 };
 
-const getBatchById = async (id: MongoId): Promise<Batch | null> =>
-  await BatchModel.getById(id);
+const getBatchById = async (id: MongoId): Promise<ServiceResponse<Batch>> => {
+  try {
+    const data = await BatchModel.getById(id);
+
+    if (!data) {
+      throw new Error("No batch found");
+    }
+
+    return { data };
+  } catch (error) {
+    return errorMessage(error, `${ERROR_MESSAGE}getBatchById`);
+  }
+};
 
 const create = async ({
   userId,
   recipeIds,
   ingredients,
   instructions,
-}: CreateBatchData): Promise<Batch | null> => {
+}: CreateBatchData): Promise<ServiceResponse<Batch>> => {
   try {
     console.log("created");
 
@@ -92,48 +106,96 @@ const create = async ({
       recipeIds,
       userId,
     });
-    return createdBatch;
+    return { data: createdBatch };
   } catch (error) {
-    return null;
+    return errorMessage(error, `${ERROR_MESSAGE}create`);
   }
 };
 
 const getBatchByRecipeIds = async (
   recipeIds: MongoId[]
-): Promise<Batch | null> => {
+): Promise<ServiceResponse<Batch | null>> => {
   try {
     const batchs = await BatchModel.getManyByRecipeIds(recipeIds);
 
-    if (batchs === null) return null;
+    if (batchs === null) return { data: null };
 
     if (batchs.length > 1) {
-      throw new Error("more than one same batch");
+      throw new Error("Batch is not unique");
     }
 
-    return batchs[0];
-  } catch (e) {
-    return null;
+    return { data: batchs[0] };
+  } catch (error) {
+    return errorMessage(error, `${ERROR_MESSAGE}getBatchByRecipeIds`);
   }
 };
 
-const updateOneRecipeFromUserBatch = async (userId: MongoId, index: number) => {
-  const user = await UserModel.getById(userId);
+const updateOneRecipeFromUserBatch = async (
+  index: number
+): Promise<ServiceResponse<User>> => {
+  try {
+    const { data: user } = await userService.getSessionUser();
 
-  if (!user) {
-    throw new Error("No user found");
+    if (!user) {
+      throw new Error("No user found");
+    }
+
+    const batch = user.batch;
+
+    const recipes = await RecipeModel.getManyRandom(1);
+
+    const newRecipe = recipes[0];
+
+    batch[index] = newRecipe.id;
+
+    const data = await UserModel.updateById(user.id, { batch });
+
+    return {
+      data,
+      success: `User ${user.id} batch recipe at index ${index} succesfully updated`,
+    };
+  } catch (error) {
+    return errorMessage(error, `${ERROR_MESSAGE}updateOneRecipeFromUserBatch`);
   }
+};
 
-  const batch = user.batch;
+export const cook = async ({
+  qt,
+}: {
+  qt: number;
+}): Promise<ServiceResponse<Batch>> => {
+  try {
+    const { data: user } = await userService.getSessionUser();
 
-  const recipes = await RecipeModel.getManyRandom(1);
+    if (!user) {
+      throw new Error("No user found");
+    }
 
-  const newRecipe = recipes[0];
+    const { data } = await getRecipesFromBatch();
 
-  batch[index] = newRecipe.id;
+    if (!data?.recipes || !data?.recipeIds) {
+      throw new Error();
+    }
 
-  await UserModel.updateById(userId, { batch });
+    const { recipes, recipeIds } = data;
 
-  return batch;
+    const { data: alreadyBatch } = await getBatchByRecipeIds(recipeIds);
+    if (alreadyBatch) {
+      console.log("This batch already exists");
+
+      return { data: alreadyBatch };
+    }
+
+    const { data: createdBatch } = await openAiService.createBatchFromAi({
+      userId: user.id,
+      qt,
+      recipes,
+    });
+
+    return { data: createdBatch };
+  } catch (error) {
+    return errorMessage(error, `${ERROR_MESSAGE}cook`);
+  }
 };
 
 const service = {
@@ -144,6 +206,7 @@ const service = {
   getBatchByRecipeIds,
   create,
   getBatchById,
+  cook,
 };
 
 export default service;
