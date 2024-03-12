@@ -2,11 +2,11 @@
 import * as React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea, Tooltip } from "@mui/material";
 import Recipe from "@/types/recipe";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function RecipeCard({ recipe }: { recipe: Recipe }) {
   const { push } = useRouter();
@@ -27,11 +27,11 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
             height: "100%",
           }}
         >
-          <CardMedia
-            component="img"
+          <Image
             height="250"
-            image={imageUrl ?? "diner.png"}
-            alt="default diner"
+            width="250"
+            src={imageUrl ?? "/diner.png"}
+            alt={`${name} image`}
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div" noWrap>

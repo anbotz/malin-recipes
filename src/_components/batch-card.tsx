@@ -1,11 +1,11 @@
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActions, Paper } from "@mui/material";
 import recipeCache from "@/lib/recipe/cache";
 import { shuffleOneRecipeAction } from "@/lib/batch/action";
 import { BatchButton } from "./buttons/batch-button";
+import Image from "next/image";
 
 export default async function BatchCard({
   recipeId,
@@ -41,11 +41,11 @@ export default async function BatchCard({
       <Paper sx={{ padding: "0 10px", position: "static", margin: "8px" }}>
         <Typography variant="h5">{day}</Typography>
       </Paper>
-      <CardMedia
-        component="img"
+      <Image
         height="250"
-        image={imageUrl ?? "diner.png"}
-        alt="default diner"
+        width="250"
+        src={imageUrl ?? "/diner.png"}
+        alt={`${name} image`}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" noWrap>
