@@ -2,7 +2,8 @@
 import { getAuthSession } from "@/lib/auth";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import crypto from "crypto";
+import { v4 } from "uuid";
+
 import { s3Client } from "./s3client";
 
 const allowedFileTypes = ["image/jpeg", "image/png"];
@@ -16,8 +17,7 @@ type GetSignedURLParams = {
   key?: string;
 };
 
-const generateFileName = (bytes = 32): string =>
-  crypto.randomBytes(bytes).toString("hex");
+const generateFileName = (bytes = 32): string => v4();
 
 export const getSignedURL = async ({
   fileType,
@@ -45,6 +45,7 @@ export const getSignedURL = async ({
     ContentType: fileType,
     ContentLength: fileSize,
     ChecksumSHA256: checksum,
+    // FIXME
     // Let's also add some metadata which is stored in s3.
     // Metadata: {
     //   userId: session.user.name,
