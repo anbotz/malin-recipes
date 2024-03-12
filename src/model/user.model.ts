@@ -1,4 +1,4 @@
-import { MongoId } from "./../../_types/query";
+import { MongoId } from "../_types/query";
 import { db } from "@/lib/db";
 import { User } from "@prisma/client";
 

@@ -1,4 +1,4 @@
-import { MongoId } from "./../../_types/query";
+import { MongoId } from "../_types/query";
 import Query from "@/_types/query";
 import { UpdatedRecipeData } from "@/_types/recipe";
 import { db } from "@/lib/db";

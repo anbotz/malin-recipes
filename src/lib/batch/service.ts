@@ -1,8 +1,8 @@
 import { MongoId } from "@/_types/query";
-import UserModel from "../../server/user/model";
-import RecipeModel from "../../server/recipe/model";
+import UserModel from "../../model/user.model";
+import RecipeModel from "../../model/recipe.model";
 import { Batch, Recipe } from "@prisma/client";
-import BatchModel from "./model";
+import BatchModel from "../../model/batch.model";
 import { CreateBatchData } from "@/_types/batch";
 
 const shuffleUserBatch = async (
