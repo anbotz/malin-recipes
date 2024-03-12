@@ -5,7 +5,7 @@ import BatchModel from "../../model/batch.model";
 import openAiService from "@/lib/openAi/service";
 import userService from "@/lib/user/service";
 import { CreateBatchData } from "@/types/batch";
-import { errorMessage } from "../utils";
+import { errorMessage, isDateExpired } from "../utils";
 
 const ERROR_MESSAGE = "Error on batch.service.";
 
@@ -32,7 +32,13 @@ const shuffleUserBatch = async (
 
 const getUserBatch = async (
   size: number
-): Promise<ServiceResponse<string[]>> => {
+): Promise<
+  ServiceResponse<{
+    isBatchLocked: boolean;
+    batch?: string[];
+    lockBatchExpiresAt?: Date;
+  }>
+> => {
   try {
     const { data: user } = await userService.getSessionUser();
 
@@ -41,13 +47,26 @@ const getUserBatch = async (
     }
 
     const batch = user.batch;
+    const isBatchLocked = isDateExpired(user.lockBatchExpiresAt);
 
     if (batch.length === 0 || batch.length !== size) {
       const { data } = await shuffleUserBatch(user.id, size);
-      return { data };
+      return {
+        data: {
+          batch: data,
+          isBatchLocked,
+          lockBatchExpiresAt: user.lockBatchExpiresAt || undefined,
+        },
+      };
     }
 
-    return { data: batch };
+    return {
+      data: {
+        batch,
+        isBatchLocked,
+        lockBatchExpiresAt: user.lockBatchExpiresAt || undefined,
+      },
+    };
   } catch (error) {
     return errorMessage(error, `${ERROR_MESSAGE}getUserBatch`);
   }
@@ -172,6 +191,10 @@ export const cook = async ({
       throw new Error("No user found");
     }
 
+    if (!user) {
+      throw new Error("No user found");
+    }
+
     const { data } = await getRecipesFromBatch();
 
     if (!data?.recipes || !data?.recipeIds) {
@@ -185,6 +208,12 @@ export const cook = async ({
       console.log("This batch already exists");
 
       return { data: alreadyBatch };
+    }
+
+    const isBatchLocked = isDateExpired(user.lockBatchExpiresAt);
+
+    if (isBatchLocked) {
+      throw new Error("User can not generate a new batch");
     }
 
     const { data: createdBatch } = await openAiService.createBatchFromAi({

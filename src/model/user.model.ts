@@ -11,7 +11,7 @@ const getById = async (id: MongoId): Promise<User | null> => {
 };
 const updateById = async (
   id: MongoId,
-  data: { batch: string[] }
+  data: { batch?: string[]; lockBatchExpiresAt?: Date }
 ): Promise<User> =>
   await db.user.update({
     where: {

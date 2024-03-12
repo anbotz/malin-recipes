@@ -3,10 +3,14 @@ import { MongoId } from "@/types/query";
 import { userMessage, systemMessage } from "./utils";
 import { openai } from "./openAiclient";
 import batchService from "@/lib/batch/service";
+import userService from "@/lib/user/service";
 import { Batch, Recipe } from "@prisma/client";
 import { errorMessage } from "../utils";
+import { DateTime } from "luxon";
 
 const ERROR_MESSAGE = "Error on openAi.service.";
+
+const LOCK = { days: 6 };
 
 const createBatchFromAi = async ({
   userId,
@@ -56,6 +60,10 @@ const createBatchFromAi = async ({
     if (!instructions.length || !ingredients.length) {
       throw new Error("Wrong return from OpenAi");
     }
+
+    await userService.updateById(userId, {
+      lockBatchExpiresAt: DateTime.now().plus(LOCK).toJSDate(),
+    });
 
     const { data: createdBatch } = await batchService.create({
       userId,

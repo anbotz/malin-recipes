@@ -12,3 +12,6 @@ export const errorMessage = (error: any, msg: string) => {
   console.error(error);
   return { error: msg };
 };
+
+export const isDateExpired = (date: Date | null): boolean =>
+  date ? !!(new Date().getTime() - date.getTime()) : false;

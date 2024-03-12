@@ -8,14 +8,20 @@ import batchService from "@/lib/batch/service";
 const days = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
 
 const BatchPage = async () => {
-  const { data: batch } = await batchService.getUserBatch(days.length);
+  const { data } = await batchService.getUserBatch(days.length);
 
   return (
     <PageLayoutComponent title="Batch">
       <ProtectedContentContainer>
-        {batch && batch?.length > 0 && <BatchGrid days={days} batch={batch} />}
+        {data && data.batch && data.batch?.length > 0 && (
+          <BatchGrid days={days} batch={data.batch} />
+        )}
         <form action={cookAction}>
-          <BatchButtons size={days.length} />
+          <BatchButtons
+            size={days.length}
+            isBatchLocked={data?.isBatchLocked ?? true}
+            lockBatchExpiresAt={data?.lockBatchExpiresAt}
+          />
         </form>
       </ProtectedContentContainer>
     </PageLayoutComponent>
