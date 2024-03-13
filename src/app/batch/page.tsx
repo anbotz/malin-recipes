@@ -1,5 +1,5 @@
-import { BatchButtons } from "@/_components/buttons/batch-buttons";
-import BatchGrid from "@/_components/container/batch-grid";
+import { BatchButtons } from "@/app/batch/_components/batch-buttons";
+import BatchGrid from "@/app/batch/_components/batch-grid";
 import ProtectedContentContainer from "@/_components/container/protected-content-container";
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import { cookAction } from "@/lib/batch/action";

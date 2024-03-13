@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import BatchCard from "../batch-card";
+import BatchCard from "./batch-card";
 
 const BatchGrid = ({ days, batch }: { days: string[]; batch: string[] }) => {
   return (

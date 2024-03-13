@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import { CardActions, Paper } from "@mui/material";
 import recipeCache from "@/lib/recipe/cache";
 import { shuffleOneRecipeAction } from "@/lib/batch/action";
-import { BatchButton } from "./buttons/batch-button";
+import { BatchButton } from "./batch-button";
 import Image from "next/image";
 
 export default async function BatchCard({
