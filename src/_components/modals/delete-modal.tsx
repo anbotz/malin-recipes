@@ -25,7 +25,7 @@ export const DeleteModal = ({
   return (
     <ModalComponent open={open} onClose={handleClose}>
       <Typography gutterBottom>
-        Are you sure to delete the recipe {deletedItemName} ?
+        Êtes vous sur de vouloir supprimer la recette : {deletedItemName} ?
       </Typography>
       <ButtonContainerComponent>
         <Button onClick={onValidate} color="error" variant="outlined">
