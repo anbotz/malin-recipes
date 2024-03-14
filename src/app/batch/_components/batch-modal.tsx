@@ -4,11 +4,12 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { ButtonContainerComponent } from "../../../_components/container/button-container";
 import { ModalComponent } from "../../../_components/container/modal";
-import { Alert, Tooltip } from "@mui/material";
+import { Alert, Backdrop, Tooltip } from "@mui/material";
 import { Flatware, LockClock, Microwave } from "@mui/icons-material";
 import { DateTime } from "luxon";
 import { useFormStatus } from "react-dom";
 import { cookAction } from "@/lib/batch/action";
+import { LoadingComponent } from "@/_components/loading";
 
 const CookButton = ({
   isBatchLocked,
@@ -27,20 +28,25 @@ const CookButton = ({
       : "Génére les instructions pour réaliser le batch";
 
   return (
-    <Tooltip title={title} placement="top">
-      <span>
-        <Button
-          type="submit"
-          variant="contained"
-          size="large"
-          startIcon={isBatchLocked ? <LockClock /> : <Flatware />}
-          color="success"
-          disabled={pending || isBatchLocked}
-        >
-          {pending ? "Chargement" : "Généré le batch !"}
-        </Button>
-      </span>
-    </Tooltip>
+    <>
+      <Tooltip title={title} placement="top">
+        <span>
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            startIcon={isBatchLocked ? <LockClock /> : <Flatware />}
+            color="success"
+            disabled={pending || isBatchLocked}
+          >
+            {pending ? "Chargement" : "Généré le batch !"}
+          </Button>
+        </span>
+      </Tooltip>
+      <Backdrop sx={{ color: "#fff", zIndex: 431 }} open={pending}>
+        <LoadingComponent />
+      </Backdrop>
+    </>
   );
 };
 

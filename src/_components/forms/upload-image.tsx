@@ -41,12 +41,18 @@ export const UploadImageForm = ({ recipe }: { recipe: Recipe }) => {
         key: id,
       });
 
-      if (signedURLResult.failure !== undefined) {
-        console.error(signedURLResult.failure);
+      if (signedURLResult.error !== undefined) {
+        console.error(signedURLResult.error);
         return;
       }
 
-      const { url, imageUrl } = signedURLResult.success;
+      const { data } = signedURLResult;
+
+      if (!data?.url || !data?.imageUrl) {
+        throw new Error("No url or imageUrl from S3");
+      }
+
+      const { url, imageUrl } = data;
 
       await fetch(url, {
         method: "PUT",

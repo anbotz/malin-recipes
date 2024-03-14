@@ -6,6 +6,7 @@ import { v4 } from "uuid";
 
 import { s3Client } from "./s3client";
 import { errorMessage } from "../utils";
+import { ServiceResponse } from "@/types/query";
 
 const ERROR_MESSAGE = "Error on s3.service.";
 
@@ -27,7 +28,9 @@ export const getSignedURL = async ({
   fileSize,
   checksum,
   key,
-}: GetSignedURLParams) => {
+}: GetSignedURLParams): Promise<
+  ServiceResponse<{ url: string; imageUrl: string }>
+> => {
   try {
     const { data: user } = await userService.getSessionUser();
 
@@ -36,11 +39,11 @@ export const getSignedURL = async ({
     }
 
     if (!allowedFileTypes.includes(fileType)) {
-      return { failure: "File type not allowed" };
+      return { error: "File type not allowed" };
     }
 
     if (fileSize > maxFileSize) {
-      return { failure: "File size too large" };
+      return { error: "File size too large" };
     }
 
     const putObjectCommand = new PutObjectCommand({
@@ -58,7 +61,7 @@ export const getSignedURL = async ({
       expiresIn: 60,
     });
 
-    return { success: { url, imageUrl: url.split("?")[0] } };
+    return { data: { url, imageUrl: url.split("?")[0] } };
   } catch (error) {
     return errorMessage(error, `${ERROR_MESSAGE}getSignedURL`);
   }
