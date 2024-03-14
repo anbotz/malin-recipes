@@ -1,94 +1,101 @@
 "use client";
 import { ButtonContainerComponent } from "@/_components/container/button-container";
+import { BatchModal } from "@/app/batch/_components/batch-modal";
 import { useAuthSession } from "@/hooks/use-auth-session";
-import { shuffleWholeBatchAction } from "@/lib/batch/action";
+import {
+  checkExistingBatchAction,
+  shuffleWholeBatchAction,
+} from "@/lib/batch/action";
 import { PERMISSIONS } from "@/lib/permission/const";
 import { Flatware, Shuffle } from "@mui/icons-material";
 import { Button, Tooltip } from "@mui/material";
-import { DateTime } from "luxon";
-import { useFormStatus } from "react-dom";
-
-const CookButton = ({
-  permissions,
-  pending,
-  isBatchLocked,
-  lockBatchExpiresAt,
-}: {
-  permissions: string[];
-  pending: boolean;
-  isBatchLocked: boolean;
-  lockBatchExpiresAt?: Date;
-}) => {
-  if (!permissions.includes(PERMISSIONS.BATCH.COOK)) return null;
-
-  const title: string =
-    isBatchLocked && !!lockBatchExpiresAt
-      ? `Prochaine génération ${DateTime.fromJSDate(
-          lockBatchExpiresAt
-        ).toRelativeCalendar()}`
-      : "Génére les instructions pour réaliser le batch";
-
-  // FIXME modal
-  return (
-    <Tooltip title={title} placement="top">
-      <span>
-        <Button
-          type="submit"
-          variant="contained"
-          size="large"
-          startIcon={<Flatware />}
-          color="success"
-          disabled={pending || isBatchLocked}
-        >
-          {pending
-            ? "Chargement"
-            : isBatchLocked
-            ? "Batch déjà généré cette semaine"
-            : "Généré le batch !"}
-        </Button>
-      </span>
-    </Tooltip>
-  );
-};
+import { useRouter } from "next/navigation";
+import { useCallback, useState } from "react";
 
 export const BatchButtons = ({
   size,
-  isBatchLocked,
   lockBatchExpiresAt,
 }: {
   size: number;
-  isBatchLocked: boolean;
   lockBatchExpiresAt?: Date;
 }) => {
+  const [modalProps, setModalProps] = useState<{
+    open: boolean;
+    batchId?: string;
+    isBatchLocked: boolean;
+  }>({
+    open: false,
+    isBatchLocked: true,
+  });
+
   const { user, permissions } = useAuthSession();
 
+  const { push } = useRouter();
+
   const { id } = user;
-  const { pending } = useFormStatus();
+
+  const onBatch = useCallback(async () => {
+    const serverProps = await checkExistingBatchAction();
+    const isBatchLocked = permissions.includes(PERMISSIONS.BATCH.UNLIMITED_COOK)
+      ? false
+      : serverProps?.isBatchLocked
+      ? serverProps.isBatchLocked
+      : true;
+    setModalProps((previousProps) => ({
+      ...previousProps,
+      open: true,
+      isBatchLocked,
+    }));
+  }, [permissions]);
 
   return (
-    <ButtonContainerComponent
-      sx={{
-        marginTop: "10vh",
-      }}
-    >
-      <CookButton
-        {...{ permissions, pending, isBatchLocked, lockBatchExpiresAt }}
+    <>
+      <BatchModal
+        setOpen={(o) =>
+          setModalProps((previousProps) => ({ ...previousProps, open: o }))
+        }
+        modalProps={modalProps}
+        accessBatch={(bId) => push("/batch/" + bId)}
+        lockBatchExpiresAt={lockBatchExpiresAt}
       />
-      <Tooltip
-        title="Change l'ensemble des recettes actuelles par des autres recettes aléatoires"
-        placement="top"
+      <ButtonContainerComponent
+        sx={{
+          marginTop: "10vh",
+        }}
       >
-        <Button
-          variant="contained"
-          size="large"
-          onClick={() => shuffleWholeBatchAction(id, size)}
-          startIcon={<Shuffle />}
-          color="secondary"
-          disabled={pending}
+        {permissions.includes(PERMISSIONS.BATCH.COOK) && (
+          <Tooltip
+            title="Génére les instructions pour réaliser le batch"
+            placement="top"
+          >
+            <Button
+              type="submit"
+              variant="contained"
+              size="large"
+              startIcon={<Flatware />}
+              color="success"
+              onClick={() => onBatch()}
+            >
+              Généré le batch !
+            </Button>
+          </Tooltip>
+        )}
+
+        <Tooltip
+          title="Change l'ensemble des recettes actuelles par des autres recettes aléatoires"
+          placement="top"
         >
-          Batch au hasard
-        </Button>
-      </Tooltip>
-    </ButtonContainerComponent>
+          <Button
+            variant="contained"
+            size="large"
+            onClick={() => shuffleWholeBatchAction(id, size)}
+            startIcon={<Shuffle />}
+            color="secondary"
+          >
+            Batch au hasard
+          </Button>
+        </Tooltip>
+      </ButtonContainerComponent>
+    </>
   );
 };

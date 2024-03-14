@@ -6,6 +6,8 @@ import openAiService from "@/lib/openAi/service";
 import userService from "@/lib/user/service";
 import { CreateBatchData } from "@/types/batch";
 import { errorMessage, isDateExpired } from "../utils";
+import { getPermissions } from "../permission";
+import { PERMISSIONS } from "../permission/const";
 
 const ERROR_MESSAGE = "Error on batch.service.";
 
@@ -179,7 +181,43 @@ const updateOneRecipeFromUserBatch = async (
   }
 };
 
-export const cook = async ({
+const checkExistingBatch = async (): Promise<
+  ServiceResponse<{ batchId?: string; isBatchLocked: boolean }>
+> => {
+  try {
+    const { data: user } = await userService.getSessionUser();
+
+    if (!user) {
+      throw new Error("No user found");
+    }
+
+    const { data } = await getRecipesFromBatch();
+
+    if (!data?.recipes || !data?.recipeIds) {
+      throw new Error("No recipes found");
+    }
+
+    const { recipeIds } = data;
+
+    const { data: alreadyBatch } = await getBatchByRecipeIds(recipeIds);
+
+    const batchId = alreadyBatch?.id ?? undefined;
+
+    if (batchId) {
+      console.log("This batch already exists");
+    } else {
+      console.log("This batch does not exist");
+    }
+
+    const isBatchLocked = isDateExpired(user.lockBatchExpiresAt);
+
+    return { data: { batchId, isBatchLocked } };
+  } catch (error) {
+    return errorMessage(error, `${ERROR_MESSAGE}checkExistingBatch`);
+  }
+};
+
+const generateFromAi = async ({
   qt,
 }: {
   qt: number;
@@ -190,31 +228,23 @@ export const cook = async ({
     if (!user) {
       throw new Error("No user found");
     }
+    const permissions = getPermissions(user.role);
 
-    if (!user) {
-      throw new Error("No user found");
+    if (!permissions.includes(PERMISSIONS.BATCH.UNLIMITED_COOK)) {
+      const isBatchLocked = isDateExpired(user.lockBatchExpiresAt);
+
+      if (isBatchLocked) {
+        throw new Error("User can not generate a new batch");
+      }
     }
 
     const { data } = await getRecipesFromBatch();
 
-    if (!data?.recipes || !data?.recipeIds) {
-      throw new Error();
+    if (!data?.recipes) {
+      throw new Error("No recipes found");
     }
 
-    const { recipes, recipeIds } = data;
-
-    const { data: alreadyBatch } = await getBatchByRecipeIds(recipeIds);
-    if (alreadyBatch) {
-      console.log("This batch already exists");
-
-      return { data: alreadyBatch };
-    }
-
-    const isBatchLocked = isDateExpired(user.lockBatchExpiresAt);
-
-    if (isBatchLocked) {
-      throw new Error("User can not generate a new batch");
-    }
+    const { recipes } = data;
 
     const { data: createdBatch } = await openAiService.createBatchFromAi({
       userId: user.id,
@@ -236,7 +266,8 @@ const service = {
   getBatchByRecipeIds,
   create,
   getBatchById,
-  cook,
+  checkExistingBatch,
+  generateFromAi,
 };
 
 export default service;

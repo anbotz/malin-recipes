@@ -3,6 +3,7 @@ import { MongoId } from "@/types/query";
 import service from "./service";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { Batch } from "@prisma/client";
 
 export const shuffleWholeBatchAction = async (
   id: MongoId,
@@ -32,12 +33,24 @@ export const shuffleOneRecipeAction = async (
   }
 };
 
-export const cookAction = async (): Promise<void> => {
+export const checkExistingBatchAction = async (): Promise<
+  | {
+      batchId?: string;
+      isBatchLocked: boolean;
+    }
+  | undefined
+> => {
+  const { data } = await service.checkExistingBatch();
+
+  return data;
+};
+
+export const cookAction = async (): Promise<Batch | void> => {
   const qt = 2;
-  const { data } = await service.cook({ qt });
+  const { data } = await service.generateFromAi({ qt });
 
   if (data) {
-    return redirect(`/batch/${data.id}`);
+    return data;
   } else {
     return console.error("Failed to cook");
   }

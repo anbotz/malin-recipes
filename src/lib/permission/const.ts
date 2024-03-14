@@ -6,6 +6,7 @@ const RECIPE = {
 
 const BATCH = {
   COOK: "BATCH.COOK",
+  UNLIMITED_COOK: "BATCH.UNLIMITED_COOK",
 };
 
 export const PERMISSIONS = { RECIPE, BATCH };
