@@ -14,7 +14,7 @@ const getManyByRecipeIds = async (
   await db.batch.findMany({
     where: {
       recipeIds: {
-        hasEvery: recipeIds,
+        equals: recipeIds,
       },
     },
   });
