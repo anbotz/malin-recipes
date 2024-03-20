@@ -1,5 +1,4 @@
 "use client";
-import { Box, Pagination } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export const PaginationComponent = ({
@@ -12,7 +11,12 @@ export const PaginationComponent = ({
   const searchParams = useSearchParams();
   const { replace } = useRouter();
 
-  const handleSearch = (event: React.ChangeEvent<unknown>, value: number) => {
+  const page =
+    searchParams.get("page") !== null
+      ? parseInt(searchParams.get("page") as string)
+      : 1;
+
+  const handleSearch = (value: number) => {
     const params = new URLSearchParams(searchParams);
     if (value) {
       params.set("page", `${value}`);
@@ -21,18 +25,25 @@ export const PaginationComponent = ({
     }
     replace(`/recipe?${params.toString()}`);
   };
+  console.log({ count, size });
 
   return (
-    <Box display="flex" justifyContent="center">
-      <Pagination
-        count={Math.ceil(count / size)}
-        page={
-          searchParams.get("page") !== null
-            ? parseInt(searchParams.get("page") as string)
-            : 1
-        }
-        onChange={handleSearch}
-      />
-    </Box>
+    <div className="join">
+      <button
+        className={`join-item btn ${page === 1 && "btn-disabled"}`}
+        onClick={() => handleSearch(page - 1)}
+      >
+        «
+      </button>
+      <button className="join-item btn">Page {page}</button>
+      <button
+        className={`join-item btn ${
+          (page - 1) * size > count && "btn-disabled"
+        }`}
+        onClick={() => handleSearch(page + 1)}
+      >
+        »
+      </button>
+    </div>
   );
 };

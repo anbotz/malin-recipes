@@ -5,7 +5,6 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { signIn, signOut, useSession } from "next-auth/react";
 
@@ -27,11 +26,11 @@ const UserMenu = () => {
 
   if (!session) {
     return (
-      <Tooltip title="Connexion">
+      <div className="tooltip" data-tip="Connexion">
         <button className="btn btn-primary" onClick={() => signIn()}>
           Connexion
         </button>
-      </Tooltip>
+      </div>
     );
   }
 
@@ -41,11 +40,11 @@ const UserMenu = () => {
 
   return (
     <Box sx={{ flexGrow: 0 }}>
-      <Tooltip title="Ouvrir le menu">
+      <div className="tooltip  tooltip-left" data-tip="Ouvrir le menu">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
           <Avatar alt={name} src={image} />
         </IconButton>
-      </Tooltip>
+      </div>
       <Menu
         sx={{ mt: "45px" }}
         id="menu-appbar"

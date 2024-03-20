@@ -5,7 +5,7 @@ import {
   Edit,
   KeyboardBackspace,
 } from "@mui/icons-material";
-import { IconButton, Tooltip } from "@mui/material";
+import { IconButton } from "@mui/material";
 
 const Icon = ({ icon }: { icon: string }) => {
   switch (icon) {
@@ -32,10 +32,10 @@ export const IconButtonComponent = ({
   title: string;
 }) => {
   return (
-    <Tooltip title={title}>
+    <div className="tooltip" data-tip={title}>
       <IconButton onClick={onClick}>
         <Icon icon={icon} />
       </IconButton>
-    </Tooltip>
+    </div>
   );
 };

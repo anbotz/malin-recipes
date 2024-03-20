@@ -1,5 +1,4 @@
 "use client";
-import { Tooltip } from "@mui/material";
 import { Shuffle } from "@mui/icons-material";
 import { MongoId } from "@/types/query";
 import { useAuthSession } from "@/hooks/use-auth-session";
@@ -16,7 +15,10 @@ export const BatchButton = ({
   } = useAuthSession();
 
   return (
-    <Tooltip title="Change cette recette par une autre recette aléatoire">
+    <div
+      className="tooltip"
+      data-tip="Change cette recette par une autre recette aléatoire"
+    >
       <button
         className="btn btn-primary"
         onClick={() => onShuffleClick(id, recipeIndex)}
@@ -24,6 +26,6 @@ export const BatchButton = ({
         <Shuffle />
         Switch !
       </button>
-    </Tooltip>
+    </div>
   );
 };

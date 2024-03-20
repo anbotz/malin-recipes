@@ -3,7 +3,7 @@ import * as React from "react";
 import Typography from "@mui/material/Typography";
 import { ButtonContainerComponent } from "../../../_components/container/button-container";
 import { ModalComponent } from "../../../_components/container/modal";
-import { Alert, Backdrop, Tooltip } from "@mui/material";
+import { Alert, Backdrop } from "@mui/material";
 import { Flatware, LockClock, Microwave } from "@mui/icons-material";
 import { DateTime } from "luxon";
 import { useFormStatus } from "react-dom";
@@ -28,7 +28,7 @@ const CookButton = ({
 
   return (
     <>
-      <Tooltip title={title} placement="top">
+      <div className="tooltip tooltip-top" data-tip={title}>
         <span>
           <button
             className="btn btn-success"
@@ -39,7 +39,7 @@ const CookButton = ({
             {pending ? "Chargement" : "Généré le batch !"}
           </button>
         </span>
-      </Tooltip>
+      </div>
       <Backdrop sx={{ color: "#fff", zIndex: 431 }} open={pending}>
         <LoadingComponent />
       </Backdrop>
