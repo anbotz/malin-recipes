@@ -23,7 +23,7 @@ export default async function RootLayout({
   const session = await getRequiredSession();
 
   return (
-    <html lang="en">
+    <html lang="en" data-theme="sunset">
       <body className={inter.className}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={darkTheme}>

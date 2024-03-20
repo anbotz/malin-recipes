@@ -8,7 +8,6 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { Button } from "@mui/material";
 
 const settings = [{ title: "Déconnexion", onClick: () => signOut() }];
 
@@ -29,9 +28,9 @@ const UserMenu = () => {
   if (!session) {
     return (
       <Tooltip title="Connexion">
-        <Button onClick={() => signIn()} variant="contained">
+        <button className="btn btn-primary" onClick={() => signIn()}>
           Connexion
-        </Button>
+        </button>
       </Tooltip>
     );
   }

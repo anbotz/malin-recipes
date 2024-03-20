@@ -1,5 +1,3 @@
-import { Button } from "@mui/material";
-
 export const ButtonComponent = ({
   children,
   onClick,
@@ -8,8 +6,8 @@ export const ButtonComponent = ({
   onClick: () => void;
 }) => {
   return (
-    <Button variant="contained" onClick={onClick}>
+    <button className="btn btn-primary" onClick={onClick}>
       {children}
-    </Button>
+    </button>
   );
 };

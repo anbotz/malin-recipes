@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@mui/material";
 import { FormLayoutComponent } from "../layout/form-layout";
 import { useRouter } from "next/navigation";
 import { MultilineTextFieldComponent } from "../inputs/multiline-text-field";
@@ -25,12 +24,12 @@ export const EditRecipeForm = ({ recipe }: { recipe: Recipe }) => {
       action={update}
       buttons={
         <>
-          <Button variant="contained" type="submit">
+          <button className="btn btn-primary" type="submit">
             Modifier
-          </Button>
-          <Button variant="contained" color="secondary" onClick={back}>
+          </button>
+          <button className="btn btn-neutral" onClick={back}>
             Annuler
-          </Button>
+          </button>
         </>
       }
     >

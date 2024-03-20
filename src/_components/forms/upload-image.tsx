@@ -5,7 +5,6 @@ import Recipe from "@/types/recipe";
 import { useState } from "react";
 import { getSignedURL } from "@/lib/s3/action";
 import { FormLayoutComponent } from "../layout/form-layout";
-import { Button } from "@mui/material";
 import { UploadButton } from "../buttons/upload-button";
 import Image from "next/image";
 import { computeSHA256 } from "@/lib/utils";
@@ -73,12 +72,12 @@ export const UploadImageForm = ({ recipe }: { recipe: Recipe }) => {
       onSubmit={handleSubmit}
       buttons={
         <>
-          <Button variant="contained" type="submit">
+          <button className="btn btn-primary" type="submit">
             Enregistrer
-          </Button>
-          <Button variant="contained" color="secondary" onClick={back}>
+          </button>
+          <button className="btn btn-neutral" onClick={back}>
             Annuler
-          </Button>
+          </button>
         </>
       }
     >

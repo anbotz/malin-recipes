@@ -8,7 +8,7 @@ import {
 } from "@/lib/batch/action";
 import { PERMISSIONS } from "@/lib/permission/const";
 import { Flatware, Shuffle } from "@mui/icons-material";
-import { Button, Tooltip } from "@mui/material";
+import { Tooltip } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
@@ -58,26 +58,20 @@ export const BatchButtons = ({
         accessBatch={(bId) => push("/batch/" + bId)}
         lockBatchExpiresAt={lockBatchExpiresAt}
       />
-      <ButtonContainerComponent
-        sx={{
-          marginTop: "10vh",
-        }}
-      >
+      <ButtonContainerComponent className="mt-10">
         {permissions.includes(PERMISSIONS.BATCH.COOK) && (
           <Tooltip
             title="Génére les instructions pour réaliser le batch"
             placement="top"
           >
-            <Button
+            <button
+              className="btn btn-success btn-lg"
               type="submit"
-              variant="contained"
-              size="large"
-              startIcon={<Flatware />}
-              color="success"
               onClick={() => onBatch()}
             >
+              <Flatware />
               Généré le batch !
-            </Button>
+            </button>
           </Tooltip>
         )}
 
@@ -85,15 +79,13 @@ export const BatchButtons = ({
           title="Change l'ensemble des recettes actuelles par des autres recettes aléatoires"
           placement="top"
         >
-          <Button
-            variant="contained"
-            size="large"
+          <button
+            className="btn btn-secondary btn-lg"
             onClick={() => shuffleWholeBatchAction(id, size)}
-            startIcon={<Shuffle />}
-            color="secondary"
           >
+            <Shuffle />
             Batch au hasard
-          </Button>
+          </button>
         </Tooltip>
       </ButtonContainerComponent>
     </>

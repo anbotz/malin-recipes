@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@mui/material";
 import { FormLayoutComponent } from "../layout/form-layout";
 import { useRouter } from "next/navigation";
 import { TextFieldComponent } from "../inputs/text-field";
@@ -20,12 +19,12 @@ export const CreateRecipeForm = () => {
       action={create}
       buttons={
         <>
-          <Button variant="contained" type="submit">
+          <button className="btn btn-primary" type="submit">
             Ajouter
-          </Button>
-          <Button variant="contained" color="secondary" onClick={back}>
+          </button>
+          <button className="btn btn-neutral" onClick={back}>
             Retour
-          </Button>
+          </button>
         </>
       }
     >

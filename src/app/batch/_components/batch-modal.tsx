@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { ButtonContainerComponent } from "../../../_components/container/button-container";
 import { ModalComponent } from "../../../_components/container/modal";
@@ -31,16 +30,14 @@ const CookButton = ({
     <>
       <Tooltip title={title} placement="top">
         <span>
-          <Button
+          <button
+            className="btn btn-success"
             type="submit"
-            variant="contained"
-            size="large"
-            startIcon={isBatchLocked ? <LockClock /> : <Flatware />}
-            color="success"
             disabled={pending || isBatchLocked}
           >
+            {isBatchLocked ? <LockClock /> : <Flatware />}
             {pending ? "Chargement" : "Généré le batch !"}
-          </Button>
+          </button>
         </span>
       </Tooltip>
       <Backdrop sx={{ color: "#fff", zIndex: 431 }} open={pending}>
@@ -86,13 +83,13 @@ export const BatchModal = ({
       {!batchId && <SubAlert isBatchLocked={isBatchLocked} />}
       <ButtonContainerComponent>
         {batchId && (
-          <Button
+          <button
+            className="btn btn-success"
             onClick={() => accessBatch(batchId)}
-            color="success"
-            variant="outlined"
           >
+            <Microwave />
             Accéder au batch
-          </Button>
+          </button>
         )}
         {!batchId && !generatedBatchId && (
           <form
@@ -108,19 +105,17 @@ export const BatchModal = ({
           </form>
         )}
         {generatedBatchId && (
-          <Button
-            variant="contained"
-            size="large"
-            startIcon={<Microwave />}
-            color="success"
+          <button
+            className="btn btn-success"
             onClick={() => accessBatch(generatedBatchId)}
           >
+            <Microwave />
             Accéder au batch
-          </Button>
+          </button>
         )}
-        <Button onClick={handleClose} variant="outlined">
+        <button className="btn btn-neutral" onClick={handleClose}>
           Annuler
-        </Button>
+        </button>
       </ButtonContainerComponent>
     </ModalComponent>
   );

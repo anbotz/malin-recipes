@@ -1,24 +1,15 @@
-import { Container } from "@mui/material";
-
 export const ButtonContainerComponent = ({
   children,
-  sx,
+  className,
 }: {
   children: React.ReactNode;
-  sx?: object;
+  className?: string;
 }) => {
   return (
-    <Container
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        ...sx,
-      }}
-      maxWidth="sm"
+    <div
+      className={`flex gap-5 flex-row justify-center items-center ${className}`}
     >
       {children}
-    </Container>
+    </div>
   );
 };

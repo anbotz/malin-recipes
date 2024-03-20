@@ -1,5 +1,4 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { ButtonContainerComponent } from "../container/button-container";
 import { ModalComponent } from "../container/modal";
@@ -28,12 +27,12 @@ export const DeleteModal = ({
         Êtes vous sur de vouloir supprimer la recette : {deletedItemName} ?
       </Typography>
       <ButtonContainerComponent>
-        <Button onClick={onValidate} color="error" variant="outlined">
+        <button className="btn btn-error" onClick={onValidate}>
           Supprimer
-        </Button>
-        <Button onClick={handleClose} variant="outlined">
+        </button>
+        <button className="btn btn-neutral" onClick={handleClose}>
           Annuler
-        </Button>
+        </button>
       </ButtonContainerComponent>
     </ModalComponent>
   );

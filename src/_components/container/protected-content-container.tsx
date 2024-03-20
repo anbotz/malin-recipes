@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { signIn, useSession } from "next-auth/react";
-import { Button, Container } from "@mui/material";
+import { Container } from "@mui/material";
 
 const ProtectedContentContainer = ({
   children,
@@ -24,9 +24,9 @@ const ProtectedContentContainer = ({
         }}
       >
         Il faut se connecter pour accéder à ce contenu
-        <Button onClick={() => signIn()} variant="contained" size="large">
+        <button className="btn btn-primary btn-lg" onClick={() => signIn()}>
           Connexion
-        </Button>
+        </button>
       </Container>
     );
   }
