@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { useState } from "react";
 
 export const TextFieldComponent = ({
   label,
@@ -13,12 +13,25 @@ export const TextFieldComponent = ({
   required?: boolean;
   defaultValue?: string;
 }) => {
+  const [value, setValue] = useState(defaultValue);
+
   return (
-    <TextField
-      {...{ label, placeholder, name, required, defaultValue }}
-      variant="outlined"
-      margin="dense"
-      fullWidth
-    />
+    <label className="form-control w-full max-w-prose">
+      <div className="label">
+        <span className="label-text">
+          {label}
+          {required && "*"}
+        </span>
+      </div>
+      <input
+        type="text"
+        className="input input-bordered w-full max-w-prose"
+        placeholder={placeholder}
+        required={required}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        name={name}
+      />
+    </label>
   );
 };

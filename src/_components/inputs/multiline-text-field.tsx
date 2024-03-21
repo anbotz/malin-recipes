@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { useState } from "react";
 
 export const MultilineTextFieldComponent = ({
   label,
@@ -13,15 +13,24 @@ export const MultilineTextFieldComponent = ({
   required?: boolean;
   defaultValue?: string;
 }) => {
+  const [value, setValue] = useState(defaultValue);
+
   return (
-    <TextField
-      multiline
-      maxRows={10}
-      minRows={4}
-      {...{ label, placeholder, name, required, defaultValue }}
-      variant="outlined"
-      margin="dense"
-      fullWidth
-    />
+    <label className="form-control w-full max-w-prose">
+      <div className="label">
+        <span className="label-text">
+          {label}
+          {required && "*"}
+        </span>
+      </div>
+      <textarea
+        className="textarea textarea-bordered h-24"
+        placeholder={placeholder}
+        required={required}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        name={name}
+      ></textarea>
+    </label>
   );
 };
