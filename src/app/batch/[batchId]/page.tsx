@@ -17,14 +17,7 @@ export default async function RecipePage({
   if (batch === null) return notFound();
 
   return (
-    <PageLayoutComponent
-      title={
-        <>
-          <BackButton />
-          Batch {batchId}
-        </>
-      }
-    >
+    <PageLayoutComponent back title={`Batch ${batchId}`}>
       <ProtectedContentContainer>
         <ListLayout
           items={batch.ingredients}

@@ -19,12 +19,8 @@ export default async function RecipePage({
 
   return (
     <PageLayoutComponent
-      title={
-        <>
-          <BackButton />
-          {recipe.name}
-        </>
-      }
+      back
+      title={recipe.name}
       buttons={
         <ManageRecipeComponent
           deletedItemName={recipe.name}

@@ -17,12 +17,8 @@ export default async function UploadImagePage({
 
   return (
     <PageLayoutComponent
-      title={
-        <>
-          <BackButton />
-          Ajouter une image pour la recette {recipe.name}
-        </>
-      }
+      back
+      title={`Ajouter une image pour la recette ${recipe.name}`}
     >
       <UploadImageForm recipe={recipe} />
     </PageLayoutComponent>

@@ -16,14 +16,7 @@ export default async function EditRecipePage({
   if (recipe === null) return notFound();
 
   return (
-    <PageLayoutComponent
-      title={
-        <>
-          <BackButton />
-          Modifier la recette {recipe.name}
-        </>
-      }
-    >
+    <PageLayoutComponent back title={`Modifier la recette ${recipe.name}`}>
       <EditRecipeForm recipe={recipe} />
     </PageLayoutComponent>
   );
