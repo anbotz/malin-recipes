@@ -7,6 +7,7 @@ import { deleteRecipeAction } from "@/lib/recipe/action";
 import { IconButtonComponent } from "@/_components/buttons/icon-button";
 import { useAuthSession } from "@/hooks/use-auth-session";
 import { PERMISSIONS } from "@/lib/permission/const";
+import { toast } from "sonner";
 
 const { RECIPE } = PERMISSIONS;
 
@@ -23,7 +24,11 @@ export const ManageRecipeComponent = ({
   const { permissions } = useAuthSession();
 
   const onDelete = () => {
-    deleteRecipeAction(recipeId);
+    toast.promise(deleteRecipeAction(recipeId), {
+      loading: "Chargement...",
+      success: "Recette supprimée",
+      error: "Erreur lors de la suppression de la recette",
+    });
     push("/recipe");
   };
 

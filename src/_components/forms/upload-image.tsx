@@ -8,6 +8,7 @@ import { FormLayoutComponent } from "../layout/form-layout";
 import { UploadButton } from "../buttons/upload-button";
 import Image from "next/image";
 import { computeSHA256 } from "@/lib/utils";
+import { toast } from "sonner";
 
 export const UploadImageForm = ({ recipe }: { recipe: Recipe }) => {
   const { back, push } = useRouter();
@@ -61,7 +62,11 @@ export const UploadImageForm = ({ recipe }: { recipe: Recipe }) => {
         body: file,
       });
 
-      await uploadImageRecipeAction(recipe.id, imageUrl);
+      toast.promise(uploadImageRecipeAction(recipe.id, imageUrl), {
+        loading: "Téléversement...",
+        success: "Image téléversée",
+        error: "Erreur lors du téléversement de l'image",
+      });
 
       return push(`/recipe/${id}`);
     }

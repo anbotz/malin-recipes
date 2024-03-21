@@ -32,7 +32,7 @@ export const IconButtonComponent = ({
 }) => {
   return (
     <div className="tooltip" data-tip={title}>
-      <button onClick={onClick} className="btn btn-circle btn-neutral">
+      <button onClick={onClick} className="btn btn-circle btn-neutral mr-2">
         <Icon icon={icon} />
       </button>
     </div>

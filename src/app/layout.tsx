@@ -7,6 +7,7 @@ import "./globals.css";
 import AppBarComponent from "../_components/app-bar";
 import SessionProvider from "../_components/session-provider";
 import { getRequiredSession } from "@/lib/auth";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default async function RootLayout({
                 <AppBarComponent />
                 <div className="flex flex-1 flex-col">{children}</div>
               </div>
+              <Toaster richColors />
             </SessionProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>

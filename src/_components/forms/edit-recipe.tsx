@@ -5,6 +5,7 @@ import { MultilineTextFieldComponent } from "../inputs/multiline-text-field";
 import { TextFieldComponent } from "../inputs/text-field";
 import { updateRecipeAction } from "@/lib/recipe/action";
 import Recipe from "@/types/recipe";
+import { toast } from "sonner";
 
 export const EditRecipeForm = ({ recipe }: { recipe: Recipe }) => {
   const { back, push } = useRouter();
@@ -15,7 +16,12 @@ export const EditRecipeForm = ({ recipe }: { recipe: Recipe }) => {
   const initialStringifiedInstructions = instructions.join("\n");
 
   const update = async (formData: FormData) => {
-    updateRecipeAction(id, formData);
+    toast.promise(updateRecipeAction(id, formData), {
+      loading: "Modification...",
+      success: "Recette modifiée",
+      error: "Erreur lors de la modification de la recette",
+    });
+
     return push(`/recipe/${id}`);
   };
 

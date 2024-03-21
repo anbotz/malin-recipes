@@ -4,13 +4,17 @@ import { useRouter } from "next/navigation";
 import { TextFieldComponent } from "../inputs/text-field";
 import { MultilineTextFieldComponent } from "../inputs/multiline-text-field";
 import { createRecipeAction } from "@/lib/recipe/action";
+import { toast } from "sonner";
 
 export const CreateRecipeForm = () => {
   const { back, push } = useRouter();
 
   const create = async (formData: FormData) => {
-    createRecipeAction(formData);
-
+    toast.promise(createRecipeAction(formData), {
+      loading: "Création...",
+      success: "Recette créée",
+      error: "Erreur lors de la création de la recette",
+    });
     return push("/recipe");
   };
 
