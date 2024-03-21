@@ -6,8 +6,8 @@ export const SearchBar = () => {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
 
-  const titou = searchParams.get("query") as string;
-  const [search, setsearch] = useState(titou);
+  const defaultValue = searchParams.get("query") as string;
+  const [search, setsearch] = useState(defaultValue || "");
 
   const handleSearch = (formData: FormData) => {
     const term = formData.get("search") as string;

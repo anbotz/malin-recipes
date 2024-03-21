@@ -6,6 +6,7 @@ const CookSvg = ({ size = 24 }: { size?: number }) => (
     id="_x32_"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 512 512"
+    fill="currentColor"
   >
     <g>
       <path

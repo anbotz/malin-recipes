@@ -2,7 +2,7 @@
 import { ButtonContainerComponent } from "@/_components/container/button-container";
 import { useRouter } from "next/navigation";
 import CookSvg from "../icons/cook";
-import FridgeSvg from "../icons/fridge";
+import { Kitchen } from "@/_components/icons";
 
 export const HomeButtons = () => {
   const { push } = useRouter();
@@ -13,7 +13,7 @@ export const HomeButtons = () => {
         className="btn btn-primary btn-lg"
         onClick={() => push("/recipe")}
       >
-        <FridgeSvg /> Découvre d&apos;autres recettes
+        <Kitchen /> Découvre d&apos;autres recettes
       </button>
 
       <button className="btn btn-primary btn-lg" onClick={() => push("/batch")}>
