@@ -1,28 +1,27 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
-import * as React from "react";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import Avatar from "@mui/material/Avatar";
-import MenuItem from "@mui/material/MenuItem";
+import { User } from "next-auth";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 const settings = [{ title: "Déconnexion", onClick: () => signOut() }];
 
-const UserMenu = () => {
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
+const Avatar = ({ user }: { user: User }) => {
+  const name = user.name || undefined;
+  const image = user?.image || undefined;
+
+  return image ? (
+    <div className="w-12 rounded-full">
+      <img alt={name} src={image} />
+    </div>
+  ) : (
+    <div className="bg-neutral text-neutral-content rounded-full w-12">
+      <span className="text-3xl">{name?.charAt(0)}</span>
+    </div>
   );
+};
+
+const UserMenu = () => {
   const { data: session } = useSession();
-
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
 
   if (!session) {
     return (
@@ -35,45 +34,31 @@ const UserMenu = () => {
   }
 
   const { user } = session;
-  const name = user?.name || undefined;
-  const image = user?.image || undefined;
 
   return (
-    <Box sx={{ flexGrow: 0 }}>
-      <div className="tooltip  tooltip-left" data-tip="Ouvrir le menu">
-        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar alt={name} src={image} />
-        </IconButton>
+    <div className="dropdown dropdown-bottom dropdown-end">
+      <div className="tooltip tooltip-left" data-tip="Ouvrir le menu">
+        <div tabIndex={0} role="button" className="avatar">
+          <Avatar user={user} />
+        </div>
       </div>
-      <Menu
-        sx={{ mt: "45px" }}
-        id="menu-appbar"
-        anchorEl={anchorElUser}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        open={Boolean(anchorElUser)}
-        onClose={handleCloseUserMenu}
+      <ul
+        tabIndex={0}
+        className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
       >
         {settings.map((setting: { title: string; onClick: () => void }) => (
-          <MenuItem
+          <li
             key={setting.title}
             onClick={() => {
-              handleCloseUserMenu();
+              // handleCloseUserMenu();
               setting.onClick();
             }}
           >
-            <Typography textAlign="center">{setting.title}</Typography>
-          </MenuItem>
+            <a>{setting.title}</a>
+          </li>
         ))}
-      </Menu>
-    </Box>
+      </ul>
+    </div>
   );
 };
 export default UserMenu;

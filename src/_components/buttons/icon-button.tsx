@@ -4,8 +4,7 @@ import {
   Delete,
   Edit,
   KeyboardBackspace,
-} from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+} from "@/_components/icons";
 
 const Icon = ({ icon }: { icon: string }) => {
   switch (icon) {
@@ -33,9 +32,9 @@ export const IconButtonComponent = ({
 }) => {
   return (
     <div className="tooltip" data-tip={title}>
-      <IconButton onClick={onClick}>
+      <button onClick={onClick} className="btn btn-circle btn-neutral">
         <Icon icon={icon} />
-      </IconButton>
+      </button>
     </div>
   );
 };

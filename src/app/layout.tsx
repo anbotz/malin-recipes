@@ -23,13 +23,15 @@ export default async function RootLayout({
   const session = await getRequiredSession();
 
   return (
-    <html lang="en" data-theme="sunset">
+    <html lang="en" data-theme="forest">
       <body className={inter.className}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={darkTheme}>
             <SessionProvider session={session}>
-              <AppBarComponent />
-              {children}
+              <div className="flex h-dvh flex-col">
+                <AppBarComponent />
+                <div className="flex flex-1 flex-col">{children}</div>
+              </div>
             </SessionProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>

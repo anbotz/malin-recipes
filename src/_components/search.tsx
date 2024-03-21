@@ -1,56 +1,20 @@
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
-import { styled, alpha } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
-import SearchIcon from "@mui/icons-material/Search";
-
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  marginBottom: theme.spacing(2),
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-  },
-}));
+import { useState } from "react";
 
 export const SearchBar = () => {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
 
+  const titou = searchParams.get("query") as string;
+  const [search, setsearch] = useState(titou);
+
   const handleSearch = (formData: FormData) => {
     const term = formData.get("search") as string;
+
     const params = new URLSearchParams(searchParams);
     if (term) {
-      params.set("query", term);
+      params.set("query", search);
     } else {
       params.delete("query");
     }
@@ -58,18 +22,29 @@ export const SearchBar = () => {
   };
 
   return (
-    <Search>
-      <SearchIconWrapper>
-        <SearchIcon />
-      </SearchIconWrapper>
-      <form action={handleSearch}>
-        <StyledInputBase
+    <form action={handleSearch}>
+      <label className="input input-bordered flex items-center gap-2">
+        <input
+          type="text"
+          className="grow"
           placeholder="Recherche ..."
-          inputProps={{ "aria-label": "search" }}
           name="search"
-          fullWidth
+          value={search}
+          onChange={(e) => setsearch(e.target.value)}
         />
-      </form>
-    </Search>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 16 16"
+          fill="currentColor"
+          className="w-4 h-4 opacity-70"
+        >
+          <path
+            fillRule="evenodd"
+            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </label>
+    </form>
   );
 };

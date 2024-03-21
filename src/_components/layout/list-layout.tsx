@@ -1,5 +1,3 @@
-import { Divider, List, ListItem, Typography } from "@mui/material";
-
 export const ListLayout = ({
   items,
   title,
@@ -11,18 +9,21 @@ export const ListLayout = ({
 }) => {
   return (
     <>
-      <Typography variant="h5" gutterBottom>
-        {title}
-      </Typography>
-      <Divider />
-      <List dense>
+      <h3>{title}</h3>
+      <div className="divider" />
+      <div>
         {items.length > 0 ? (
-          items.map((item) => <ListItem key={item}>{item}</ListItem>)
+          items.map((item) => (
+            <div className="flex gap-3" key={item}>
+              <input type="checkbox" className="checkbox" />
+              {item}
+            </div>
+          ))
         ) : (
           <>{noContent}</>
         )}
-      </List>
-      <Divider />
+      </div>
+      <div className="divider" />
     </>
   );
 };

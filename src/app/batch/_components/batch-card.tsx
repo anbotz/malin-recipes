@@ -1,7 +1,3 @@
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import { CardActions, Paper } from "@mui/material";
 import recipeCache from "@/lib/recipe/cache";
 import { shuffleOneRecipeAction } from "@/lib/batch/action";
 import { BatchButton } from "./batch-button";
@@ -27,49 +23,32 @@ export default async function BatchCard({
       : recipe.ingredients;
 
   return (
-    <Card
-      sx={{
-        maxWidth: 350,
-        width: "19dvw",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        overflow: "visible",
-      }}
-    >
-      <Paper sx={{ padding: "0 10px", position: "static", margin: "8px" }}>
-        <Typography variant="h5">{day}</Typography>
-      </Paper>
-      <Image
-        height="250"
-        width="250"
-        src={imageUrl ?? "/diner.png"}
-        alt={`${name} image`}
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div" noWrap>
-          {name}
-        </Typography>
-        {ingredients.map((i) => (
-          <Typography
-            gutterBottom
-            variant="body2"
-            color="text.secondary"
-            noWrap
-            key={i}
-          >
-            {i}
-            <br />
-          </Typography>
-        ))}
-      </CardContent>
-      <CardActions sx={{ justifyContent: "center" }}>
-        <BatchButton
-          onShuffleClick={shuffleOneRecipeAction}
-          recipeIndex={recipeIndex}
+    <div className="card card-compact image-full">
+      <figure>
+        <Image
+          fill
+          style={{ objectFit: "contain" }}
+          src={imageUrl ?? "/diner.png"}
+          alt={`${name} image`}
         />
-      </CardActions>
-    </Card>
+      </figure>
+      <div className="card-body flex justify-between">
+        <div>{day}</div>
+        <h5 className="card-title text-ellipsis overflow-hidden whitespace-nowrap">
+          {name}
+        </h5>
+        {ingredients.map((i) => (
+          <div className="" key={i}>
+            {i}
+          </div>
+        ))}
+        <div className="card-actions justify-end">
+          <BatchButton
+            onShuffleClick={shuffleOneRecipeAction}
+            recipeIndex={recipeIndex}
+          />
+        </div>
+      </div>
+    </div>
   );
 }

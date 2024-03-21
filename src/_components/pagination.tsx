@@ -25,7 +25,6 @@ export const PaginationComponent = ({
     }
     replace(`/recipe?${params.toString()}`);
   };
-  console.log({ count, size });
 
   return (
     <div className="join">
@@ -37,9 +36,7 @@ export const PaginationComponent = ({
       </button>
       <button className="join-item btn">Page {page}</button>
       <button
-        className={`join-item btn ${
-          (page - 1) * size > count && "btn-disabled"
-        }`}
+        className={`join-item btn ${page * size > count && "btn-disabled"}`}
         onClick={() => handleSearch(page + 1)}
       >
         »

@@ -1,19 +1,15 @@
 import RecipeCard from "@/_components/recipe-card";
-import { Grid } from "@mui/material";
 import Recipe from "@/types/recipe";
 
 const RecipesGrid = async ({ recipes }: { recipes: Recipe[] }) => {
-  // FIXME: Warning: Failed prop type: Invalid prop `children` supplied to `ForwardRef(Box)`, expected a ReactNode.
   if (recipes.length === 0) return <>Aucune recette trouvée</>;
 
   return (
-    <Grid spacing={2} columns={5} container alignItems="center">
+    <div className="flex-1 grid grid-cols-5 gap-2 h-100">
       {recipes.map((a) => (
-        <Grid item key={a.id} xs={1}>
-          <RecipeCard recipe={a} />
-        </Grid>
+        <RecipeCard recipe={a} key={a.id} />
       ))}
-    </Grid>
+    </div>
   );
 };
 

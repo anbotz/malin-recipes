@@ -7,7 +7,7 @@ import {
   shuffleWholeBatchAction,
 } from "@/lib/batch/action";
 import { PERMISSIONS } from "@/lib/permission/const";
-import { Flatware, Shuffle } from "@mui/icons-material";
+import { Flatware, Shuffle } from "@/_components/icons";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 

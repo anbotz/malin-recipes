@@ -1,7 +1,8 @@
 "use client";
 import { ButtonContainerComponent } from "@/_components/container/button-container";
-import { Kitchen, Microwave } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
+import CookSvg from "../icons/cook";
+import FridgeSvg from "../icons/fridge";
 
 export const HomeButtons = () => {
   const { push } = useRouter();
@@ -12,11 +13,11 @@ export const HomeButtons = () => {
         className="btn btn-primary btn-lg"
         onClick={() => push("/recipe")}
       >
-        <Kitchen /> Découvre d&apos;autres recettes
+        <FridgeSvg /> Découvre d&apos;autres recettes
       </button>
 
       <button className="btn btn-primary btn-lg" onClick={() => push("/batch")}>
-        <Microwave /> Commence le batch
+        <CookSvg /> Commence le batch
       </button>
     </ButtonContainerComponent>
   );

@@ -1,9 +1,10 @@
 "use client";
 import * as React from "react";
-import { Add, Kitchen, Microwave } from "@mui/icons-material";
 import Link from "next/link";
 import UserMenu from "./user-menu";
 import { useAuthSession } from "@/hooks/use-auth-session";
+import CookSvg from "./icons/cook";
+import { Kitchen, Add } from "@/_components/icons";
 
 export default function AppBarComponent() {
   const { permissions } = useAuthSession();
@@ -24,7 +25,7 @@ export default function AppBarComponent() {
           </li>
           <li>
             <Link href="/batch">
-              <Microwave /> BATCH
+              <CookSvg /> BATCH
             </Link>
           </li>
           {permissions.includes("RECIPE.CREATE") && (

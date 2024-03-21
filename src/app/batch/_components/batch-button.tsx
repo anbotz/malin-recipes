@@ -1,5 +1,5 @@
 "use client";
-import { Shuffle } from "@mui/icons-material";
+import { Shuffle } from "@/_components/icons";
 import { MongoId } from "@/types/query";
 import { useAuthSession } from "@/hooks/use-auth-session";
 

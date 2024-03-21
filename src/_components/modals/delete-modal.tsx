@@ -1,5 +1,4 @@
 import * as React from "react";
-import Typography from "@mui/material/Typography";
 import { ButtonContainerComponent } from "../container/button-container";
 import { ModalComponent } from "../container/modal";
 
@@ -21,11 +20,13 @@ export const DeleteModal = ({
     handleClose();
   };
 
+  console.log("dele", { open });
+
   return (
     <ModalComponent open={open} onClose={handleClose}>
-      <Typography gutterBottom>
+      <p className="mb-5">
         Êtes vous sur de vouloir supprimer la recette : {deletedItemName} ?
-      </Typography>
+      </p>
       <ButtonContainerComponent>
         <button className="btn btn-error" onClick={onValidate}>
           Supprimer

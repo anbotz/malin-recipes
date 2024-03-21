@@ -1,16 +1,18 @@
-import { Grid } from "@mui/material";
 import BatchCard from "./batch-card";
 
 const BatchGrid = ({ days, batch }: { days: string[]; batch: string[] }) => {
   return (
-    <Grid spacing={2} columns={5} container alignItems="center" height="80%">
+    <div className={`flex-1 grid grid-cols-${days.length ?? 5} gap-2`}>
       {days.length > 0 &&
         days.map((a, index) => (
-          <Grid item key={a} xs={1} height="100%">
-            <BatchCard recipeId={batch[index]} day={a} recipeIndex={index} />
-          </Grid>
+          <BatchCard
+            recipeId={batch[index]}
+            day={a}
+            key={a}
+            recipeIndex={index}
+          />
         ))}
-    </Grid>
+    </div>
   );
 };
 

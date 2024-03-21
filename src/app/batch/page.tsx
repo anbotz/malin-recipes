@@ -12,13 +12,15 @@ const BatchPage = async () => {
   return (
     <PageLayoutComponent title="Batch">
       <ProtectedContentContainer>
-        {data && data.batch && data.batch?.length > 0 && (
-          <BatchGrid days={days} batch={data.batch} />
-        )}
-        <BatchButtons
-          size={days.length}
-          lockBatchExpiresAt={data?.lockBatchExpiresAt}
-        />
+        <div className="flex flex-col items-center justify-between flex-1">
+          {data && data.batch && data.batch?.length > 0 && (
+            <BatchGrid days={days} batch={data.batch} />
+          )}
+          <BatchButtons
+            size={days.length}
+            lockBatchExpiresAt={data?.lockBatchExpiresAt}
+          />
+        </div>
       </ProtectedContentContainer>
     </PageLayoutComponent>
   );

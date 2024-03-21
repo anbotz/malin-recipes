@@ -1,4 +1,3 @@
-import { Container } from "@mui/material";
 import { ButtonContainerComponent } from "../container/button-container";
 
 export const FormLayoutComponent = ({
@@ -14,12 +13,7 @@ export const FormLayoutComponent = ({
 }) => {
   return (
     <form action={action} onSubmit={onSubmit}>
-      <Container
-        maxWidth="sm"
-        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-      >
-        {children}
-      </Container>
+      <div className="flex flex-col items-center w-50">{children}</div>
       <ButtonContainerComponent>{buttons}</ButtonContainerComponent>
     </form>
   );

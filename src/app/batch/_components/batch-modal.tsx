@@ -1,14 +1,11 @@
 "use client";
 import * as React from "react";
-import Typography from "@mui/material/Typography";
 import { ButtonContainerComponent } from "../../../_components/container/button-container";
 import { ModalComponent } from "../../../_components/container/modal";
-import { Alert, Backdrop } from "@mui/material";
-import { Flatware, LockClock, Microwave } from "@mui/icons-material";
+import { Flatware, LockClock, Microwave } from "@/_components/icons";
 import { DateTime } from "luxon";
 import { useFormStatus } from "react-dom";
 import { cookAction } from "@/lib/batch/action";
-import { LoadingComponent } from "@/_components/loading";
 
 const CookButton = ({
   isBatchLocked,
@@ -19,6 +16,7 @@ const CookButton = ({
 }) => {
   const { pending } = useFormStatus();
 
+  // FIXME TOAST LOADING
   const title: string =
     isBatchLocked && !!lockBatchExpiresAt
       ? `Prochaine génération ${DateTime.fromJSDate(
@@ -27,33 +25,56 @@ const CookButton = ({
       : "Génére les instructions pour réaliser le batch";
 
   return (
-    <>
-      <div className="tooltip tooltip-top" data-tip={title}>
-        <span>
-          <button
-            className="btn btn-success"
-            type="submit"
-            disabled={pending || isBatchLocked}
-          >
-            {isBatchLocked ? <LockClock /> : <Flatware />}
-            {pending ? "Chargement" : "Généré le batch !"}
-          </button>
-        </span>
-      </div>
-      <Backdrop sx={{ color: "#fff", zIndex: 431 }} open={pending}>
-        <LoadingComponent />
-      </Backdrop>
-    </>
+    <div className="tooltip tooltip-top" data-tip={title}>
+      <span>
+        <button
+          className="btn btn-success"
+          type="submit"
+          disabled={pending || isBatchLocked}
+        >
+          {isBatchLocked ? <LockClock /> : <Flatware />}
+          {pending ? "Chargement" : "Généré le batch !"}
+        </button>
+      </span>
+    </div>
   );
 };
 
 const SubAlert = ({ isBatchLocked }: { isBatchLocked: boolean }) => {
   return isBatchLocked ? (
-    <Alert severity="error">Vous avez déjà généré un batch cette semaine</Alert>
+    <div role="alert" className="alert alert-error">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="stroke-current shrink-0 h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <span>Vous avez déjà généré un batch cette semaine</span>
+    </div>
   ) : (
-    <Alert severity="success">
-      Vous avez une génération de batch disponible
-    </Alert>
+    <div role="alert" className="alert alert-success">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="stroke-current shrink-0 h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <span>Vous avez une génération de batch disponible</span>
+    </div>
   );
 };
 
@@ -79,7 +100,7 @@ export const BatchModal = ({
 
   return (
     <ModalComponent open={open} onClose={handleClose}>
-      <Typography gutterBottom>{text}</Typography>
+      <p className="mb-3">{text}</p>
       {!batchId && <SubAlert isBatchLocked={isBatchLocked} />}
       <ButtonContainerComponent>
         {batchId && (
