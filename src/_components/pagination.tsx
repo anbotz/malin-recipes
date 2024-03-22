@@ -2,7 +2,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 
 export const PaginationComponent = ({
-  size = 10,
+  size = 12,
   count,
 }: {
   size: number;

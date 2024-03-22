@@ -9,7 +9,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
   const { name, imageUrl } = recipe;
 
   return (
-    <div className="card card-compact image-full">
+    <div className="card card-compact image-full size-64">
       <figure>
         <Image
           fill
@@ -18,8 +18,8 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
           alt={`${name} image`}
         />
       </figure>
-      <div className="card-body flex justify-between">
-        <h5 className="card-title text-ellipsis overflow-hidden whitespace-nowrap">
+      <div className="card-body flex justify-between w-64 min-w-0">
+        <h5 className="card-title line-clamp-1 hover:line-clamp-none">
           {name}
         </h5>
         <div className="card-actions justify-end">

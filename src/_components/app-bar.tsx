@@ -6,6 +6,24 @@ import { useAuthSession } from "@/hooks/use-auth-session";
 import CookSvg from "./icons/cook";
 import { Kitchen, Add } from "@/_components/icons";
 
+const Tab = ({
+  href,
+  name,
+  icon,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  name?: string;
+}) => (
+  <li>
+    <Link href={href}>
+      {icon}
+      {icon && name && " "}
+      <span className="hidden sm:block">{name}</span>
+    </Link>
+  </li>
+);
+
 export default function AppBarComponent() {
   const { permissions } = useAuthSession();
 
@@ -18,22 +36,10 @@ export default function AppBarComponent() {
       </div>
       <div className="flex-1">
         <ul className="menu menu-horizontal px-1">
-          <li>
-            <Link href="/recipe">
-              <Kitchen /> RECETTES
-            </Link>
-          </li>
-          <li>
-            <Link href="/batch">
-              <CookSvg /> BATCH
-            </Link>
-          </li>
+          <Tab href="/recipe" icon={<Kitchen />} name="RECETTES" />
+          <Tab href="/batch" icon={<CookSvg />} name="BATCH" />
           {permissions.includes("RECIPE.CREATE") && (
-            <li>
-              <Link href="/create">
-                <Add />
-              </Link>
-            </li>
+            <Tab href="/create" icon={<Add />} />
           )}
         </ul>
       </div>
