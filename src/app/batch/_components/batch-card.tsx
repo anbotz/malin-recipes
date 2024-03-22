@@ -28,11 +28,11 @@ export default async function BatchCard({
           alt={`${name} image`}
         />
       </figure>
-      <div className="card-body flex flex-row lg:flex-col max-w-full lg:h-96 min-w-0 justify-between">
+      <div className="card-body flex flex-row lg:flex-col max-w-full lg:h-full min-w-0 justify-between">
         <div className="flex flex-col justify-start w-full lg:w-56 min-w-0">
-          {day}
+          <span className="text-end">{day}</span>
           <h5 className="card-title truncate">{name}</h5>
-          <p className="overflow-y-auto h-32 lg:h-64 overflow-x-hidden text-ellipsis w-full">
+          <p className="overflow-y-auto h-32 lg:h-full overflow-x-hidden text-ellipsis w-full">
             {ingredients.map((i) => (
               <span key={v4()}>
                 {i}
@@ -41,7 +41,7 @@ export default async function BatchCard({
             ))}
           </p>
         </div>
-        <div className="absolute bottom-5 lg:bottom-0 right-5 ">
+        <div className="absolute bottom-5 right-5">
           <BatchButton
             onShuffleClick={shuffleOneRecipeAction}
             recipeIndex={recipeIndex}

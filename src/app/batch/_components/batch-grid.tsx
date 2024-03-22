@@ -3,7 +3,7 @@ import BatchCard from "./batch-card";
 const BatchGrid = ({ days, batch }: { days: string[]; batch: string[] }) => {
   return (
     <div
-      className={`flex-1 grid grid-cols-1 lg:grid-cols-5 gap-2 w-full place-items-center`}
+      className={`flex-1 grid grid-cols-1 lg:grid-cols-5 gap-2 w-full place-items-center h-full`}
     >
       {days.length > 0 &&
         days.map((a, index) => (
