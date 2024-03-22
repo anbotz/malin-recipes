@@ -25,11 +25,13 @@ const UserMenu = () => {
 
   if (!session) {
     return (
-      <div className="tooltip" data-tip="Connexion">
-        <button className="btn btn-primary" onClick={() => signIn()}>
-          Connexion
-        </button>
-      </div>
+      <button
+        title="Connexion"
+        className="btn btn-primary"
+        onClick={() => signIn()}
+      >
+        Connexion
+      </button>
     );
   }
 
@@ -37,10 +39,8 @@ const UserMenu = () => {
 
   return (
     <div className="dropdown dropdown-bottom dropdown-end">
-      <div className="tooltip tooltip-left" data-tip="Ouvrir le menu">
-        <div tabIndex={0} role="button" className="avatar">
-          <Avatar user={user} />
-        </div>
+      <div tabIndex={0} role="button" className="avatar" title="Ouvrir le menu">
+        <Avatar user={user} />
       </div>
       <ul
         tabIndex={0}

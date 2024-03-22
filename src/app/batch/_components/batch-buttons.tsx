@@ -59,33 +59,25 @@ export const BatchButtons = ({
       />
       <ButtonContainerComponent className="mt-10">
         {permissions.includes(PERMISSIONS.BATCH.COOK) && (
-          <div
-            className="tooltip tooltip-top"
-            data-tip="Génére les instructions pour réaliser le batch"
+          <button
+            title="Génére les instructions pour réaliser le batch"
+            className="btn btn-success btn-lg"
+            type="submit"
+            onClick={() => onBatch()}
           >
-            <button
-              className="btn btn-success btn-lg"
-              type="submit"
-              onClick={() => onBatch()}
-            >
-              <Flatware />
-              Généré le batch !
-            </button>
-          </div>
+            <Flatware />
+            Généré le batch !
+          </button>
         )}
 
-        <div
-          className="tooltip tooltip-top"
-          data-tip="Change l'ensemble des recettes actuelles par des autres recettes aléatoires"
+        <button
+          title="Change l'ensemble des recettes actuelles par des autres recettes aléatoires"
+          className="btn btn-secondary btn-lg"
+          onClick={() => shuffleWholeBatchAction(id, size)}
         >
-          <button
-            className="btn btn-secondary btn-lg"
-            onClick={() => shuffleWholeBatchAction(id, size)}
-          >
-            <Shuffle />
-            Batch au hasard
-          </button>
-        </div>
+          <Shuffle />
+          Batch au hasard
+        </button>
       </ButtonContainerComponent>
     </>
   );

@@ -1,4 +1,3 @@
-import { BackButton } from "@/_components/buttons/back-button";
 import { ListLayout } from "@/_components/layout/list-layout";
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import { ManageRecipeComponent } from "@/app/recipe/[recipeId]/_components/manage-recipe";
@@ -30,7 +29,7 @@ export default async function RecipePage({
     >
       {recipe.imageUrl && (
         <Image
-          className="floatting-image"
+          className="absolute right-0 mr-3"
           src={recipe.imageUrl}
           alt="recipe image"
           width="200"

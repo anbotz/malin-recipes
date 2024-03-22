@@ -19,7 +19,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
         />
       </figure>
       <div className="card-body flex justify-between w-64 min-w-0">
-        <h5 className="card-title line-clamp-1 hover:line-clamp-none">
+        <h5 className="card-title line-clamp-1 hover:line-clamp-none hover:text-wrap hover:overflow-hidden">
           {name}
         </h5>
         <div className="card-actions justify-end">

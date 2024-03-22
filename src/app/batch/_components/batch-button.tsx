@@ -15,17 +15,13 @@ export const BatchButton = ({
   } = useAuthSession();
 
   return (
-    <div
-      className="tooltip"
-      data-tip="Change cette recette par une autre recette aléatoire"
+    <button
+      title="Change cette recette par une autre recette aléatoire"
+      className="btn btn-primary"
+      onClick={() => onShuffleClick(id, recipeIndex)}
     >
-      <button
-        className="btn btn-primary"
-        onClick={() => onShuffleClick(id, recipeIndex)}
-      >
-        <Shuffle />
-        Switch !
-      </button>
-    </div>
+      <Shuffle />
+      Switch !
+    </button>
   );
 };

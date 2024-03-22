@@ -25,18 +25,15 @@ const CookButton = ({
       : "Génére les instructions pour réaliser le batch";
 
   return (
-    <div className="tooltip tooltip-top" data-tip={title}>
-      <span>
-        <button
-          className="btn btn-success"
-          type="submit"
-          disabled={pending || isBatchLocked}
-        >
-          {isBatchLocked ? <LockClock /> : <Flatware />}
-          {pending ? "Chargement" : "Généré le batch !"}
-        </button>
-      </span>
-    </div>
+    <button
+      title={title}
+      className="btn btn-success"
+      type="submit"
+      disabled={pending || isBatchLocked}
+    >
+      {isBatchLocked ? <LockClock /> : <Flatware />}
+      {pending ? "Chargement" : "Généré le batch !"}
+    </button>
   );
 };
 

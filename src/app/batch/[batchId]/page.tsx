@@ -1,4 +1,3 @@
-import { BackButton } from "@/_components/buttons/back-button";
 import ProtectedContentContainer from "@/_components/container/protected-content-container";
 import { ListLayout } from "@/_components/layout/list-layout";
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
