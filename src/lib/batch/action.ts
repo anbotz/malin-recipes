@@ -1,8 +1,7 @@
 "use server";
-import { MongoId } from "@/types/query";
+import { MongoId, ServiceResponse } from "@/types/query";
 import service from "./service";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { Batch } from "@prisma/client";
 
 export const shuffleWholeBatchAction = async (
@@ -45,13 +44,15 @@ export const checkExistingBatchAction = async (): Promise<
   return data;
 };
 
-export const cookAction = async (): Promise<Batch | void> => {
+export const cookAction = async (): Promise<ServiceResponse<Batch>> => {
   const qt = 2;
-  const { data } = await service.generateFromAi({ qt });
 
-  if (data) {
-    return data;
-  } else {
-    return console.error("Failed to cook");
-  }
+  return new Promise(async (resolve, reject) => {
+    const response = await service.generateFromAi({ qt });
+
+    if (response.error) {
+      return reject(response);
+    }
+    return resolve(response);
+  });
 };

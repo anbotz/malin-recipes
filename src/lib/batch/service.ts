@@ -246,13 +246,13 @@ const generateFromAi = async ({
 
     const { recipes } = data;
 
-    const { data: createdBatch } = await openAiService.createBatchFromAi({
+    const createdBatchResponse = await openAiService.createBatchFromAi({
       userId: user.id,
       qt,
       recipes,
     });
 
-    return { data: createdBatch };
+    return createdBatchResponse;
   } catch (error) {
     return errorMessage(error, `${ERROR_MESSAGE}cook`);
   }

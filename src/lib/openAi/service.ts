@@ -58,6 +58,10 @@ const createBatchFromAi = async ({
     const { instructions, ingredients } = parsedContent;
 
     if (!instructions.length || !ingredients.length) {
+      console.error({
+        instructionsLength: instructions.length,
+        ingredientsLength: ingredients.length,
+      });
       throw new Error("Wrong return from OpenAi");
     }
 

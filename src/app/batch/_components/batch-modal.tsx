@@ -6,6 +6,7 @@ import { Flatware, LockClock, Microwave } from "@/_components/icons";
 import { DateTime } from "luxon";
 import { useFormStatus } from "react-dom";
 import { cookAction } from "@/lib/batch/action";
+import { toast } from "sonner";
 
 const CookButton = ({
   isBatchLocked,
@@ -16,7 +17,6 @@ const CookButton = ({
 }) => {
   const { pending } = useFormStatus();
 
-  // FIXME TOAST LOADING
   const title: string =
     isBatchLocked && !!lockBatchExpiresAt
       ? `Prochaine génération ${DateTime.fromJSDate(
@@ -115,8 +115,15 @@ export const BatchModal = ({
         {!batchId && !generatedBatchId && (
           <form
             action={async () => {
-              const data = await cookAction();
-              setGeneratedBatchId(data?.id);
+              toast.promise(cookAction, {
+                loading: "Génération du batch ..",
+                success: (response) => {
+                  setGeneratedBatchId(response.data?.id);
+
+                  return "Batch généré !";
+                },
+                error: "Erreur lors de la génération",
+              });
             }}
           >
             <CookButton

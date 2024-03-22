@@ -41,6 +41,7 @@ export default async function RecipePage({
         items={recipe.ingredients}
         title="Ingrédients :"
         noContent="Aucun ingrédient indiqué"
+        isGrid
       />
       <ListLayout
         items={recipe.instructions}

@@ -23,6 +23,7 @@ export default async function RecipePage({
           items={batch.ingredients}
           title="Ingrédients pour l'ensemble du batch :"
           noContent="Aucun ingrédient indiqué"
+          isGrid
         />
         <ListLayout
           items={batch.instructions}
