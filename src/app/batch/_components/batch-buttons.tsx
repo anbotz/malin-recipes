@@ -14,16 +14,16 @@ import { useCallback, useState } from "react";
 export const BatchButtons = ({
   size,
   lockBatchExpiresAt,
+  showBatchModal,
 }: {
   size: number;
   lockBatchExpiresAt?: Date;
+  showBatchModal: boolean;
 }) => {
   const [modalProps, setModalProps] = useState<{
-    open: boolean;
     batchId?: string;
     isBatchLocked: boolean;
   }>({
-    open: false,
     isBatchLocked: true,
   });
 
@@ -42,21 +42,20 @@ export const BatchButtons = ({
       : true;
     setModalProps((previousProps) => ({
       ...previousProps,
-      open: true,
       isBatchLocked,
     }));
-  }, [permissions]);
+    push("?show=true");
+  }, [permissions, push]);
 
   return (
     <>
-      <BatchModal
-        setOpen={(o) =>
-          setModalProps((previousProps) => ({ ...previousProps, open: o }))
-        }
-        modalProps={modalProps}
-        accessBatch={(bId) => push("/batch/" + bId)}
-        lockBatchExpiresAt={lockBatchExpiresAt}
-      />
+      {showBatchModal && (
+        <BatchModal
+          modalProps={modalProps}
+          accessBatch={(bId) => push("/batch/" + bId)}
+          lockBatchExpiresAt={lockBatchExpiresAt}
+        />
+      )}
       <ButtonContainerComponent className="mt-10">
         {permissions.includes(PERMISSIONS.BATCH.COOK) && (
           <button

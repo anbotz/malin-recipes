@@ -7,6 +7,7 @@ import { DateTime } from "luxon";
 import { useFormStatus } from "react-dom";
 import { cookAction } from "@/lib/batch/action";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const CookButton = ({
   isBatchLocked,
@@ -76,27 +77,27 @@ const SubAlert = ({ isBatchLocked }: { isBatchLocked: boolean }) => {
 };
 
 export const BatchModal = ({
-  setOpen,
   modalProps,
   accessBatch,
   lockBatchExpiresAt,
 }: {
-  setOpen: (bool: boolean) => void;
-  modalProps: { open: boolean; batchId?: string; isBatchLocked: boolean };
+  modalProps: { batchId?: string; isBatchLocked: boolean };
   accessBatch: (e: string) => void;
   lockBatchExpiresAt?: Date;
 }) => {
   const [generatedBatchId, setGeneratedBatchId] = React.useState<string>();
-  const { batchId, isBatchLocked, open } = modalProps;
+  const { batchId, isBatchLocked } = modalProps;
 
-  const handleClose = () => setOpen(false);
+  const { back } = useRouter();
+
+  const handleClose = () => back();
 
   const text = batchId
     ? "Le même batch existe déjà !"
     : "Ce batch n'a pas encore été généré";
 
   return (
-    <ModalComponent open={open} onClose={handleClose}>
+    <ModalComponent>
       <p className="mb-3">{text}</p>
       {!batchId && <SubAlert isBatchLocked={isBatchLocked} />}
       <ButtonContainerComponent>

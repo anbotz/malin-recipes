@@ -1,29 +1,7 @@
-import { Box, Modal } from "@mui/material";
-
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  maxWidth: "50%",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 2,
-};
-
-export const ModalComponent = ({
-  open,
-  onClose,
-  children,
-}: {
-  open: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
-}) => {
+export const ModalComponent = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Modal open={open} onClose={onClose}>
-      <Box sx={style}>{children}</Box>
-    </Modal>
+    <div className="fixed inset-0 bg-opacity-50 bg-white overflow-y-auto h-full w-full flex items-center justify-center z-20">
+      <div className="modal-box w-full">{children}</div>
+    </div>
   );
 };

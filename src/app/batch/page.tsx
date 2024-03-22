@@ -3,10 +3,17 @@ import BatchGrid from "@/app/batch/_components/batch-grid";
 import ProtectedContentContainer from "@/_components/container/protected-content-container";
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import batchService from "@/lib/batch/service";
+import { BatchModal } from "./_components/batch-modal";
 
 const days = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
 
-const BatchPage = async () => {
+const BatchPage = async ({
+  searchParams,
+}: {
+  searchParams: { show: string };
+}) => {
+  const show = searchParams?.show;
+
   const { data } = await batchService.getUserBatch(days.length);
 
   return (
@@ -19,6 +26,7 @@ const BatchPage = async () => {
           <BatchButtons
             size={days.length}
             lockBatchExpiresAt={data?.lockBatchExpiresAt}
+            showBatchModal={!!show}
           />
         </div>
       </ProtectedContentContainer>
