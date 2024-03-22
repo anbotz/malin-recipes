@@ -2,8 +2,9 @@ import React from "react";
 import { BackButton } from "../buttons/back-button";
 
 type PageLayoutComponentType = {
-  title: string;
   children: React.ReactNode;
+  title?: string;
+  header?: React.ReactNode;
   buttons?: React.ReactNode;
   back?: boolean;
 };
@@ -13,11 +14,13 @@ export const PageLayoutComponent = ({
   children,
   buttons,
   back,
+  header,
 }: PageLayoutComponentType) => {
   return (
     <div className="flex flex-col m-3 flex-1">
       <div className="flex items-center justify-between mb-3">
-        {back && <BackButton />} <h2 className="text-xl">{title}</h2>
+        {back && <BackButton />} {title && <h2 className="text-xl">{title}</h2>}
+        {header}
         <div className="grow" />
         <div>{buttons}</div>
       </div>

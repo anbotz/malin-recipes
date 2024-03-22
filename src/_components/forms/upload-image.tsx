@@ -80,7 +80,7 @@ export const UploadImageForm = ({ recipe }: { recipe: Recipe }) => {
           <button className="btn btn-primary" type="submit">
             Enregistrer
           </button>
-          <button className="btn btn-neutral" onClick={back}>
+          <button className="btn btn-neutral" onClick={back} type="reset">
             Annuler
           </button>
         </>

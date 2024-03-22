@@ -139,7 +139,7 @@ export const BatchModal = ({
             Accéder au batch
           </button>
         )}
-        <button className="btn btn-neutral" onClick={handleClose}>
+        <button className="btn btn-neutral" onClick={handleClose} type="reset">
           Annuler
         </button>
       </ButtonContainerComponent>

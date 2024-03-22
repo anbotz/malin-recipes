@@ -39,7 +39,7 @@ export const DeleteModal = ({
         <button className="btn btn-error" onClick={onValidate}>
           Supprimer
         </button>
-        <button className="btn btn-neutral" onClick={handleClose}>
+        <button className="btn btn-neutral" onClick={handleClose} type="reset">
           Annuler
         </button>
       </ButtonContainerComponent>

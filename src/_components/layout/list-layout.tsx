@@ -14,7 +14,11 @@ export const ListLayout = ({
       <h3>{title}</h3>
       <div className="divider" />
       <div
-        className={`${isGrid ? "grid grid-cols-1 gap-3 lg:grid-cols-2" : ""}`}
+        className={`${
+          isGrid
+            ? "grid grid-cols-1 gap-3 lg:grid-cols-2"
+            : "flex flex-col gap-3"
+        }`}
       >
         {items.length > 0 ? (
           items.map((item) => (

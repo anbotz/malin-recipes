@@ -33,7 +33,7 @@ export const EditRecipeForm = ({ recipe }: { recipe: Recipe }) => {
           <button className="btn btn-primary" type="submit">
             Modifier
           </button>
-          <button className="btn btn-neutral" onClick={back}>
+          <button className="btn btn-neutral" onClick={back} type="reset">
             Annuler
           </button>
         </>
