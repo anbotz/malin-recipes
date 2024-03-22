@@ -1,7 +1,4 @@
 import type { Metadata } from "next";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
-import { ThemeProvider } from "@mui/material/styles";
-import darkTheme from "../theme";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import AppBarComponent from "../_components/app-bar";
@@ -26,17 +23,13 @@ export default async function RootLayout({
   return (
     <html lang="en" data-theme="forest">
       <body className={inter.className}>
-        <AppRouterCacheProvider>
-          <ThemeProvider theme={darkTheme}>
-            <SessionProvider session={session}>
-              <div className="flex h-dvh flex-col">
-                <AppBarComponent />
-                <div className="flex flex-1 flex-col">{children}</div>
-              </div>
-              <Toaster richColors />
-            </SessionProvider>
-          </ThemeProvider>
-        </AppRouterCacheProvider>
+        <SessionProvider session={session}>
+          <div className="flex h-dvh flex-col">
+            <AppBarComponent />
+            <div className="flex flex-1 flex-col">{children}</div>
+          </div>
+          <Toaster richColors />
+        </SessionProvider>
       </body>
     </html>
   );
