@@ -1,5 +1,5 @@
 "use client";
-import { ButtonContainerComponent } from "@/_components/container/button-container";
+import { HeroButtonContainerComponent } from "@/_components/container/hero-button-container";
 import { useRouter } from "next/navigation";
 import CookSvg from "../icons/cook";
 import { Kitchen } from "@/_components/icons";
@@ -8,7 +8,7 @@ export const HomeButtons = () => {
   const { push } = useRouter();
 
   return (
-    <ButtonContainerComponent className="mt-10">
+    <HeroButtonContainerComponent>
       <button
         className="btn btn-primary btn-lg"
         onClick={() => push("/recipe")}
@@ -19,6 +19,6 @@ export const HomeButtons = () => {
       <button className="btn btn-primary btn-lg" onClick={() => push("/batch")}>
         <CookSvg /> Commence le batch
       </button>
-    </ButtonContainerComponent>
+    </HeroButtonContainerComponent>
   );
 };

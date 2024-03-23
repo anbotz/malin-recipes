@@ -21,10 +21,11 @@ export const PageLayoutComponent = ({
   return (
     <div className="flex flex-col m-3 flex-1">
       <div className="flex items-center justify-between mb-3">
-        {back && <BackButton />} {title && <h2 className="text-xl">{title}</h2>}
+        {back && <BackButton />}
+        {title && <h2 className="text-xl grow-0 truncate">{title}</h2>}
         {header}
         <div className="grow" />
-        <div>{buttons}</div>
+        <div className="flex flex-row">{buttons}</div>
       </div>
 
       <div className="flex flex-1 flex-col">{children}</div>

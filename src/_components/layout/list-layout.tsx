@@ -22,7 +22,7 @@ export const ListLayout = ({
       >
         {items.length > 0 ? (
           items.map((item) => (
-            <div className="flex gap-3" key={item}>
+            <div className="flex gap-3 line-clamp-1" key={item}>
               <input type="checkbox" className="checkbox" />
               {item}
             </div>

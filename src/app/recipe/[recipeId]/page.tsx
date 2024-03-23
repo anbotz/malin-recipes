@@ -26,29 +26,31 @@ export default async function RecipePage({
       title={recipe.name}
       buttons={<ManageRecipeComponent recipeId={recipeId} />}
     >
-      {recipe.imageUrl && (
-        <Image
-          className="absolute right-0 mr-3"
-          src={recipe.imageUrl}
-          alt="recipe image"
-          width="200"
-          height="200"
+      <div className="relative">
+        {recipe.imageUrl && (
+          <Image
+            className="absolute hidden lg:block right-0 mr-3"
+            src={recipe.imageUrl}
+            alt="recipe image"
+            width="200"
+            height="200"
+          />
+        )}
+        <ListLayout
+          items={recipe.ingredients}
+          title="Ingrédients :"
+          noContent="Aucun ingrédient indiqué"
+          isGrid
         />
-      )}
-      <ListLayout
-        items={recipe.ingredients}
-        title="Ingrédients :"
-        noContent="Aucun ingrédient indiqué"
-        isGrid
-      />
-      <ListLayout
-        items={recipe.instructions}
-        title="Instructions :"
-        noContent="Aucune instruction indiquée"
-      />
-      {show && (
-        <DeleteModal deletedItemName={recipe.name} recipeId={recipeId} />
-      )}
+        <ListLayout
+          items={recipe.instructions}
+          title="Instructions :"
+          noContent="Aucune instruction indiquée"
+        />
+        {show && (
+          <DeleteModal deletedItemName={recipe.name} recipeId={recipeId} />
+        )}
+      </div>
     </PageLayoutComponent>
   );
 }

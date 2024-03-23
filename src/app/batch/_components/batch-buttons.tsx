@@ -1,5 +1,5 @@
 "use client";
-import { ButtonContainerComponent } from "@/_components/container/button-container";
+import { HeroButtonContainerComponent } from "@/_components/container/hero-button-container";
 import { BatchModal } from "@/app/batch/_components/batch-modal";
 import { useAuthSession } from "@/hooks/use-auth-session";
 import {
@@ -56,7 +56,7 @@ export const BatchButtons = ({
           lockBatchExpiresAt={lockBatchExpiresAt}
         />
       )}
-      <ButtonContainerComponent className="mt-10">
+      <HeroButtonContainerComponent>
         {permissions.includes(PERMISSIONS.BATCH.COOK) && (
           <button
             title="Génére les instructions pour réaliser le batch"
@@ -77,7 +77,7 @@ export const BatchButtons = ({
           <Shuffle />
           Batch au hasard
         </button>
-      </ButtonContainerComponent>
+      </HeroButtonContainerComponent>
     </>
   );
 };
