@@ -33,15 +33,19 @@ export const shuffleOneRecipeAction = async (
 };
 
 export const checkExistingBatchAction = async (): Promise<
-  | {
-      batchId?: string;
-      isBatchLocked: boolean;
-    }
-  | undefined
+  ServiceResponse<{
+    batchId?: string;
+    isBatchLocked: boolean;
+  }>
 > => {
-  const { data } = await service.checkExistingBatch();
+  return new Promise(async (resolve, reject) => {
+    const response = await service.checkExistingBatch();
 
-  return data;
+    if (response.error) {
+      return reject(response.error);
+    }
+    return resolve(response);
+  });
 };
 
 export const cookAction = async (): Promise<ServiceResponse<Batch>> => {

@@ -23,6 +23,7 @@ const createBatchFromAi = async ({
 }): Promise<ServiceResponse<Batch>> => {
   try {
     const recipeIds = recipes.map(({ id }) => id);
+    const recipeNames = recipes.map(({ name }) => name);
 
     const formattedRecipes = recipes.map(
       ({ name, ingredients, instructions, qtCounter }, index) => ({
@@ -65,15 +66,21 @@ const createBatchFromAi = async ({
       throw new Error("Wrong return from OpenAi");
     }
 
-    await userService.updateById(userId, {
+    const { data } = await userService.updateById(userId, {
       lockBatchExpiresAt: DateTime.now().plus(LOCK).toJSDate(),
     });
 
     const { data: createdBatch } = await batchService.create({
       userId,
+      creator:
+        data?.name
+          ?.split(" ")
+          .map((i) => i.charAt(0).toUpperCase())
+          .join("") ?? undefined,
       recipeIds,
       ingredients,
       instructions,
+      recipeNames,
     });
 
     if (!createdBatch) {

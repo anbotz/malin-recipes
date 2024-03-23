@@ -10,15 +10,18 @@ import { PERMISSIONS } from "@/lib/permission/const";
 import { Flatware, Shuffle } from "@/_components/icons";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
+import { toast } from "sonner";
 
 export const BatchButtons = ({
   size,
   lockBatchExpiresAt,
   showBatchModal,
+  disabledBatchButton,
 }: {
   size: number;
   lockBatchExpiresAt?: Date;
   showBatchModal: boolean;
+  disabledBatchButton: boolean;
 }) => {
   const [modalProps, setModalProps] = useState<{
     batchId?: string;
@@ -34,17 +37,31 @@ export const BatchButtons = ({
   const { id } = user;
 
   const onBatch = useCallback(async () => {
-    const serverProps = await checkExistingBatchAction();
-    const isBatchLocked = permissions.includes(PERMISSIONS.BATCH.UNLIMITED_COOK)
-      ? false
-      : serverProps?.isBatchLocked
-      ? serverProps.isBatchLocked
-      : true;
-    setModalProps((previousProps) => ({
-      ...previousProps,
-      isBatchLocked,
-    }));
-    push("?show=true");
+    toast.promise(checkExistingBatchAction(), {
+      loading: "Chargement...",
+      success: (response) => {
+        const isBatchLocked = permissions.includes(
+          PERMISSIONS.BATCH.UNLIMITED_COOK
+        )
+          ? false
+          : response.data?.isBatchLocked
+          ? response.data.isBatchLocked
+          : true;
+        setModalProps((previousProps) => ({
+          ...previousProps,
+          isBatchLocked,
+          batchId: response?.data?.batchId,
+        }));
+        push("?show=true");
+        return response.data?.batchId
+          ? "Ce batch existe déjà, vous pouvez directement y accéder"
+          : "Ce batch est générable";
+      },
+      error: (error) => {
+        console.log(error);
+        return `Erreur`;
+      },
+    });
   }, [permissions, push]);
 
   return (
@@ -63,6 +80,7 @@ export const BatchButtons = ({
             className="btn btn-success btn-lg"
             type="submit"
             onClick={() => onBatch()}
+            disabled={disabledBatchButton}
           >
             <Flatware />
             Généré le batch !

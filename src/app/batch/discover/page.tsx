@@ -6,14 +6,13 @@ import { DateTime } from "luxon";
 import { EnterButton } from "./_components/enter-button";
 
 const BatchAccordeon = ({ batch }: { batch: Batch }) => {
-  const { id, createdAt, creator, name, recipesName, recipeIds, description } =
+  const { id, createdAt, creator, name, recipeNames, recipeIds, description } =
     batch;
   const createAtLocalString = DateTime.fromJSDate(createdAt).toLocaleString();
   const week = DateTime.fromJSDate(createdAt).weekNumber;
 
   const subtitle = `Créé par ${creator ?? "Malin"} le ${createAtLocalString}`;
-  // FIXME
-  const recipes = recipesName.length === 0 ? recipeIds : recipesName;
+  const recipes = recipeNames.length === 0 ? recipeIds : recipeNames;
 
   return (
     <div className="collapse collapse-arrow bg-base-200">
@@ -24,9 +23,9 @@ const BatchAccordeon = ({ batch }: { batch: Batch }) => {
             <span>{week}</span>
           </div>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col justify-center truncate">
           {name ?? subtitle}
-          <div className="italic text-base">{description}</div>
+          <div className="italic text-base truncate">{description}</div>
         </div>
       </div>
       <div className="collapse-content flex flex-row justify-between">

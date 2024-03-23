@@ -15,3 +15,7 @@ export const errorMessage = (error: any, msg: string) => {
 
 export const isDateExpired = (date: Date | null): boolean =>
   date ? !!(new Date().getTime() - date.getTime()) : false;
+
+export const hasDuplicates = (array: any[]): boolean => {
+  return new Set(array).size !== array.length;
+};

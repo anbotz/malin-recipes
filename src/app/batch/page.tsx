@@ -4,6 +4,7 @@ import ProtectedContentContainer from "@/_components/container/protected-content
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import batchService from "@/lib/batch/service";
 import { DiscoverButton } from "./_components/browse-button";
+import { hasDuplicates } from "@/lib/utils";
 
 const DAYS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
 
@@ -15,6 +16,7 @@ const BatchPage = async ({
   const show = searchParams?.show;
 
   const { data } = await batchService.getUserBatch(DAYS.length);
+  const hasDuplicatesRecipes = data?.batch && hasDuplicates(data.batch);
 
   return (
     <PageLayoutComponent title="Batch" buttons={<DiscoverButton />}>
@@ -27,6 +29,7 @@ const BatchPage = async ({
             size={DAYS.length}
             lockBatchExpiresAt={data?.lockBatchExpiresAt}
             showBatchModal={!!show}
+            disabledBatchButton={hasDuplicatesRecipes ?? true}
           />
         </div>
       </ProtectedContentContainer>

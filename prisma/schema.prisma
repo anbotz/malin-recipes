@@ -33,7 +33,7 @@ model Batch {
   instructions String[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  recipesName  String[]
+  recipeNames  String[]
   creator      String?
   description  String?
   name         String?

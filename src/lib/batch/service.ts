@@ -5,7 +5,7 @@ import BatchModel from "../../model/batch.model";
 import openAiService from "@/lib/openAi/service";
 import userService from "@/lib/user/service";
 import { CreateBatchData } from "@/types/batch";
-import { errorMessage, isDateExpired } from "../utils";
+import { errorMessage, hasDuplicates, isDateExpired } from "../utils";
 import { getPermissions } from "../permission";
 import { PERMISSIONS } from "../permission/const";
 
@@ -112,8 +112,10 @@ const getBatchById = async (id: MongoId): Promise<ServiceResponse<Batch>> => {
 };
 
 const create = async ({
+  creator,
   userId,
   recipeIds,
+  recipeNames,
   ingredients,
   instructions,
 }: CreateBatchData): Promise<ServiceResponse<Batch>> => {
@@ -124,7 +126,9 @@ const create = async ({
       ingredients,
       instructions,
       recipeIds,
+      recipeNames,
       userId,
+      creator,
     });
     return { data: createdBatch };
   } catch (error) {
@@ -198,6 +202,10 @@ const checkExistingBatch = async (): Promise<
     }
 
     const { recipeIds } = data;
+
+    if (hasDuplicates(recipeIds)) {
+      throw new Error("Batchs has duplicated recipe");
+    }
 
     const { data: alreadyBatch } = await getBatchByRecipeIds(recipeIds);
 
