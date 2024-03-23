@@ -5,6 +5,7 @@ import AppBarComponent from "../_components/app-bar";
 import SessionProvider from "../_components/session-provider";
 import { getRequiredSession } from "@/lib/auth";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "next-themes";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,14 +22,18 @@ export default async function RootLayout({
   const session = await getRequiredSession();
 
   return (
-    <html lang="en" data-theme="forest">
+    <html lang="en" className="overflow-hidden" suppressHydrationWarning>
       <body className={inter.className}>
         <SessionProvider session={session}>
-          <div className="flex h-dvh flex-col">
-            <AppBarComponent />
-            <div className="flex flex-1 flex-col">{children}</div>
-          </div>
-          <Toaster richColors />
+          <ThemeProvider>
+            <div className="flex h-dvh flex-col">
+              <AppBarComponent />
+              <div className="flex flex-1 flex-col overflow-auto">
+                {children}
+              </div>
+            </div>
+            <Toaster richColors />
+          </ThemeProvider>
         </SessionProvider>
       </body>
     </html>

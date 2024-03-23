@@ -17,10 +17,13 @@ const RecipePage = async ({
   });
 
   return (
-    <PageLayoutComponent title="Recipes" buttons={<SearchBar />}>
+    <PageLayoutComponent
+      title="Recipes"
+      buttons={<SearchBar />}
+      footer={<PaginationComponent count={total} size={10} />}
+    >
       <div className="flex flex-col items-center justify-between flex-1">
         <RecipesGrid recipes={recipes} />
-        <PaginationComponent count={total} size={10} />
       </div>
     </PageLayoutComponent>
   );

@@ -7,6 +7,7 @@ type PageLayoutComponentType = {
   header?: React.ReactNode;
   buttons?: React.ReactNode;
   back?: boolean;
+  footer?: React.ReactNode;
 };
 
 export const PageLayoutComponent = ({
@@ -15,6 +16,7 @@ export const PageLayoutComponent = ({
   buttons,
   back,
   header,
+  footer,
 }: PageLayoutComponentType) => {
   return (
     <div className="flex flex-col m-3 flex-1">
@@ -26,6 +28,7 @@ export const PageLayoutComponent = ({
       </div>
 
       <div className="flex flex-1 flex-col">{children}</div>
+      <div className="flex items-center justify-center mt-3">{footer}</div>
     </div>
   );
 };
