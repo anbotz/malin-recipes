@@ -2,6 +2,7 @@ import { ListLayout } from "@/_components/layout/list-layout";
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import { DeleteModal } from "@/_components/modals/delete-modal";
 import { ManageRecipeComponent } from "@/app/recipe/[recipeId]/_components/manage-recipe";
+import { deleteRecipeAction } from "@/lib/recipe/action";
 import recipeCache from "@/lib/recipe/cache";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -11,7 +12,7 @@ export default async function RecipePage({
   searchParams,
 }: {
   params: { recipeId: string };
-  searchParams: { show?: true };
+  searchParams: { show?: boolean };
 }) {
   const { recipeId } = params;
   const show = searchParams?.show;
@@ -48,7 +49,12 @@ export default async function RecipePage({
           noContent="Aucune instruction indiquée"
         />
         {show && (
-          <DeleteModal deletedItemName={recipe.name} recipeId={recipeId} />
+          <DeleteModal
+            deletedItemName={recipe.name}
+            id={recipeId}
+            deleteAction={deleteRecipeAction}
+            backHref="/recipe"
+          />
         )}
       </div>
     </PageLayoutComponent>

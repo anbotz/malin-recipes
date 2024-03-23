@@ -2,27 +2,30 @@
 import * as React from "react";
 import { ButtonContainerComponent } from "../container/button-container";
 import { ModalComponent } from "../container/modal";
-import { deleteRecipeAction } from "@/lib/recipe/action";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 export const DeleteModal = ({
   deletedItemName,
-  recipeId,
+  id,
+  backHref,
+  deleteAction,
 }: {
-  recipeId: string;
+  id: string;
   deletedItemName: string;
+  backHref: string;
+  deleteAction: (id: string) => Promise<void>;
 }) => {
   const { push, back } = useRouter();
   const handleClose = () => back();
 
   const onDelete = () => {
-    toast.promise(deleteRecipeAction(recipeId), {
+    toast.promise(deleteAction(id), {
       loading: "Chargement...",
       success: "Recette supprimée",
-      error: "Erreur lors de la suppression de la recette",
+      error: `Erreur lors de la suppression`,
     });
-    push("/recipe");
+    push(backHref);
   };
   const onValidate = () => {
     onDelete();
@@ -32,7 +35,7 @@ export const DeleteModal = ({
   return (
     <ModalComponent>
       <p className="mb-5">
-        Êtes vous sur de vouloir supprimer la recette :
+        Êtes vous sur de vouloir supprimer :
         <div className="truncate">{deletedItemName}</div> ?
       </p>
       <ButtonContainerComponent>

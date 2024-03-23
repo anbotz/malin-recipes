@@ -8,12 +8,29 @@ const getCachedBatchById = cache(async (id: MongoId): Promise<Batch> => {
   if (data) {
     return data;
   } else {
-    throw new Error("Error while retrieving cached recipe");
+    throw new Error("Error while retrieving cached batch");
   }
 });
 
+const getCachedBatchs = cache(
+  async ({
+    from,
+  }: {
+    from: number;
+  }): Promise<{ data: Batch[]; total: number }> => {
+    const { data } = await service.searchBatch({ from, size: 10 });
+
+    if (data) {
+      return data;
+    } else {
+      throw new Error("Error while retrieving cached batchs");
+    }
+  }
+);
+
 const batchCache = {
-   getCachedBatchById,
+  getCachedBatchById,
+  getCachedBatchs,
 };
 
 export default batchCache;

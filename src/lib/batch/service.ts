@@ -1,4 +1,4 @@
-import { MongoId, ServiceResponse } from "@/types/query";
+import Query, { MongoId, ServiceResponse } from "@/types/query";
 import RecipeModel from "../../model/recipe.model";
 import { Batch, Recipe, User } from "@prisma/client";
 import BatchModel from "../../model/batch.model";
@@ -258,6 +258,49 @@ const generateFromAi = async ({
   }
 };
 
+const searchBatch = async (
+  query: Query
+): Promise<ServiceResponse<{ data: Batch[]; total: number }>> => {
+  try {
+    const data = await BatchModel.search(query);
+
+    return { data };
+  } catch (error) {
+    return errorMessage(error, `${ERROR_MESSAGE}searchBatch`);
+  }
+};
+
+const deleteBatchById = async (
+  id: MongoId
+): Promise<ServiceResponse<Batch | null>> => {
+  try {
+    const data = await BatchModel.deleteById(id);
+
+    return { data };
+  } catch (error) {
+    return errorMessage(error, `${ERROR_MESSAGE}deleteBatchById`);
+  }
+};
+
+const updateBatchById = async (
+  id: MongoId,
+  updatedData: {
+    name?: string;
+    description?: string;
+  }
+): Promise<ServiceResponse<Batch | null>> => {
+  try {
+    const updatedRecipe = await BatchModel.updateById({
+      id,
+      data: updatedData,
+    });
+
+    return { data: updatedRecipe };
+  } catch (error) {
+    return errorMessage(error, `${ERROR_MESSAGE}updateBatchById`);
+  }
+};
+
 const service = {
   shuffleUserBatch,
   getUserBatch,
@@ -268,6 +311,9 @@ const service = {
   getBatchById,
   checkExistingBatch,
   generateFromAi,
+  searchBatch,
+  deleteBatchById,
+  updateBatchById,
 };
 
 export default service;

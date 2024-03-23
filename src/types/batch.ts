@@ -7,4 +7,9 @@ export type CreateBatchData = {
   userId: string;
 };
 
+export type UpdatedBatchData = {
+  name?: string;
+  description?: string;
+};
+
 export default Batch;

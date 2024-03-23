@@ -56,3 +56,29 @@ export const cookAction = async (): Promise<ServiceResponse<Batch>> => {
     return resolve(response);
   });
 };
+
+export const deleteBatchAction = async (id: MongoId) => {
+  const data = await service.deleteBatchById(id);
+
+  if (data) {
+    return revalidatePath("/");
+  } else {
+    return console.error(`Failed to delete batch`);
+  }
+};
+
+export const updateBatchAction = async (id: MongoId, formData: FormData) => {
+  const name = formData.get("name") as string;
+  const description = formData.get("description") as string;
+
+  const data = await service.updateBatchById(id, {
+    name,
+    description,
+  });
+
+  if (data) {
+    return revalidatePath("/");
+  } else {
+    return console.error(`Failed to update batch`);
+  }
+};

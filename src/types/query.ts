@@ -1,7 +1,7 @@
 export type Query = {
   from: number;
   size: number;
-  search: string | undefined;
+  search?: string;
 };
 
 export type MongoId = string;

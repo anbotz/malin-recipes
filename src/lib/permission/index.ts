@@ -11,6 +11,8 @@ export const getPermissions = (role: string | null | undefined) => {
     permissions.push(RECIPE.DELETE);
     permissions.push(BATCH.COOK);
     permissions.push(BATCH.UNLIMITED_COOK);
+    permissions.push(BATCH.BASIC_UPDATE);
+    permissions.push(BATCH.DELETE);
   }
 
   if ((role = "creator")) {
