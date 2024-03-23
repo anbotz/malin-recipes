@@ -10,10 +10,14 @@ import Image from "next/image";
 import { computeSHA256 } from "@/lib/utils";
 import { toast } from "sonner";
 
+const IMAGE_FILE_TYPE = ["image/jpeg", "image/png"];
+
 export const UploadImageForm = ({ recipe }: { recipe: Recipe }) => {
   const { back, push } = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const accept = IMAGE_FILE_TYPE.join(",");
 
   const { id } = recipe;
 
@@ -77,7 +81,14 @@ export const UploadImageForm = ({ recipe }: { recipe: Recipe }) => {
       onSubmit={handleSubmit}
       buttons={
         <>
-          <button className="btn btn-primary" type="submit">
+          <button
+            className="btn btn-primary"
+            type="submit"
+            disabled={
+              (file && !IMAGE_FILE_TYPE.find((type) => type === file.type)) ??
+              false
+            }
+          >
             Enregistrer
           </button>
           <button className="btn btn-neutral" onClick={back} type="reset">
@@ -86,7 +97,7 @@ export const UploadImageForm = ({ recipe }: { recipe: Recipe }) => {
         </>
       }
     >
-      <UploadButton onChange={handleChange} />
+      <UploadButton onChange={handleChange} accept={accept} />
       {previewUrl && file && (
         <div>
           {file.type.startsWith("image/") ? (

@@ -22,9 +22,15 @@ model Recipe {
   updatedAt    DateTime @updatedAt
   imageUrl     String?
   qtCounter    Int
+  // rating       Rating[]
 
   batch    Batch[]  @relation(fields: [batchIds], references: [id])
   batchIds String[] @db.ObjectId
+}
+
+type Rating {
+  userId String
+  rate   Int
 }
 
 model Batch {
@@ -37,6 +43,7 @@ model Batch {
   creator      String?
   description  String?
   name         String?
+  // rating       Rating[]
 
   recipeIds String[] @db.ObjectId
   recipes   Recipe[] @relation(fields: [recipeIds], references: [id])

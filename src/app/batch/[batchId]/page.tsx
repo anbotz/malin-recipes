@@ -5,9 +5,9 @@ import batchCache from "@/lib/batch/cache";
 import { notFound } from "next/navigation";
 import { ManageBatchComponent } from "./_components/manage-batch";
 import { DeleteModal } from "@/_components/modals/delete-modal";
-import { deleteRecipeAction } from "@/lib/recipe/action";
 import { EditModal } from "@/_components/modals/edit-modal";
 import { deleteBatchAction } from "@/lib/batch/action";
+import { DateTime } from "luxon";
 
 export default async function RecipePage({
   params,
@@ -25,12 +25,15 @@ export default async function RecipePage({
   const editModal = searchParams?.editModal;
   const deleteModal = searchParams?.deleteModal;
 
-  const { name, description } = batch;
+  const { name, description, creator, createdAt } = batch;
+  const createAtLocalString = DateTime.fromJSDate(createdAt).toLocaleString();
+
+  const subtitle = `Créé par ${creator ?? "Malin"} le ${createAtLocalString}`;
 
   return (
     <PageLayoutComponent
       back
-      title={name ?? `Batch ${batchId}`}
+      title={name ?? subtitle}
       buttons={<ManageBatchComponent batchId={batchId} />}
     >
       <ProtectedContentContainer>
