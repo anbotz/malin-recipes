@@ -43,9 +43,26 @@ const search = async ({
   return { data, total };
 };
 
-const getManyRandom = async (size: number): Promise<Recipe[]> => {
+const getManyRandom = async (
+  size: number,
+  excludeIds?: string[]
+): Promise<Recipe[]> => {
+  const pipeline = [];
+
+  if (excludeIds && excludeIds.length > 0) {
+    const excludeObjectIds = excludeIds.map((id) => ({ $oid: id }));
+
+    pipeline.push({
+      $match: {
+        _id: { $nin: excludeObjectIds },
+      },
+    });
+  }
+
+  pipeline.push({ $sample: { size } });
+
   const data = (await db.recipe.aggregateRaw({
-    pipeline: [{ $sample: { size } }],
+    pipeline,
   })) as unknown as RawRecipe[];
 
   const recipes = data?.map((r) => {

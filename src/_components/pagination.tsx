@@ -13,7 +13,7 @@ export const PaginationComponent = ({
 
   const { replace } = useRouter();
 
-  if (count === 0) {
+  if (count === 0 || count < size) {
     return null;
   }
 

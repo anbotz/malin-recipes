@@ -166,7 +166,7 @@ const updateOneRecipeFromUserBatch = async (
 
     const batch = user.batch;
 
-    const recipes = await RecipeModel.getManyRandom(1);
+    const recipes = await RecipeModel.getManyRandom(1, batch);
 
     const newRecipe = recipes[0];
 
