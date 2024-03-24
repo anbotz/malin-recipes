@@ -15,20 +15,17 @@ import { toast } from "sonner";
 export const BatchButtons = ({
   size,
   lockBatchExpiresAt,
-  showBatchModal,
   disabledBatchButton,
 }: {
   size: number;
   lockBatchExpiresAt?: Date;
-  showBatchModal: boolean;
   disabledBatchButton: boolean;
 }) => {
   const [modalProps, setModalProps] = useState<{
+    show: boolean;
     batchId?: string;
-    isBatchLocked: boolean;
-  }>({
-    isBatchLocked: true,
-  });
+    isBatchLocked?: boolean;
+  }>({ show: false });
 
   const { user, permissions } = useAuthSession();
 
@@ -40,19 +37,21 @@ export const BatchButtons = ({
     toast.promise(checkExistingBatchAction(), {
       loading: "Chargement...",
       success: (response) => {
-        const isBatchLocked = permissions.includes(
-          PERMISSIONS.BATCH.UNLIMITED_COOK
-        )
-          ? false
-          : response.data?.isBatchLocked
-          ? response.data.isBatchLocked
-          : true;
+        let isBatchLocked = true;
+
+        if (response.data) {
+          isBatchLocked = response.data.isBatchLocked;
+        }
+        if (permissions.includes(PERMISSIONS.BATCH.UNLIMITED_COOK)) {
+          isBatchLocked = false;
+        }
+
         setModalProps((previousProps) => ({
           ...previousProps,
           isBatchLocked,
           batchId: response?.data?.batchId,
+          show: true,
         }));
-        push("?show=true");
         return response.data?.batchId
           ? "Ce batch existe déjà, vous pouvez directement y accéder"
           : "Ce batch est générable";
@@ -62,15 +61,21 @@ export const BatchButtons = ({
         return `Erreur`;
       },
     });
-  }, [permissions, push]);
+  }, [permissions]);
 
   return (
     <>
-      {showBatchModal && (
+      {modalProps.show && (
         <BatchModal
           modalProps={modalProps}
           accessBatch={(bId) => push("/batch/" + bId)}
           lockBatchExpiresAt={lockBatchExpiresAt}
+          handleClose={() =>
+            setModalProps((previousProps) => ({
+              ...previousProps,
+              show: false,
+            }))
+          }
         />
       )}
       <HeroButtonContainerComponent>
@@ -83,7 +88,7 @@ export const BatchButtons = ({
             disabled={disabledBatchButton}
           >
             <Flatware />
-            Généré le batch !
+            En cuisine !
           </button>
         )}
 

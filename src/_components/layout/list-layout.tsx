@@ -1,3 +1,5 @@
+import { v4 } from "uuid";
+
 export const ListLayout = ({
   items,
   title,
@@ -22,7 +24,7 @@ export const ListLayout = ({
       >
         {items.length > 0 ? (
           items.map((item) => (
-            <div className="flex gap-3 line-clamp-1" key={item}>
+            <div className="flex gap-3 line-clamp-1" key={v4()}>
               <input type="checkbox" className="checkbox" />
               {item}
             </div>

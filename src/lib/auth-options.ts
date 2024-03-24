@@ -25,7 +25,7 @@ export const authOptions: NextAuthOptions = {
         },
       });
 
-      const permissions = getPermissions(dbUser?.role);
+      const permissions = getPermissions(dbUser);
 
       token.permissions = permissions;
       token.id = dbUser?.id;

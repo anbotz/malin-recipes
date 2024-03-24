@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AppBarComponent from "../_components/app-bar";
 import SessionProvider from "../_components/session-provider";
-import { getRequiredSession } from "@/lib/auth";
+import { getSession } from "@/lib/auth";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "next-themes";
 
@@ -19,7 +19,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getRequiredSession();
+  const session = await getSession();
 
   return (
     <html lang="en" className="overflow-hidden" suppressHydrationWarning>

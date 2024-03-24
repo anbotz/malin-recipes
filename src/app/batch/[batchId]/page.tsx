@@ -1,4 +1,3 @@
-import ProtectedContentContainer from "@/_components/container/protected-content-container";
 import { ListLayout } from "@/_components/layout/list-layout";
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import batchCache from "@/lib/batch/cache";
@@ -36,31 +35,27 @@ export default async function RecipePage({
       title={name ?? subtitle}
       buttons={<ManageBatchComponent batchId={batchId} />}
     >
-      <ProtectedContentContainer>
-        {description}
-        <ListLayout
-          items={batch.ingredients}
-          title="Ingrédients pour l'ensemble du batch :"
-          noContent="Aucun ingrédient indiqué"
-          isGrid
+      {description}
+      <ListLayout
+        items={batch.ingredients}
+        title="Ingrédients pour l'ensemble du batch :"
+        noContent="Aucun ingrédient indiqué"
+        isGrid
+      />
+      <ListLayout
+        items={batch.instructions}
+        title="Instructions :"
+        noContent="Aucune instruction indiquée"
+      />
+      {editModal && <EditModal batch={batch} backHref={`/batch/${batchId}`} />}
+      {deleteModal && (
+        <DeleteModal
+          deletedItemName={batch.name ?? batch.id}
+          id={batchId}
+          deleteAction={deleteBatchAction}
+          backHref="/batch/discover"
         />
-        <ListLayout
-          items={batch.instructions}
-          title="Instructions :"
-          noContent="Aucune instruction indiquée"
-        />
-        {editModal && (
-          <EditModal batch={batch} backHref={`/batch/${batchId}`} />
-        )}
-        {deleteModal && (
-          <DeleteModal
-            deletedItemName={batch.name ?? batch.id}
-            id={batchId}
-            deleteAction={deleteBatchAction}
-            backHref="/batch/discover"
-          />
-        )}
-      </ProtectedContentContainer>
+      )}
     </PageLayoutComponent>
   );
 }

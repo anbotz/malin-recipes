@@ -1,25 +1,37 @@
-"use client";
-import * as React from "react";
-import { signIn, useSession } from "next-auth/react";
+import { getAuthSession } from "@/lib/auth";
+import SignInButton from "../buttons/signin-button";
+import HomeButton from "../buttons/home-button";
 
-const ProtectedContentContainer = ({
+const ProtectedContentContainer = async ({
   children,
+  requiredPermissions,
 }: {
   children: React.ReactNode;
+  requiredPermissions?: string[];
 }) => {
-  const { data: session } = useSession();
+  const { user, permissions: userPermissions } = await getAuthSession();
 
-  if (!session) {
+  if (!user) {
     return (
       <div className="flex flex-col items-center grow justify-center">
         Il faut se connecter pour accéder à ce contenu
-        <button className="btn btn-primary btn-lg" onClick={() => signIn()}>
-          Connexion
-        </button>
+        <SignInButton />
       </div>
     );
   }
 
-  return children;
+  if (
+    requiredPermissions?.length &&
+    requiredPermissions.some((req) => !userPermissions.includes(req))
+  ) {
+    return (
+      <div className="flex flex-col items-center grow justify-center">
+        Vous n&apos;avez pas les droits
+        <HomeButton />
+      </div>
+    );
+  }
+
+  return <>{children}</>;
 };
 export default ProtectedContentContainer;

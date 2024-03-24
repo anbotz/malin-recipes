@@ -1,7 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
+import { useAuthSession } from "@/hooks/use-auth-session";
 import { User } from "next-auth";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 
 const settings = [{ title: "Déconnexion", onClick: () => signOut() }];
 
@@ -21,9 +22,9 @@ const Avatar = ({ user }: { user: User }) => {
 };
 
 const UserMenu = () => {
-  const { data: session } = useSession();
+  const { user } = useAuthSession();
 
-  if (!session) {
+  if (!user) {
     return (
       <button
         title="Connexion"
@@ -35,8 +36,6 @@ const UserMenu = () => {
     );
   }
 
-  const { user } = session;
-
   return (
     <div className="dropdown dropdown-bottom dropdown-end">
       <div tabIndex={0} role="button" className="avatar" title="Ouvrir le menu">
@@ -47,13 +46,7 @@ const UserMenu = () => {
         className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
       >
         {settings.map((setting: { title: string; onClick: () => void }) => (
-          <li
-            key={setting.title}
-            onClick={() => {
-              // handleCloseUserMenu();
-              setting.onClick();
-            }}
-          >
+          <li key={setting.title} onClick={() => setting.onClick()}>
             <a>{setting.title}</a>
           </li>
         ))}

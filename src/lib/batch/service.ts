@@ -236,7 +236,7 @@ const generateFromAi = async ({
     if (!user) {
       throw new Error("No user found");
     }
-    const permissions = getPermissions(user.role);
+    const permissions = getPermissions(user);
 
     if (!permissions.includes(PERMISSIONS.BATCH.UNLIMITED_COOK)) {
       const isBatchLocked = isDateExpired(user.lockBatchExpiresAt);
