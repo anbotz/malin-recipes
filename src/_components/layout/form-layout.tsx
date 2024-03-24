@@ -13,7 +13,7 @@ export const FormLayoutComponent = ({
 }) => {
   return (
     <form action={action} onSubmit={onSubmit}>
-      <div className="flex flex-col items-center w-50">{children}</div>
+      <div className="flex flex-col items-center w-full">{children}</div>
       <ButtonContainerComponent>{buttons}</ButtonContainerComponent>
     </form>
   );

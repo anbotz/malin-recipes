@@ -7,8 +7,14 @@ export const createRecipeAction = async (formData: FormData) => {
   const name = formData.get("name") as string;
   const ingredients = formData.get("ingredients") as string;
   const instructions = formData.get("instructions") as string;
+  const qtCounter = parseInt(formData.get("qtCounter") as string);
 
-  const data = await service.createRecipe(name, ingredients, instructions);
+  const data = await service.createRecipe({
+    name,
+    ingredientsStr: ingredients,
+    instructionsStr: instructions,
+    qtCounter,
+  });
 
   if (data) {
     return revalidatePath("/");
@@ -21,11 +27,13 @@ export const updateRecipeAction = async (id: MongoId, formData: FormData) => {
   const name = formData.get("name") as string;
   const ingredientsStr = formData.get("ingredients") as string;
   const instructionsStr = formData.get("instructions") as string;
+  const qtCounter = parseInt(formData.get("qtCounter") as string);
 
   const data = await service.updateRecipeById(id, {
     name,
     ingredientsStr,
     instructionsStr,
+    qtCounter,
   });
 
   if (data) {

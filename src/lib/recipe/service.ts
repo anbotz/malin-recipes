@@ -7,19 +7,23 @@ import { errorMessage } from "../utils";
 
 const ERROR_MESSAGE = "Error on recipe.service.";
 
-const createRecipe = async (
-  name: string,
-  ingredientsStr: string,
-  instructionsStr: string
-): Promise<ServiceResponse<Recipe>> => {
+const createRecipe = async ({
+  name,
+  ingredientsStr,
+  instructionsStr,
+  qtCounter,
+}: {
+  name: string;
+  ingredientsStr: string;
+  instructionsStr: string;
+  qtCounter: number;
+}): Promise<ServiceResponse<Recipe>> => {
   try {
     const ingredients =
       ingredientsStr.length > 0 ? ingredientsStr.split("\n") : [];
     const instructions =
       instructionsStr.length > 0 ? instructionsStr.split("\n") : [];
 
-    // FIXME create qtCounter on both forms
-    const qtCounter = 2;
     const data = await RecipeModel.create({
       name,
       ingredients,
@@ -93,6 +97,7 @@ const updateRecipeById = async (
     ingredientsStr?: string;
     instructionsStr?: string;
     imageUrl?: string;
+    qtCounter?: number;
   }
 ): Promise<ServiceResponse<Recipe | null>> => {
   try {
@@ -111,6 +116,7 @@ const updateRecipeById = async (
       ingredients,
       instructions,
       imageUrl: updatedData.imageUrl,
+      qtCounter: updatedData.qtCounter,
     };
 
     const updatedRecipe = await RecipeModel.updateById({ id, data });

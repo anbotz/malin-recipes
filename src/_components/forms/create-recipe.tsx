@@ -5,6 +5,7 @@ import { TextFieldComponent } from "../inputs/text-field";
 import { MultilineTextFieldComponent } from "../inputs/multiline-text-field";
 import { createRecipeAction } from "@/lib/recipe/action";
 import { toast } from "sonner";
+import { NumberFieldComponent } from "../inputs/number-field";
 
 export const CreateRecipeForm = () => {
   const { back, push } = useRouter();
@@ -33,9 +34,16 @@ export const CreateRecipeForm = () => {
       }
     >
       <TextFieldComponent
-        label="Nom de la recette"
-        placeholder="Nom de la recette"
+        label="Titre de la recette"
+        placeholder="Titre de la recette"
         name="name"
+        required
+      />
+      <NumberFieldComponent
+        defaultValue={2}
+        label="Personnes"
+        placeholder=""
+        name="qtCounter"
         required
       />
       <MultilineTextFieldComponent
