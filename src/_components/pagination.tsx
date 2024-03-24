@@ -1,15 +1,21 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export const PaginationComponent = ({
-  size = 12,
+  size,
   count,
 }: {
   size: number;
   count: number;
 }) => {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+
   const { replace } = useRouter();
+
+  if (count === 0) {
+    return null;
+  }
 
   const page =
     searchParams.get("page") !== null
@@ -23,7 +29,7 @@ export const PaginationComponent = ({
     } else {
       params.delete("page");
     }
-    replace(`/recipe?${params.toString()}`);
+    replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   return (
@@ -36,7 +42,7 @@ export const PaginationComponent = ({
       </button>
       <button className="join-item btn">Page {page}</button>
       <button
-        className={`join-item btn ${page * size > count && "btn-disabled"}`}
+        className={`join-item btn ${page * size >= count && "btn-disabled"}`}
         onClick={() => handleSearch(page + 1)}
       >
         »

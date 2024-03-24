@@ -15,10 +15,12 @@ const getCachedBatchById = cache(async (id: MongoId): Promise<Batch> => {
 const getCachedBatchs = cache(
   async ({
     from,
+    size,
   }: {
     from: number;
+    size: number;
   }): Promise<{ data: Batch[]; total: number }> => {
-    const { data } = await service.searchBatch({ from, size: 10 });
+    const { data } = await service.searchBatch({ from, size });
 
     if (data) {
       return data;

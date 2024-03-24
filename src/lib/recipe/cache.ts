@@ -7,11 +7,13 @@ const getCachedRecipes = cache(
   async ({
     search,
     from,
+    size,
   }: {
     search: string | undefined;
     from: number;
+    size: number;
   }): Promise<{ data: Recipe[]; total: number }> => {
-    const { data } = await service.searchRecipe({ from, size: 10, search });
+    const { data } = await service.searchRecipe({ from, size, search });
 
     if (data) {
       return data;
