@@ -15,6 +15,7 @@
     "@mui/icons-material": "^5.15.11",
     "@prisma/client": "^5.10.2",
     "bson": "^6.4.0",
+    "groq-sdk": "^0.3.2",
     "luxon": "^3.4.4",
     "next": "14.1.0",
     "next-auth": "^4.24.6",

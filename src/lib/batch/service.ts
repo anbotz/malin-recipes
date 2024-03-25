@@ -2,7 +2,7 @@ import Query, { MongoId, ServiceResponse } from "@/types/query";
 import RecipeModel from "../../model/recipe.model";
 import { Batch, Recipe, User } from "@prisma/client";
 import BatchModel from "../../model/batch.model";
-import openAiService from "@/lib/openAi/service";
+import openAiService from "@/lib/ai/service";
 import userService from "@/lib/user/service";
 import { CreateBatchData } from "@/types/batch";
 import { errorMessage, hasDuplicates, isDateExpired } from "../utils";

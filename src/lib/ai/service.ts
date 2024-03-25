@@ -1,14 +1,14 @@
-import { ServiceResponse } from "./../../types/query";
+import { ServiceResponse } from "../../types/query";
 import { MongoId } from "@/types/query";
 import { userMessage, systemMessage } from "./utils";
-import { openai } from "./openAiclient";
+import { AIclient, AiClientConfig } from "./ai.client";
 import batchService from "@/lib/batch/service";
 import userService from "@/lib/user/service";
 import { Batch, Recipe } from "@prisma/client";
 import { errorMessage } from "../utils";
 import { DateTime } from "luxon";
 
-const ERROR_MESSAGE = "Error on openAi.service.";
+const ERROR_MESSAGE = "Error on Ai.service.";
 
 const LOCK = { days: 6 };
 
@@ -35,7 +35,7 @@ const createBatchFromAi = async ({
       })
     );
 
-    const completion = await openai.chat.completions.create({
+    const completion = await AIclient.chat.completions.create({
       messages: [
         {
           role: "system",
@@ -46,12 +46,14 @@ const createBatchFromAi = async ({
           content: userMessage({ qtCount: qt, recipes: formattedRecipes }),
         },
       ],
-      model: "gpt-3.5-turbo",
+      model: AiClientConfig.model,
     });
 
     if (!completion.choices[0].message.content) {
-      throw new Error("Error from OpenAi");
+      throw new Error("Error from AIClient");
     }
+
+    // check if JSON
 
     const parsedContent: { ingredients: string[]; instructions: string[] } =
       JSON.parse(completion.choices[0].message.content);
@@ -63,7 +65,7 @@ const createBatchFromAi = async ({
         instructionsLength: instructions.length,
         ingredientsLength: ingredients.length,
       });
-      throw new Error("Wrong return from OpenAi");
+      throw new Error("Wrong return from AiClient");
     }
 
     const { data } = await userService.updateById(userId, {
