@@ -24,7 +24,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
         <figure>
           <Image
             fill
-            style={{ objectFit: "contain" }}
+            style={{ objectFit: "contain", borderRadius: "1rem" }}
             src={imageUrl ?? "/diner.png"}
             alt={`${name} image`}
           />
