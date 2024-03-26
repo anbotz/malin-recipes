@@ -35,7 +35,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
           </h5>
           <div className="card-actions justify-end">
             <button
-              className="btn btn-primary"
+              className="btn btn-secondary"
               onClick={() => push("/recipe/" + recipe.id)}
             >
               Accéder

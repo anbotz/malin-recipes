@@ -78,7 +78,7 @@ const getLatestRecipes = async (): Promise<Recipe[]> =>
     orderBy: {
       id: "desc",
     },
-    take: 4,
+    take: 2,
   });
 
 const getById = async (id: MongoId): Promise<Recipe | null> =>

@@ -1,5 +1,4 @@
 "use client";
-import { HeroButtonContainerComponent } from "@/_components/container/hero-button-container";
 import { BatchModal } from "@/app/batch/_components/batch-modal";
 import { useAuthSession } from "@/hooks/use-auth-session";
 import {
@@ -78,7 +77,9 @@ export const BatchButtons = ({
           }
         />
       )}
-      <HeroButtonContainerComponent>
+      <div
+        className={`flex gap-5 flex-col sm:flex-row justify-center items-center mt-10`}
+      >
         {permissions.includes(PERMISSIONS.BATCH.COOK) && (
           <button
             title="Génére les instructions pour réaliser le batch"
@@ -91,7 +92,6 @@ export const BatchButtons = ({
             En cuisine !
           </button>
         )}
-
         <button
           title="Change l'ensemble des recettes actuelles par des autres recettes aléatoires"
           className="btn btn-secondary btn-lg"
@@ -100,7 +100,7 @@ export const BatchButtons = ({
           <Shuffle />
           Batch au hasard
         </button>
-      </HeroButtonContainerComponent>
+      </div>
     </>
   );
 };
