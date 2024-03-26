@@ -15,7 +15,24 @@ export default async function BatchCard({
 }) {
   const recipe = await recipeCache.getCachedRecipeById(recipeId);
 
-  if (!recipe) throw new Error("Error on batch card RSC : No recipe found");
+  if (!recipe)
+    return (
+      <div className="card card-compact image-full w-full lg:w-64 h-56 lg:h-full">
+        <div className="card-body flex flex-row lg:flex-col max-w-full lg:h-full min-w-0 justify-between">
+          <div className="flex flex-col justify-start w-full lg:w-56 min-w-0 h-full">
+            <span className="text-end">{day}</span>
+            <div className="grow flex flex-col items-center justify-center">
+              <BatchButton
+                onShuffleClick={shuffleOneRecipeAction}
+                recipeIndex={recipeIndex}
+                className="btn-lg"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
   const { name, imageUrl, ingredients } = recipe;
 
   return (

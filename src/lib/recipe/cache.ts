@@ -26,11 +26,19 @@ const getCachedRecipes = cache(
 const getCachedRecipeById = cache(
   async (id: MongoId): Promise<Recipe | null> => {
     const { data } = await service.getRecipeById(id);
-    if (data) {
-      return data;
-    } else {
-      throw new Error("Error while retrieving cached recipe");
-    }
+
+    return new Promise(async (resolve, reject) => {
+      const response = await service.getRecipeById(id);
+
+      if (response.error) {
+        return reject(response.error);
+      }
+      if (response.data) {
+        return resolve(response.data);
+      }
+      // FIXME
+      resolve(null);
+    });
   }
 );
 

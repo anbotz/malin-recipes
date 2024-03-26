@@ -6,9 +6,11 @@ import { useAuthSession } from "@/hooks/use-auth-session";
 export const BatchButton = ({
   onShuffleClick,
   recipeIndex,
+  className,
 }: {
   onShuffleClick: (id: MongoId, recipeIndex: number) => void;
   recipeIndex: number;
+  className?: string;
 }) => {
   const {
     user: { id },
@@ -17,7 +19,7 @@ export const BatchButton = ({
   return (
     <button
       title="Change cette recette par une autre recette aléatoire"
-      className="btn btn-primary"
+      className={`btn btn-primary ${className}`}
       onClick={() => onShuffleClick(id, recipeIndex)}
     >
       <Shuffle />
