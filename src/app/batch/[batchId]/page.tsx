@@ -25,7 +25,9 @@ export default async function RecipePage({
   const deleteModal = searchParams?.deleteModal;
 
   const { name, description, creator, createdAt } = batch;
-  const createAtLocalString = DateTime.fromJSDate(createdAt).toLocaleString();
+  const createAtLocalString = DateTime.fromJSDate(createdAt)
+    .setLocale("fr")
+    .toLocaleString();
 
   const subtitle = `Créé par ${creator ?? "Malin"} le ${createAtLocalString}`;
 
@@ -58,7 +60,6 @@ export default async function RecipePage({
           deletedItemName={batch.name ?? batch.id}
           id={batchId}
           deleteAction={deleteBatchAction}
-          backHref="/batch/discover"
         />
       )}
     </PageLayoutComponent>

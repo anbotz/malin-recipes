@@ -8,15 +8,13 @@ import { useRouter } from "next/navigation";
 export const DeleteModal = ({
   deletedItemName,
   id,
-  backHref,
   deleteAction,
 }: {
   id: string;
   deletedItemName: string;
-  backHref: string;
   deleteAction: (id: string) => Promise<void>;
 }) => {
-  const { push, back } = useRouter();
+  const { back } = useRouter();
   const handleClose = () => back();
 
   const onDelete = () => {
@@ -25,11 +23,6 @@ export const DeleteModal = ({
       success: "Suppression réussie",
       error: `Erreur lors de la suppression`,
     });
-    push(backHref);
-  };
-  const onValidate = () => {
-    onDelete();
-    handleClose();
   };
 
   return (
@@ -39,7 +32,7 @@ export const DeleteModal = ({
         <div className="truncate">{deletedItemName}</div> ?
       </p>
       <ButtonContainerComponent>
-        <button className="btn btn-error" onClick={onValidate}>
+        <button className="btn btn-error" onClick={onDelete}>
           Supprimer
         </button>
         <button className="btn btn-neutral" onClick={handleClose} type="reset">

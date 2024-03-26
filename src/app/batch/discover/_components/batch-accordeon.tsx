@@ -5,7 +5,9 @@ import { EnterButton } from "./enter-button";
 const BatchAccordeon = ({ batch }: { batch: Batch }) => {
   const { id, createdAt, creator, name, recipeNames, recipeIds, description } =
     batch;
-  const createAtLocalString = DateTime.fromJSDate(createdAt).toLocaleString();
+  const createAtLocalString = DateTime.fromJSDate(createdAt)
+    .setLocale("fr")
+    .toLocaleString();
   const week = DateTime.fromJSDate(createdAt).weekNumber;
 
   const subtitle = `Créé par ${creator ?? "Malin"} le ${createAtLocalString}`;

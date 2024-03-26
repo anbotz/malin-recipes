@@ -67,7 +67,6 @@ export default async function RecipePage({
             deletedItemName={recipe.name}
             id={recipeId}
             deleteAction={deleteRecipeAction}
-            backHref="/recipe"
           />
         )}
       </div>

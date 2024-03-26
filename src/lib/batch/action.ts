@@ -3,6 +3,7 @@ import { MongoId, ServiceResponse } from "@/types/query";
 import service from "./service";
 import { revalidatePath } from "next/cache";
 import { Batch } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 export const shuffleWholeBatchAction = async (
   id: MongoId,
@@ -65,7 +66,7 @@ export const deleteBatchAction = async (id: MongoId) => {
   const data = await service.deleteBatchById(id);
 
   if (data) {
-    return revalidatePath("/");
+    return redirect("/batch/discover");
   } else {
     return console.error(`Failed to delete batch`);
   }
