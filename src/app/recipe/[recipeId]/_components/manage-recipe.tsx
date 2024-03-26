@@ -17,10 +17,7 @@ export const ManageRecipeComponent = ({
   createdBy?: CreatedBy;
 }) => {
   const { push } = useRouter();
-  const {
-    permissions,
-    user: { id },
-  } = useAuthSession();
+  const { permissions, user } = useAuthSession();
 
   return (
     <>
@@ -32,7 +29,8 @@ export const ManageRecipeComponent = ({
             title="Téléverser une image"
           />
         )}
-        {(createdBy?.userId === id || permissions.includes(RECIPE.UPDATE)) && (
+        {(createdBy?.userId === user?.id ||
+          permissions.includes(RECIPE.UPDATE)) && (
           <IconButtonComponent
             onClick={() => push(`/recipe/${recipeId}/edit`)}
             icon="edit"
@@ -40,7 +38,8 @@ export const ManageRecipeComponent = ({
           />
         )}
       </>
-      {(createdBy?.userId === id || permissions.includes(RECIPE.DELETE)) && (
+      {(createdBy?.userId === user?.id ||
+        permissions.includes(RECIPE.DELETE)) && (
         <IconButtonComponent
           onClick={() => push(`/recipe/${recipeId}?show=true`)}
           icon="delete"

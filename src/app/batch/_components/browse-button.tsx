@@ -8,7 +8,7 @@ export const DiscoverButton = () => {
     <button
       title="Découvrez des batchs déjà réalisés"
       className="btn btn-accent"
-      onClick={() => push("/batch/discover")}
+      onClick={() => push("/discover")}
     >
       Explorer
     </button>

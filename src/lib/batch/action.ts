@@ -66,7 +66,7 @@ export const deleteBatchAction = async (id: MongoId) => {
   const data = await service.deleteBatchById(id);
 
   if (data) {
-    return redirect("/batch/discover");
+    return redirect("/discover");
   } else {
     return console.error(`Failed to delete batch`);
   }
