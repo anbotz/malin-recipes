@@ -3,6 +3,7 @@ import { MongoId } from "@/types/query";
 import service from "./service";
 import { revalidatePath } from "next/cache";
 import { IngredientLine } from "@prisma/client";
+import { HEALTHS } from "../const";
 
 export const createRecipeAction = async (
   formData: FormData,
@@ -11,6 +12,7 @@ export const createRecipeAction = async (
   const name = formData.get("name") as string;
   const instructionsStr = formData.get("instructions") as string;
   const qtCounter = parseInt(formData.get("qtCounter") as string);
+  const health = HEALTHS.filter((h) => !!formData.get(`health.${h}`));
 
   const ingredientLines: IngredientLine[] = lineUuids.map((uuid) => ({
     quantity: parseInt(formData.get(`quantity-${uuid}`) as string),
@@ -23,6 +25,7 @@ export const createRecipeAction = async (
     ingredientLines,
     instructionsStr,
     qtCounter,
+    health,
   });
 
   if (data) {

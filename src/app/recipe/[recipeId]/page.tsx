@@ -1,3 +1,6 @@
+import IceCreamSvg from "@/_components/icons/ice-cream";
+import VeganSvg from "@/_components/icons/vegan";
+import VegetarianSvg from "@/_components/icons/vegetarian";
 import { ListLayout } from "@/_components/layout/list-layout";
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import { DeleteModal } from "@/_components/modals/delete-modal";
@@ -37,6 +40,12 @@ export default async function RecipePage({
             height="200"
           />
         )}
+        <div className="flex -flex-row">
+          {recipe.health.includes("vegan") && <VeganSvg />}
+          {recipe.health.includes("vegetarian") && <VegetarianSvg />}
+          {recipe.health.includes("dessert") && <IceCreamSvg />}
+        </div>
+
         <ListLayout
           items={recipe.ingredients}
           title="Ingrédients :"

@@ -11,6 +11,7 @@ import { useState } from "react";
 import { v4 } from "uuid";
 import { IngredientLine } from "@prisma/client";
 import { CreateRecipeDefaultValueType } from "@/types/recipe";
+import { HealthFieldComponent } from "../inputs/health-field";
 
 const IngredientLinesContainer = ({
   lines,
@@ -135,6 +136,7 @@ export const CreateRecipeForm = ({
         setLines={setIngredientLinesUuid}
         onDelete={onDeleteIngredientLine}
       />
+      <HealthFieldComponent />
       <MultilineTextFieldComponent
         label="Instructions"
         name="instructions"

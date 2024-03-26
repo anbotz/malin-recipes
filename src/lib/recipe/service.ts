@@ -3,7 +3,7 @@ import RecipeModel from "../../model/recipe.model";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client } from "@/lib/s3/s3client";
 import { errorMessage } from "../utils";
-import { IngredientLine, Recipe } from "@prisma/client";
+import { Health, IngredientLine, Recipe } from "@prisma/client";
 
 const ERROR_MESSAGE = "Error on recipe.service.";
 
@@ -12,11 +12,13 @@ const createRecipe = async ({
   ingredientLines,
   instructionsStr,
   qtCounter,
+  health,
 }: {
   name: string;
   ingredientLines: IngredientLine[];
   instructionsStr: string;
   qtCounter: number;
+  health: Health[];
 }): Promise<ServiceResponse<Recipe>> => {
   try {
     const ingredients = ingredientLines.map(
@@ -32,6 +34,7 @@ const createRecipe = async ({
       instructions,
       ingredientLines,
       qtCounter,
+      health,
     });
 
     return { data };
