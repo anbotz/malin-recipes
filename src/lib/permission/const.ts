@@ -12,4 +12,4 @@ const BATCH = {
   DELETE: "BATCH.DELETE",
 };
 
-export const PERMISSIONS = { RECIPE, BATCH };
+export const PERMISSIONS = { RECIPE, BATCH, ADMIN: "admin" };

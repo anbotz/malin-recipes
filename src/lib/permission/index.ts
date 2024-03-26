@@ -1,7 +1,7 @@
 import { PERMISSIONS } from "@/lib/permission/const";
 import { User } from "@prisma/client";
 
-const { RECIPE, BATCH } = PERMISSIONS;
+const { RECIPE, BATCH, ADMIN } = PERMISSIONS;
 
 export const getPermissions = (user: User | null): string[] => {
   const permissions: string[] = [];
@@ -20,6 +20,7 @@ export const getPermissions = (user: User | null): string[] => {
     permissions.push(BATCH.BASIC_UPDATE);
     permissions.push(BATCH.DELETE);
     permissions.push(RECIPE.SCRAP);
+    permissions.push(ADMIN);
   }
 
   if (role === "creator") {

@@ -9,6 +9,7 @@ import HomeSvg from "./icons/home";
 import { PERMISSIONS } from "@/lib/permission/const";
 import NightMode from "./buttons/night-mode-button";
 import DropdownMenu from "./dropdown";
+import BasketSvg from "./icons/basket";
 
 export type MenuItem = {
   href: string;
@@ -26,6 +27,12 @@ const MENU_ITEMS: MenuItem[] = [
     icon: <Add />,
     name: "Créer une recette",
     permission: PERMISSIONS.RECIPE.CREATE,
+  },
+  {
+    href: "/basket",
+    icon: <BasketSvg />,
+    name: "Liste de course",
+    permission: PERMISSIONS.ADMIN,
   },
 ];
 
