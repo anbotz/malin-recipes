@@ -29,7 +29,7 @@ export const ManageRecipeComponent = ({
             title="Téléverser une image"
           />
         )}
-        {(createdBy?.userId === user?.id ||
+        {((createdBy !== undefined && createdBy?.userId === user.id) ||
           permissions.includes(RECIPE.UPDATE)) && (
           <IconButtonComponent
             onClick={() => push(`/recipe/${recipeId}/edit`)}
@@ -38,7 +38,7 @@ export const ManageRecipeComponent = ({
           />
         )}
       </>
-      {(createdBy?.userId === user?.id ||
+      {((createdBy !== undefined && createdBy?.userId === user.id) ||
         permissions.includes(RECIPE.DELETE)) && (
         <IconButtonComponent
           onClick={() => push(`/recipe/${recipeId}?show=true`)}
