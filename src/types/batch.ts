@@ -1,4 +1,4 @@
-import { Batch } from "@prisma/client";
+import { Batch, CreatedBy } from "@prisma/client";
 
 export type CreateBatchData = {
   ingredients: string[];
@@ -6,6 +6,7 @@ export type CreateBatchData = {
   recipeIds: string[];
   recipeNames: string[];
   userId: string;
+  createdBy: CreatedBy;
   creator?: string;
 };
 

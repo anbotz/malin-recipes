@@ -28,7 +28,12 @@ export default async function RecipePage({
     <PageLayoutComponent
       back
       title={recipe.name}
-      buttons={<ManageRecipeComponent recipeId={recipeId} />}
+      buttons={
+        <ManageRecipeComponent
+          recipeId={recipeId}
+          createdBy={recipe?.createdBy ?? undefined}
+        />
+      }
     >
       <div className="relative">
         {recipe.imageUrl && (

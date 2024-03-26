@@ -72,15 +72,21 @@ const createBatchFromAi = async ({
 
     const qt_token_used = completion.usage?.total_tokens;
 
-    const { data } = await userService.updateById(userId, {
+    const { data: user } = await userService.updateById(userId, {
       lockBatchExpiresAt: DateTime.now().plus(LOCK).toJSDate(),
       qt_token_used,
     });
 
+    if (!user) {
+      throw new Error("No user found");
+    }
+
+    const createdBy = { creator: user?.name ?? "Malin", userId: user.id };
+
     const { data: createdBatch } = await batchService.create({
       userId,
       creator:
-        data?.name
+        user?.name
           ?.split(" ")
           .map((i) => i.charAt(0).toUpperCase())
           .join("") ?? undefined,
@@ -88,6 +94,7 @@ const createBatchFromAi = async ({
       ingredients,
       instructions,
       recipeNames,
+      createdBy,
     });
 
     if (!createdBatch) {

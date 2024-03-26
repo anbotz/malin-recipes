@@ -4,6 +4,7 @@ import service from "./service";
 import { revalidatePath } from "next/cache";
 import { IngredientLine } from "@prisma/client";
 import { HEALTHS } from "../const";
+import { redirect } from "next/navigation";
 
 export const createRecipeAction = async (
   formData: FormData,
@@ -74,7 +75,7 @@ export const deleteRecipeAction = async (id: MongoId) => {
   const data = await service.deleteRecipeById(id);
 
   if (data) {
-    return revalidatePath("/");
+    return redirect("/");
   } else {
     return console.error(`Failed to delete recipe`);
   }

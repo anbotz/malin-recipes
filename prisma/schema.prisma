@@ -16,6 +16,7 @@ datasource db {
 enum Role {
   creator
   admin
+  member
 }
 
 enum Health {
@@ -37,6 +38,11 @@ type IngredientLine {
   ingredient String
 }
 
+type CreatedBy {
+  creator String
+  userId  String
+}
+
 model Recipe {
   id              String           @id @default(auto()) @map("_id") @db.ObjectId
   name            String
@@ -49,22 +55,24 @@ model Recipe {
   qtCounter       Int
   rating          Rating[]
   health          Health[]
+  createdBy       CreatedBy?
 
   batch    Batch[]  @relation(fields: [batchIds], references: [id])
   batchIds String[] @db.ObjectId
 }
 
 model Batch {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
   ingredients  String[]
   instructions String[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
   recipeNames  String[]
   creator      String?
   description  String?
   name         String?
-  // rating       Rating[]
+  rating       Rating[]
+  createdBy    CreatedBy?
 
   recipeIds String[] @db.ObjectId
   recipes   Recipe[] @relation(fields: [recipeIds], references: [id])
@@ -106,10 +114,10 @@ model User {
   email              String?   @unique
   emailVerified      DateTime?
   image              String?
-  role               Role?
+  role               Role      @default(member)
   batch              String[]
   lockBatchExpiresAt DateTime?
-  qt_token_used      Int
+  qt_token_used      Int       @default(0)
 
   accounts Account[]
   sessions Session[]

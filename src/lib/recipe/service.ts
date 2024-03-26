@@ -3,6 +3,8 @@ import RecipeModel from "../../model/recipe.model";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client } from "@/lib/s3/s3client";
 import { errorMessage } from "../utils";
+import userService from "@/lib/user/service";
+
 import { Health, IngredientLine, Recipe } from "@prisma/client";
 
 const ERROR_MESSAGE = "Error on recipe.service.";
@@ -21,12 +23,20 @@ const createRecipe = async ({
   health: Health[];
 }): Promise<ServiceResponse<Recipe>> => {
   try {
+    const { data: user } = await userService.getSessionUser();
+
+    if (!user) {
+      throw new Error("No user found");
+    }
+
     const ingredients = ingredientLines.map(
       ({ quantity, unit, ingredient }) => `${quantity}${unit} ${ingredient}`
     );
 
     const instructions =
       instructionsStr.length > 0 ? instructionsStr.split("\n") : [];
+
+    const createdBy = { creator: user.name ?? "Malin", userId: user.id };
 
     const data = await RecipeModel.create({
       name,
@@ -35,6 +45,7 @@ const createRecipe = async ({
       ingredientLines,
       qtCounter,
       health,
+      createdBy,
     });
 
     return { data };

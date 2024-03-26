@@ -33,7 +33,12 @@ export default async function RecipePage({
     <PageLayoutComponent
       back
       title={name ?? subtitle}
-      buttons={<ManageBatchComponent batchId={batchId} />}
+      buttons={
+        <ManageBatchComponent
+          batchId={batchId}
+          createdBy={batch?.createdBy ?? undefined}
+        />
+      }
     >
       {description}
       <ListLayout

@@ -120,7 +120,14 @@ const create = async ({
   instructions,
 }: CreateBatchData): Promise<ServiceResponse<Batch>> => {
   try {
-    console.log("created");
+    console.log("creating batch ...");
+    const { data: user } = await userService.getSessionUser();
+
+    if (!user) {
+      throw new Error("No user found");
+    }
+
+    const createdBy = { creator: user.name ?? "Malin", userId: user.id };
 
     const createdBatch = await BatchModel.create({
       ingredients,
@@ -129,6 +136,7 @@ const create = async ({
       recipeNames,
       userId,
       creator,
+      createdBy,
     });
     return { data: createdBatch };
   } catch (error) {

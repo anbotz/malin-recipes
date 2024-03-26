@@ -2,7 +2,7 @@ import { MongoId } from "../types/query";
 import Query from "@/types/query";
 import { UpdatedRecipeData } from "@/types/recipe";
 import { db } from "@/lib/db";
-import { Health, IngredientLine, Recipe } from "@prisma/client";
+import { CreatedBy, Health, IngredientLine, Recipe } from "@prisma/client";
 import { ObjectId } from "bson";
 
 type RawRecipe = Recipe & {
@@ -18,6 +18,7 @@ const create = async (recipe: {
   ingredientLines: IngredientLine[];
   qtCounter: number;
   health: Health[];
+  createdBy: CreatedBy;
 }): Promise<Recipe> =>
   await db.recipe.create({
     data: recipe,
