@@ -1,26 +1,28 @@
 import Query, { MongoId, ServiceResponse } from "@/types/query";
-import Recipe from "@/types/recipe";
 import RecipeModel from "../../model/recipe.model";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client } from "@/lib/s3/s3client";
 import { errorMessage } from "../utils";
+import { IngredientLine, Recipe } from "@prisma/client";
 
 const ERROR_MESSAGE = "Error on recipe.service.";
 
 const createRecipe = async ({
   name,
-  ingredientsStr,
+  ingredientLines,
   instructionsStr,
   qtCounter,
 }: {
   name: string;
-  ingredientsStr: string;
+  ingredientLines: IngredientLine[];
   instructionsStr: string;
   qtCounter: number;
 }): Promise<ServiceResponse<Recipe>> => {
   try {
-    const ingredients =
-      ingredientsStr.length > 0 ? ingredientsStr.split("\n") : [];
+    const ingredients = ingredientLines.map(
+      ({ quantity, unit, ingredient }) => `${quantity}${unit} ${ingredient}`
+    );
+
     const instructions =
       instructionsStr.length > 0 ? instructionsStr.split("\n") : [];
 
@@ -28,6 +30,7 @@ const createRecipe = async ({
       name,
       ingredients,
       instructions,
+      ingredientLines,
       qtCounter,
     });
 

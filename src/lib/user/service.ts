@@ -24,7 +24,7 @@ const getSessionUser = async (): Promise<ServiceResponse<User>> => {
 
 const updateById = async (
   id: MongoId,
-  data: { batch?: string[]; lockBatchExpiresAt?: Date }
+  data: { batch?: string[]; lockBatchExpiresAt?: Date; qt_token_used?: number }
 ): Promise<ServiceResponse<User>> => {
   try {
     const updatedUser = await UserModel.updateById(id, data);

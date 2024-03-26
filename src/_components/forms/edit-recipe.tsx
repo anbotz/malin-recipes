@@ -4,9 +4,9 @@ import { useRouter } from "next/navigation";
 import { MultilineTextFieldComponent } from "../inputs/multiline-text-field";
 import { TextFieldComponent } from "../inputs/text-field";
 import { updateRecipeAction } from "@/lib/recipe/action";
-import Recipe from "@/types/recipe";
 import { toast } from "sonner";
 import { NumberFieldComponent } from "../inputs/number-field";
+import { Recipe } from "@prisma/client";
 
 export const EditRecipeForm = ({ recipe }: { recipe: Recipe }) => {
   const { back, push } = useRouter();

@@ -1,10 +1,10 @@
 "use client";
 import * as React from "react";
-import Recipe from "@/types/recipe";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { DateTime } from "luxon";
 import NewSvg from "./icons/new";
+import { Recipe } from "@prisma/client";
 
 export default function RecipeCard({ recipe }: { recipe: Recipe }) {
   const { push } = useRouter();

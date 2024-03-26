@@ -2,17 +2,26 @@
 import { MongoId } from "@/types/query";
 import service from "./service";
 import { revalidatePath } from "next/cache";
+import { IngredientLine } from "@prisma/client";
 
-export const createRecipeAction = async (formData: FormData) => {
+export const createRecipeAction = async (
+  formData: FormData,
+  lineUuids: string[]
+) => {
   const name = formData.get("name") as string;
-  const ingredients = formData.get("ingredients") as string;
-  const instructions = formData.get("instructions") as string;
+  const instructionsStr = formData.get("instructions") as string;
   const qtCounter = parseInt(formData.get("qtCounter") as string);
+
+  const ingredientLines: IngredientLine[] = lineUuids.map((uuid) => ({
+    quantity: parseInt(formData.get(`quantity-${uuid}`) as string),
+    unit: formData.get(`unit-${uuid}`) as string,
+    ingredient: formData.get(`ingredient-${uuid}`) as string,
+  }));
 
   const data = await service.createRecipe({
     name,
-    ingredientsStr: ingredients,
-    instructionsStr: instructions,
+    ingredientLines,
+    instructionsStr,
     qtCounter,
   });
 

@@ -1,7 +1,7 @@
 import { cache } from "react";
-import Recipe from "@/types/recipe";
 import { MongoId } from "@/types/query";
 import service from "./service";
+import { Recipe } from "@prisma/client";
 
 const getCachedRecipes = cache(
   async ({

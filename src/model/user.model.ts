@@ -11,14 +11,17 @@ const getById = async (id: MongoId): Promise<User | null> => {
 };
 const updateById = async (
   id: MongoId,
-  data: { batch?: string[]; lockBatchExpiresAt?: Date }
-): Promise<User> =>
-  await db.user.update({
+  data: { batch?: string[]; lockBatchExpiresAt?: Date; qt_token_used?: number }
+): Promise<User> => {
+  const { qt_token_used, ...rest } = data;
+
+  return await db.user.update({
     where: {
       id,
     },
-    data,
+    data: { ...rest, qt_token_used: { increment: qt_token_used } },
   });
+};
 
 const UserModel = {
   getById,

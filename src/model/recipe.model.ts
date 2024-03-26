@@ -2,25 +2,20 @@ import { MongoId } from "../types/query";
 import Query from "@/types/query";
 import { UpdatedRecipeData } from "@/types/recipe";
 import { db } from "@/lib/db";
-import { Recipe } from "@prisma/client";
+import { IngredientLine, Recipe } from "@prisma/client";
 import { ObjectId } from "bson";
 
-type RawRecipe = {
+type RawRecipe = Recipe & {
   _id: { $oid: ObjectId };
-  name: string;
-  ingredients: string[];
-  instructions: string[];
-  imageUrl: string | null;
   createdAt: { $date: Date };
   updatedAt: { $date: Date };
-  qtCounter: number;
-  batchIds: string[];
 };
 
 const create = async (recipe: {
   name: string;
   ingredients: string[];
   instructions: string[];
+  ingredientLines: IngredientLine[];
   qtCounter: number;
 }): Promise<Recipe> =>
   await db.recipe.create({

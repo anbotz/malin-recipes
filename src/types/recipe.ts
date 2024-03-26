@@ -1,4 +1,4 @@
-import type { Recipe } from "@prisma/client";
+import type { IngredientLine } from "@prisma/client";
 
 export type UpdatedRecipeData = {
   name?: string;
@@ -7,4 +7,9 @@ export type UpdatedRecipeData = {
   imageUrl?: string;
 };
 
-export default Recipe;
+export type CreateRecipeDefaultValueType = {
+  name: string;
+  qtCounter: number;
+  ingredientLines: IngredientLine[];
+  instructions: string;
+};

@@ -34,3 +34,12 @@ Voici les recettes :
 ${formattedRecipes}
 `;
 };
+
+export const createRecipeSystemMessage =
+  "You are an assistant that generates JSON, user will gave you a recipe, " +
+  "and you shall transform this recipe to the JSON format, " +
+  "which has this type RecipeType = {name: string; qtCounter: integer; ingredientLines: IngredientLineType[]; instructions: string[]} " +
+  "with IngredientLineType = {quantity: integer; unit: string; ingredient: string }. " +
+  "qtCounter is the integer of people, if you don't find this information, set QtCounter = 2. " +
+  "If there is no name, invent it" +
+  "You always return just the JSON with no additonal description or context.";

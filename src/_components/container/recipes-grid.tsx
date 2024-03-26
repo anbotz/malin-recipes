@@ -1,6 +1,6 @@
 import RecipeCard from "@/_components/recipe-card";
-import Recipe from "@/types/recipe";
 import RecipeCardSkeleton from "../skeletons/recipe-card-skeleton";
+import { Recipe } from "@prisma/client";
 
 const RecipesGrid = async ({ recipes }: { recipes: Recipe[] }) => {
   if (recipes.length === 0) return <>Aucune recette trouvée</>;

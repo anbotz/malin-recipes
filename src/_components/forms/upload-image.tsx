@@ -1,7 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { uploadImageRecipeAction } from "@/lib/recipe/action";
-import Recipe from "@/types/recipe";
 import { useState } from "react";
 import { getSignedURL } from "@/lib/s3/action";
 import { FormLayoutComponent } from "../layout/form-layout";
@@ -9,6 +8,7 @@ import { UploadButton } from "../buttons/upload-button";
 import Image from "next/image";
 import { computeSHA256 } from "@/lib/utils";
 import { toast } from "sonner";
+import { Recipe } from "@prisma/client";
 
 const IMAGE_FILE_TYPE = ["image/jpeg", "image/png"];
 

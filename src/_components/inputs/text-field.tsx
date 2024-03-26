@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 
 export const TextFieldComponent = ({
@@ -6,26 +7,32 @@ export const TextFieldComponent = ({
   name,
   required,
   defaultValue,
+  className,
+  type = "text",
 }: {
-  label: string;
   placeholder: string;
   name: string;
+  label?: string;
   required?: boolean;
   defaultValue?: string;
+  className?: string;
+  type?: string;
 }) => {
   const [value, setValue] = useState(defaultValue);
 
   return (
-    <label className="form-control w-full max-w-prose">
-      <div className="label">
-        <span className="label-text">
-          {label}
-          {required && "*"}
-        </span>
-      </div>
+    <label className={`form-control w-full max-w-prose ${className}`}>
+      {label && (
+        <div className="label">
+          <span className="label-text">
+            {label}
+            {required && "*"}
+          </span>
+        </div>
+      )}
       <input
-        type="text"
-        className="input input-bordered w-full max-w-prose"
+        type={type}
+        className={`input input-bordered w-full`}
         placeholder={placeholder}
         required={required}
         value={value}

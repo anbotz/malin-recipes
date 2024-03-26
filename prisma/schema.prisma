@@ -13,24 +13,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Recipe {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  ingredients  String[]
-  instructions String[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  imageUrl     String?
-  qtCounter    Int
-  // rating       Rating[]
+enum Role {
+  creator
+  admin
+}
 
-  batch    Batch[]  @relation(fields: [batchIds], references: [id])
-  batchIds String[] @db.ObjectId
+enum Health {
+  vegan
+  fish
+  vegetarian
+  dessert
+  starter
 }
 
 type Rating {
   userId String
   rate   Int
+}
+
+type IngredientLine {
+  quantity   Int
+  unit       String?
+  ingredient String
+}
+
+model Recipe {
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  ingredients     String[]
+  ingredientLines IngredientLine[]
+  instructions    String[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  imageUrl        String?
+  qtCounter       Int
+  rating          Rating[]
+  health          Health[]
+
+  batch    Batch[]  @relation(fields: [batchIds], references: [id])
+  batchIds String[] @db.ObjectId
 }
 
 model Batch {
@@ -85,9 +106,10 @@ model User {
   email              String?   @unique
   emailVerified      DateTime?
   image              String?
-  role               String?
+  role               Role?
   batch              String[]
   lockBatchExpiresAt DateTime?
+  qt_token_used      Int
 
   accounts Account[]
   sessions Session[]
