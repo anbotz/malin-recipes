@@ -22,7 +22,7 @@ export const DeleteModal = ({
   const onDelete = () => {
     toast.promise(deleteAction(id), {
       loading: "Chargement...",
-      success: "Recette supprimée",
+      success: "Suppression réussie",
       error: `Erreur lors de la suppression`,
     });
     push(backHref);

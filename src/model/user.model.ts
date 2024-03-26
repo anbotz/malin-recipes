@@ -15,11 +15,15 @@ const updateById = async (
 ): Promise<User> => {
   const { qt_token_used, ...rest } = data;
 
+  const updateData = qt_token_used
+    ? { ...rest, qt_token_used: { increment: qt_token_used } }
+    : rest;
+
   return await db.user.update({
     where: {
       id,
     },
-    data: { ...rest, qt_token_used: { increment: qt_token_used } },
+    data: updateData,
   });
 };
 

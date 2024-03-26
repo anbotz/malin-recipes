@@ -13,5 +13,5 @@ const groqClient = new Groq({
 const openAiConfig: AiConfig = { model: "gpt-3.5-turbo" };
 const groqConfig: AiConfig = { model: "llama2-70b-4096" };
 
-export const AIclient = openAiClient;
-export const AiClientConfig: AiConfig = openAiConfig;
+export const AIclient = groqClient;
+export const AiClientConfig: AiConfig = groqConfig;

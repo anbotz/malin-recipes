@@ -15,14 +15,14 @@ export const IngredientLineFieldComponent = ({
   return (
     <div className="flex flex-row items-center max-w-prose">
       <TextFieldComponent
-        defaultValue={defaultValue?.quantity.toString()}
+        defaultValue={defaultValue?.quantity?.toString() ?? undefined}
         name={`quantity-${index}`}
         placeholder="Quantité"
         className="w-24"
         type="number"
       />
       <TextFieldComponent
-        defaultValue={defaultValue?.unit}
+        defaultValue={defaultValue?.unit ?? undefined}
         name={`unit-${index}`}
         placeholder="Unité"
         className="w-24"
