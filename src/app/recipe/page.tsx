@@ -3,6 +3,7 @@ import RecipesGrid from "@/_components/container/recipes-grid";
 import { SearchBar } from "@/_components/search";
 import recipeCache from "@/lib/recipe/cache";
 import { PaginationComponent } from "@/_components/pagination";
+import { ManageRecipesButtonsComponent } from "./_components/recipes-buttons";
 
 const SIZE = 12;
 
@@ -22,7 +23,12 @@ const RecipePage = async ({
   return (
     <PageLayoutComponent
       title="Recipes"
-      buttons={<SearchBar />}
+      buttons={
+        <>
+          <ManageRecipesButtonsComponent />
+          <SearchBar />
+        </>
+      }
       footer={<PaginationComponent count={total} size={SIZE} />}
     >
       <div className="flex flex-col items-center justify-between flex-1">
