@@ -7,6 +7,7 @@ import { DeleteModal } from "@/_components/modals/delete-modal";
 import { EditModal } from "@/_components/modals/edit-modal";
 import { deleteBatchAction } from "@/lib/batch/action";
 import { DateTime } from "luxon";
+import Badges from "@/_components/badges";
 
 export default async function RecipePage({
   params,
@@ -24,7 +25,7 @@ export default async function RecipePage({
   const editModal = searchParams?.editModal;
   const deleteModal = searchParams?.deleteModal;
 
-  const { name, description, creator, createdAt } = batch;
+  const { name, description, creator, createdAt, recipeNames } = batch;
   const createAtLocalString = DateTime.fromJSDate(createdAt)
     .setLocale("fr")
     .toLocaleString();
@@ -43,6 +44,7 @@ export default async function RecipePage({
       }
     >
       {description}
+      <Badges items={recipeNames} />
       <ListLayout
         items={batch.ingredients}
         title="Ingrédients pour l'ensemble du batch :"

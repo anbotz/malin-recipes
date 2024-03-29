@@ -86,6 +86,8 @@ export const CreateRecipeForm = ({
     ]
   );
 
+  const defaultInstructions = defaultValue?.instructions.join("\n");
+
   const create = async (formData: FormData) => {
     const ingredientLines: string[] = ingredientLinesUuid.map(
       ({ uuid }) => uuid
@@ -140,7 +142,7 @@ export const CreateRecipeForm = ({
       <MultilineTextFieldComponent
         label="Instructions"
         name="instructions"
-        defaultValue={defaultValue?.instructions}
+        defaultValue={defaultInstructions ?? undefined}
         placeholder=""
       />
     </FormLayoutComponent>

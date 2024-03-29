@@ -1,6 +1,7 @@
 import { Batch } from "@prisma/client";
 import { DateTime } from "luxon";
 import { EnterButton } from "./enter-button";
+import Badges from "@/_components/badges";
 
 const BatchAccordeon = ({ batch }: { batch: Batch }) => {
   const { id, createdAt, creator, name, recipeNames, recipeIds, description } =
@@ -32,13 +33,7 @@ const BatchAccordeon = ({ batch }: { batch: Batch }) => {
       <div className="collapse-content flex flex-col sm:flex-row justify-between">
         <div className="flex flex-col">
           <span className="badge badge-neutral mb-3 truncate">{subtitle}</span>
-          <div className="flex flex-wrap gap-2">
-            {recipes.map((r) => (
-              <div key={r} className="badge badge-secondary line-clamp-1">
-                {r}
-              </div>
-            ))}
-          </div>
+          <Badges items={recipes} />
         </div>
         <div className="flex justify-end mt-3">
           <EnterButton batchId={id} />

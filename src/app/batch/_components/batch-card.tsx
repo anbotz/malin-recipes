@@ -3,6 +3,7 @@ import { shuffleOneRecipeAction } from "@/lib/batch/action";
 import { BatchButton } from "./batch-button";
 import Image from "next/image";
 import { v4 } from "uuid";
+import DishSvg from "@/_components/icons/dish";
 
 export default async function BatchCard({
   recipeId,
@@ -37,13 +38,18 @@ export default async function BatchCard({
 
   return (
     <div className="card card-compact image-full w-full lg:w-64 h-56 lg:h-full">
-      <figure>
-        <Image
-          fill
-          style={{ objectFit: "contain" }}
-          src={imageUrl ?? "/diner.png"}
-          alt={`${name} image`}
-        />
+      <figure className="relative">
+        {imageUrl ? (
+          <Image
+            fill
+            style={{ objectFit: "contain", borderRadius: "1rem" }}
+            src={imageUrl}
+            alt={`${name} image`}
+            sizes="(min-width: 808px) 50vw, 100vw"
+          />
+        ) : (
+          <DishSvg size={150} />
+        )}
       </figure>
       <div className="card-body flex flex-row lg:flex-col max-w-full lg:h-full min-w-0 justify-between">
         <div className="flex flex-col justify-start w-full lg:w-56 min-w-0">

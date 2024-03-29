@@ -112,7 +112,7 @@ const updateById = async ({
     },
   });
 
-const getManyRecipeByIds = async (ids: MongoId[]) =>
+const getManyRecipeByIds = async (ids: MongoId[]): Promise<Recipe[]> =>
   await db.recipe.findMany({
     where: {
       id: { in: ids },
