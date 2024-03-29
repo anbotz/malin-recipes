@@ -5,10 +5,14 @@ import { ListLayout } from "@/_components/layout/list-layout";
 import { PageLayoutComponent } from "@/_components/layout/page-layout";
 import { DeleteModal } from "@/_components/modals/delete-modal";
 import { ManageRecipeComponent } from "@/app/recipe/[recipeId]/_components/manage-recipe";
+import { getAuthSession } from "@/lib/auth";
 import { deleteRecipeAction } from "@/lib/recipe/action";
 import recipeCache from "@/lib/recipe/cache";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { PERMISSIONS } from "@/lib/permission/const";
+
+const { RECIPE } = PERMISSIONS;
 
 export default async function RecipePage({
   params,
@@ -23,6 +27,18 @@ export default async function RecipePage({
   const recipe = await recipeCache.getCachedRecipeById(recipeId);
 
   if (recipe === null) return notFound();
+  const {
+    permissions,
+    user: { id },
+  } = await getAuthSession();
+
+  const userPermissions = {
+    update:
+      recipe?.createdBy?.userId === id || permissions.includes(RECIPE.UPDATE),
+    delete:
+      recipe?.createdBy?.userId === id || permissions.includes(RECIPE.DELETE),
+    uploadImage: permissions.includes(RECIPE.UPDATE),
+  };
 
   return (
     <PageLayoutComponent
@@ -31,7 +47,7 @@ export default async function RecipePage({
       buttons={
         <ManageRecipeComponent
           recipeId={recipeId}
-          createdBy={recipe?.createdBy ?? undefined}
+          permissions={userPermissions}
         />
       }
     >
@@ -62,7 +78,7 @@ export default async function RecipePage({
           title="Instructions :"
           noContent="Aucune instruction indiquée"
         />
-        {show && (
+        {userPermissions.delete && show && (
           <DeleteModal
             deletedItemName={recipe.name}
             id={recipeId}

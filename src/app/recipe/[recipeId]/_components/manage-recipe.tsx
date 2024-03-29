@@ -3,34 +3,27 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { MongoId } from "@/types/query";
 import { IconButtonComponent } from "@/_components/buttons/icon-button";
-import { useAuthSession } from "@/hooks/use-auth-session";
-import { PERMISSIONS } from "@/lib/permission/const";
-import { CreatedBy } from "@prisma/client";
-
-const { RECIPE } = PERMISSIONS;
 
 export const ManageRecipeComponent = ({
   recipeId,
-  createdBy,
+  permissions,
 }: {
   recipeId: MongoId;
-  createdBy?: CreatedBy;
+  permissions: { delete: boolean; update: boolean; uploadImage: boolean };
 }) => {
   const { push } = useRouter();
-  const { permissions, user } = useAuthSession();
 
   return (
     <>
       <>
-        {permissions.includes(RECIPE.UPDATE) && (
+        {permissions.uploadImage && (
           <IconButtonComponent
             onClick={() => push(`/recipe/${recipeId}/upload-image`)}
             icon="cloud"
             title="Téléverser une image"
           />
         )}
-        {((createdBy !== undefined && createdBy?.userId === user.id) ||
-          permissions.includes(RECIPE.UPDATE)) && (
+        {permissions.update && (
           <IconButtonComponent
             onClick={() => push(`/recipe/${recipeId}/edit`)}
             icon="edit"
@@ -38,8 +31,7 @@ export const ManageRecipeComponent = ({
           />
         )}
       </>
-      {((createdBy !== undefined && createdBy?.userId === user.id) ||
-        permissions.includes(RECIPE.DELETE)) && (
+      {permissions.delete && (
         <IconButtonComponent
           onClick={() => push(`/recipe/${recipeId}?show=true`)}
           icon="delete"

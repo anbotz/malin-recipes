@@ -8,6 +8,10 @@ import { EditModal } from "@/_components/modals/edit-modal";
 import { deleteBatchAction } from "@/lib/batch/action";
 import { DateTime } from "luxon";
 import Badges from "@/_components/badges";
+import { getAuthSession } from "@/lib/auth";
+import { PERMISSIONS } from "@/lib/permission/const";
+
+const { BATCH } = PERMISSIONS;
 
 export default async function RecipePage({
   params,
@@ -21,6 +25,19 @@ export default async function RecipePage({
   const batch = await batchCache.getCachedBatchById(batchId);
 
   if (batch === null) return notFound();
+
+  const {
+    permissions,
+    user: { id },
+  } = await getAuthSession();
+
+  const userPermissions = {
+    update:
+      batch?.createdBy?.userId === id ||
+      permissions.includes(BATCH.BASIC_UPDATE),
+    delete:
+      batch?.createdBy?.userId === id || permissions.includes(BATCH.DELETE),
+  };
 
   const editModal = searchParams?.editModal;
   const deleteModal = searchParams?.deleteModal;
@@ -37,10 +54,7 @@ export default async function RecipePage({
       back
       title={name ?? subtitle}
       buttons={
-        <ManageBatchComponent
-          batchId={batchId}
-          createdBy={batch?.createdBy ?? undefined}
-        />
+        <ManageBatchComponent batchId={batchId} permissions={userPermissions} />
       }
     >
       {description}
@@ -56,8 +70,10 @@ export default async function RecipePage({
         title="Instructions :"
         noContent="Aucune instruction indiquée"
       />
-      {editModal && <EditModal batch={batch} backHref={`/batch/${batchId}`} />}
-      {deleteModal && (
+      {userPermissions.update && editModal && (
+        <EditModal batch={batch} backHref={`/batch/${batchId}`} />
+      )}
+      {userPermissions.delete && deleteModal && (
         <DeleteModal
           deletedItemName={batch.name ?? batch.id}
           id={batchId}
