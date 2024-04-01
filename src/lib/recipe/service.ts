@@ -2,12 +2,11 @@ import Query, { MongoId, ServiceResponse } from "@/types/query";
 import RecipeModel from "../../model/recipe.model";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client } from "@/lib/s3/s3client";
-import { errorMessage } from "../utils";
 import userService from "@/lib/user/service";
 
 import { Health, IngredientLine, Recipe } from "@prisma/client";
 
-const ERROR_MESSAGE = "Error on recipe.service.";
+const ERROR_MESSAGE = "Recipe.service :";
 
 const createRecipe = async ({
   name,
@@ -22,89 +21,73 @@ const createRecipe = async ({
   qtCounter: number;
   health: Health[];
 }): Promise<ServiceResponse<Recipe>> => {
-  try {
-    const { data: user } = await userService.getSessionUser();
+  const { data: user } = await userService.getSessionUser();
 
-    if (!user) {
-      throw new Error("No user found");
-    }
+  const ingredients = ingredientLines.map(
+    ({ quantity, unit, ingredient }) => `${quantity}${unit} ${ingredient}`
+  );
 
-    const ingredients = ingredientLines.map(
-      ({ quantity, unit, ingredient }) => `${quantity}${unit} ${ingredient}`
-    );
+  const instructions =
+    instructionsStr.length > 0 ? instructionsStr.split("\n") : [];
 
-    const instructions =
-      instructionsStr.length > 0 ? instructionsStr.split("\n") : [];
+  const createdBy = { creator: user.name ?? "Malin", userId: user.id };
 
-    const createdBy = { creator: user.name ?? "Malin", userId: user.id };
+  const data = await RecipeModel.create({
+    name,
+    ingredients,
+    instructions,
+    ingredientLines,
+    qtCounter,
+    health,
+    createdBy,
+  });
 
-    const data = await RecipeModel.create({
-      name,
-      ingredients,
-      instructions,
-      ingredientLines,
-      qtCounter,
-      health,
-      createdBy,
-    });
-
-    return { data };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}createRecipe`);
+  if (!data) {
+    throw new Error(`${ERROR_MESSAGE} No recipe created`);
   }
+
+  return { data };
 };
 
 const searchRecipe = async (
   query: Query
 ): Promise<ServiceResponse<{ data: Recipe[]; total: number }>> => {
-  try {
-    const data = await RecipeModel.search(query);
+  const data = await RecipeModel.search(query);
 
-    return { data };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}searchRecipe`);
-  }
+  return { data };
 };
 
 const getLatestRecipes = async (): Promise<ServiceResponse<Recipe[]>> => {
-  try {
-    const data = await RecipeModel.getLatestRecipes();
+  const data = await RecipeModel.getLatestRecipes();
 
-    return { data };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}getLatestRecipes`);
-  }
+  return { data };
 };
 
 const getRecipeById = async (
   id: MongoId
 ): Promise<ServiceResponse<Recipe | null>> => {
-  try {
-    const data = await RecipeModel.getById(id);
+  const data = await RecipeModel.getById(id);
 
-    return { data };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}getRecipeById`);
-  }
+  return { data };
 };
 
 const deleteRecipeById = async (
   id: MongoId
-): Promise<ServiceResponse<Recipe | null>> => {
-  try {
-    const data = await RecipeModel.deleteById(id);
-    if (data) {
-      const deleteObjectCommand = new DeleteObjectCommand({
-        Bucket: process.env.AWS_BUCKET_NAME!,
-        Key: id,
-      });
+): Promise<ServiceResponse<Recipe>> => {
+  const data = await RecipeModel.deleteById(id);
 
-      await s3Client.send(deleteObjectCommand);
-    }
-    return { data };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}deleteRecipeById`);
+  if (!data) {
+    throw new Error(`${ERROR_MESSAGE} No recipe to delete`);
   }
+
+  const deleteObjectCommand = new DeleteObjectCommand({
+    Bucket: process.env.AWS_BUCKET_NAME!,
+    Key: id,
+  });
+
+  await s3Client.send(deleteObjectCommand);
+
+  return { data };
 };
 
 const updateRecipeById = async (
@@ -116,32 +99,32 @@ const updateRecipeById = async (
     imageUrl?: string;
     qtCounter?: number;
   }
-): Promise<ServiceResponse<Recipe | null>> => {
-  try {
-    const ingredients =
-      updatedData.ingredientsStr && updatedData.ingredientsStr.length > 0
-        ? updatedData.ingredientsStr?.split("\n")
-        : undefined;
+): Promise<ServiceResponse<Recipe>> => {
+  const ingredients =
+    updatedData.ingredientsStr && updatedData.ingredientsStr.length > 0
+      ? updatedData.ingredientsStr?.split("\n")
+      : undefined;
 
-    const instructions =
-      updatedData.instructionsStr && updatedData.instructionsStr.length > 0
-        ? updatedData.instructionsStr?.split("\n")
-        : undefined;
+  const instructions =
+    updatedData.instructionsStr && updatedData.instructionsStr.length > 0
+      ? updatedData.instructionsStr?.split("\n")
+      : undefined;
 
-    const data = {
-      name: updatedData.name,
-      ingredients,
-      instructions,
-      imageUrl: updatedData.imageUrl,
-      qtCounter: updatedData.qtCounter,
-    };
+  const data = {
+    name: updatedData.name,
+    ingredients,
+    instructions,
+    imageUrl: updatedData.imageUrl,
+    qtCounter: updatedData.qtCounter,
+  };
 
-    const updatedRecipe = await RecipeModel.updateById({ id, data });
+  const updatedRecipe = await RecipeModel.updateById({ id, data });
 
-    return { data: updatedRecipe };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}updateRecipeById`);
+  if (!updatedRecipe) {
+    throw new Error(`${ERROR_MESSAGE} No recipe updated`);
   }
+
+  return { data: updatedRecipe };
 };
 
 const business = {

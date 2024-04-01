@@ -13,42 +13,42 @@ const getCachedRecipes = cache(
     from: number;
     size: number;
   }): Promise<{ data: Recipe[]; total: number }> => {
-    const { data } = await service.searchRecipe({ from, size, search });
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { data } = await service.searchRecipe({ from, size, search });
 
-    if (data) {
-      return data;
-    } else {
-      throw new Error("Error while retrieving cached recipes");
-    }
+        resolve(data);
+      } catch (error: any) {
+        reject(new Error(error.message + " on getCachedRecipes"));
+      }
+    });
   }
 );
 
 const getCachedRecipeById = cache(
   async (id: MongoId): Promise<Recipe | null> => {
-    const { data } = await service.getRecipeById(id);
-
     return new Promise(async (resolve, reject) => {
-      const response = await service.getRecipeById(id);
+      try {
+        const { data } = await service.getRecipeById(id);
 
-      if (response.error) {
-        return reject(response.error);
+        resolve(data);
+      } catch (error: any) {
+        reject(new Error(error.message + " on getCachedRecipeById"));
       }
-      if (response.data) {
-        return resolve(response.data);
-      }
-      // FIXME
-      resolve(null);
     });
   }
 );
 
 const getCachedLastRecipeById = cache(async (): Promise<Recipe[]> => {
-  const { data } = await service.getLatestRecipes();
-  if (data) {
-    return data;
-  } else {
-    throw new Error("Error while retrieving cached last recipes");
-  }
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await service.getLatestRecipes();
+
+      resolve(data);
+    } catch (error: any) {
+      reject(new Error(error.message + " on getCachedLastRecipeById"));
+    }
+  });
 });
 
 const recipeCache = {

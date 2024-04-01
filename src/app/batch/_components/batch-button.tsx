@@ -8,7 +8,7 @@ export const BatchButton = ({
   recipeIndex,
   className,
 }: {
-  onShuffleClick: (id: MongoId, recipeIndex: number) => void;
+  onShuffleClick: (recipeIndex: number) => void;
   recipeIndex: number;
   className?: string;
 }) => {
@@ -20,7 +20,7 @@ export const BatchButton = ({
     <button
       title="Change cette recette par une autre recette aléatoire"
       className={`btn btn-primary ${className}`}
-      onClick={() => onShuffleClick(id, recipeIndex)}
+      onClick={() => onShuffleClick(recipeIndex)}
     >
       <Shuffle />
       Switch !

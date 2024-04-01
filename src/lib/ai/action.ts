@@ -6,16 +6,16 @@ import { CreateRecipeDefaultValueType } from "@/types/recipe";
 export const scrapRecipeAction = async (
   formData: FormData
 ): Promise<ServiceResponse<CreateRecipeDefaultValueType>> => {
-  const recipe = formData.get("recipe") as string;
-
   return new Promise(async (resolve, reject) => {
-    const response = await service.scrapRecipeFromAi({
-      recipe,
-    });
+    try {
+      const recipe = formData.get("recipe") as string;
+      const response = await service.scrapRecipeFromAi({
+        recipe,
+      });
 
-    if (response.error) {
-      return reject(response.error);
+      resolve(response);
+    } catch (error: any) {
+      reject(new Error(error.message + " on uploadImageRecipe"));
     }
-    return resolve(response);
   });
 };

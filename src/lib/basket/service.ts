@@ -2,7 +2,7 @@ import { ServiceResponse } from "@/types/query";
 import RecipeModel from "../../model/recipe.model";
 import { IngredientLine } from "@prisma/client";
 
-const ERROR_MESSAGE = "Error on basket.service.";
+const ERROR_MESSAGE = "Basket.service :";
 
 const getBasket = async ({
   basket,
@@ -13,7 +13,13 @@ const getBasket = async ({
 > => {
   const recipes = await RecipeModel.getManyRecipeByIds(basket); // ORM request
 
-  if (!recipes) return { error: "error" };
+  if (!recipes) {
+    throw new Error(`${ERROR_MESSAGE} No recipe found on getBasket`);
+  }
+
+  if (recipes.length !== basket.length) {
+    console.log("Not all recipes found on getBasket");
+  }
 
   const recipeNames = recipes.map(({ name }) => name);
 

@@ -3,34 +3,32 @@ import { MongoId, ServiceResponse } from "@/types/query";
 import service from "./service";
 import { revalidatePath } from "next/cache";
 import { Batch } from "@prisma/client";
-import { redirect } from "next/navigation";
 
 export const shuffleWholeBatchAction = async (
   id: MongoId,
   size: number
 ): Promise<void> => {
-  const data = await service.shuffleUserBatch(id, size);
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service.shuffleUserBatch(id, size);
 
-  if (data) {
-    return revalidatePath("/");
-  } else {
-    return console.error(`Failed to shuffle whole batch for user (_id: ${id}`);
-  }
+      resolve(revalidatePath("/"));
+    } catch (error: any) {
+      reject(new Error(error.message + " on shuffleWholeBatchAction"));
+    }
+  });
 };
 
-export const shuffleOneRecipeAction = async (
-  id: MongoId,
-  index: number
-): Promise<void> => {
-  try {
-    await service.updateOneRecipeFromUserBatch(index);
+export const shuffleOneRecipeAction = async (index: number): Promise<void> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service.updateOneRecipeFromUserBatch(index);
 
-    return revalidatePath("/");
-  } catch (e) {
-    throw new Error(
-      `Failed to shuffle one recipe from batch for user (_id: ${id}`
-    );
-  }
+      resolve(revalidatePath("/"));
+    } catch (error: any) {
+      reject(new Error(error.message + " on shuffleOneRecipeAction"));
+    }
+  });
 };
 
 export const checkExistingBatchAction = async (): Promise<
@@ -40,12 +38,13 @@ export const checkExistingBatchAction = async (): Promise<
   }>
 > => {
   return new Promise(async (resolve, reject) => {
-    const response = await service.checkExistingBatch();
+    try {
+      const response = await service.checkExistingBatch();
 
-    if (response.error) {
-      return reject(response.error);
+      resolve(response);
+    } catch (error: any) {
+      reject(new Error(error.message + " on checkExistingBatchAction"));
     }
-    return resolve(response);
   });
 };
 
@@ -53,37 +52,44 @@ export const cookAction = async (): Promise<ServiceResponse<Batch>> => {
   const qt = 2;
 
   return new Promise(async (resolve, reject) => {
-    const response = await service.generateFromAi({ qt });
+    try {
+      const response = await service.generateFromAi({ qt });
 
-    if (response.error) {
-      return reject(response);
+      resolve(response);
+    } catch (error: any) {
+      reject(new Error(error.message + " on cookAction"));
     }
-    return resolve(response);
   });
 };
 
-export const deleteBatchAction = async (id: MongoId) => {
-  const data = await service.deleteBatchById(id);
+export const deleteBatchAction = async (id: MongoId): Promise<void> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service.deleteBatchById(id);
 
-  if (data) {
-    return redirect("/discover");
-  } else {
-    return console.error(`Failed to delete batch`);
-  }
+      resolve();
+    } catch (error: any) {
+      reject(new Error(error.message + " on deleteBatchAction"));
+    }
+  });
 };
 
-export const updateBatchAction = async (id: MongoId, formData: FormData) => {
-  const name = formData.get("name") as string;
-  const description = formData.get("description") as string;
+export const updateBatchAction = async (
+  id: MongoId,
+  formData: FormData
+): Promise<void> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const name = formData.get("name") as string;
+      const description = formData.get("description") as string;
 
-  const data = await service.updateBatchById(id, {
-    name,
-    description,
+      await service.updateBatchById(id, {
+        name,
+        description,
+      });
+      resolve(revalidatePath("/"));
+    } catch (error: any) {
+      reject(new Error(error.message + " on updateBatchAction"));
+    }
   });
-
-  if (data) {
-    return revalidatePath("/");
-  } else {
-    return console.error(`Failed to update batch`);
-  }
 };

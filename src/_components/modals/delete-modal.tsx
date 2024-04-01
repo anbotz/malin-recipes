@@ -14,7 +14,7 @@ export const DeleteModal = ({
   deletedItemName: string;
   deleteAction: (id: string) => Promise<void>;
 }) => {
-  const { back } = useRouter();
+  const { back, push } = useRouter();
   const handleClose = () => back();
 
   const onDelete = () => {
@@ -23,14 +23,15 @@ export const DeleteModal = ({
       success: "Suppression réussie",
       error: `Erreur lors de la suppression`,
     });
+    push("/");
   };
 
   return (
     <ModalComponent>
-      <p className="mb-5">
+      <div className="mb-5">
         Êtes vous sur de vouloir supprimer :
         <div className="truncate">{deletedItemName}</div> ?
-      </p>
+      </div>
       <ButtonContainerComponent>
         <button className="btn btn-error" onClick={onDelete}>
           Supprimer

@@ -7,7 +7,7 @@ export type Query = {
 export type MongoId = string;
 
 export type ServiceResponse<T> = {
-  data?: T;
+  data: T;
   success?: string;
   error?: string;
 };

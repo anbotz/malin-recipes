@@ -104,8 +104,9 @@ export const UploadImageForm = ({ recipe }: { recipe: Recipe }) => {
             <Image
               src={previewUrl}
               alt="Selected file"
-              width="200"
-              height="200"
+              width="0"
+              height="0"
+              className="w-[200px] h-auto"
             />
           ) : null}
         </div>

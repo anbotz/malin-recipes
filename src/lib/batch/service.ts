@@ -9,27 +9,23 @@ import { errorMessage, hasDuplicates, isDateExpired } from "../utils";
 import { getPermissions } from "../permission";
 import { PERMISSIONS } from "../permission/const";
 
-const ERROR_MESSAGE = "Error on batch.service.";
+const ERROR_MESSAGE = "Batch.service :";
 
 const shuffleUserBatch = async (
   id: MongoId,
   size: number
 ): Promise<ServiceResponse<string[]>> => {
-  try {
-    const recipes = await RecipeModel.getManyRandom(size);
+  const recipes = await RecipeModel.getManyRandom(size);
 
-    if (!recipes) {
-      throw new Error("No recipe found");
-    }
-
-    const recipeIds = recipes.map((recipes) => recipes.id.toString());
-
-    await userService.updateById(id, { batch: recipeIds });
-
-    return { data: recipeIds };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}shuffleUserBatch`);
+  if (!recipes) {
+    throw new Error(`${ERROR_MESSAGE} No recipe found on shuffleUserBatch`);
   }
+
+  const recipeIds = recipes.map((recipes) => recipes.id.toString());
+
+  await userService.updateById(id, { batch: recipeIds });
+
+  return { data: recipeIds };
 };
 
 const getUserBatch = async (
@@ -41,74 +37,57 @@ const getUserBatch = async (
     lockBatchExpiresAt?: Date;
   }>
 > => {
-  try {
-    const { data: user } = await userService.getSessionUser();
+  const { data: user } = await userService.getSessionUser();
 
-    if (!user) {
-      throw new Error("No user found");
-    }
+  const batch = user.batch;
+  const isBatchLocked = isDateExpired(user.lockBatchExpiresAt);
 
-    const batch = user.batch;
-    const isBatchLocked = isDateExpired(user.lockBatchExpiresAt);
-
-    if (batch.length === 0 || batch.length !== size) {
-      const { data } = await shuffleUserBatch(user.id, size);
-      return {
-        data: {
-          batch: data,
-          isBatchLocked,
-          lockBatchExpiresAt: user.lockBatchExpiresAt || undefined,
-        },
-      };
-    }
-
+  if (batch.length === 0 || batch.length !== size) {
+    const { data } = await shuffleUserBatch(user.id, size);
     return {
       data: {
-        batch,
+        batch: data,
         isBatchLocked,
         lockBatchExpiresAt: user.lockBatchExpiresAt || undefined,
       },
     };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}getUserBatch`);
   }
+
+  return {
+    data: {
+      batch,
+      isBatchLocked,
+      lockBatchExpiresAt: user.lockBatchExpiresAt || undefined,
+    },
+  };
 };
 
 const getRecipesFromBatch = async (): Promise<
   ServiceResponse<{ recipes: Recipe[]; recipeIds: string[] }>
 > => {
-  try {
-    const { data: user } = await userService.getSessionUser();
+  const { data: user } = await userService.getSessionUser();
 
-    if (!user) {
-      throw new Error("No user found");
-    }
+  const batch = user.batch;
 
-    const batch = user.batch;
-
-    if (batch.length === 0) {
-      throw new Error("No batch found");
-    }
-    const recipes = await RecipeModel.getManyRecipeByIds(batch);
-
-    return { data: { recipes, recipeIds: batch } };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}getRecipesFromBatch`);
+  if (batch.length === 0) {
+    throw new Error(`${ERROR_MESSAGE} No batch found on getRecipesFromBatch`);
   }
+
+  const recipes = await RecipeModel.getManyRecipeByIds(batch);
+
+  if (!recipes) {
+    throw new Error(`${ERROR_MESSAGE} No recipe found on getRecipesFromBatch`);
+  }
+
+  return { data: { recipes, recipeIds: batch } };
 };
 
-const getBatchById = async (id: MongoId): Promise<ServiceResponse<Batch>> => {
-  try {
-    const data = await BatchModel.getById(id);
+const getBatchById = async (
+  id: MongoId
+): Promise<ServiceResponse<Batch | null>> => {
+  const data = await BatchModel.getById(id);
 
-    if (!data) {
-      throw new Error("No batch found");
-    }
-
-    return { data };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}getBatchById`);
-  }
+  return { data };
 };
 
 const create = async ({
@@ -119,118 +98,103 @@ const create = async ({
   ingredients,
   instructions,
 }: CreateBatchData): Promise<ServiceResponse<Batch>> => {
-  try {
-    console.log("creating batch ...");
-    const { data: user } = await userService.getSessionUser();
+  console.log("creating batch ...");
+  const { data: user } = await userService.getSessionUser();
 
-    if (!user) {
-      throw new Error("No user found");
-    }
+  const createdBy = { creator: user.name ?? "Malin", userId: user.id };
 
-    const createdBy = { creator: user.name ?? "Malin", userId: user.id };
+  const createdBatch = await BatchModel.create({
+    ingredients,
+    instructions,
+    recipeIds,
+    recipeNames,
+    userId,
+    creator,
+    createdBy,
+  });
 
-    const createdBatch = await BatchModel.create({
-      ingredients,
-      instructions,
-      recipeIds,
-      recipeNames,
-      userId,
-      creator,
-      createdBy,
-    });
-    return { data: createdBatch };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}create`);
+  if (!createdBatch) {
+    throw new Error("No batch has been created");
   }
+
+  return { data: createdBatch };
 };
 
 const getBatchByRecipeIds = async (
   recipeIds: MongoId[]
 ): Promise<ServiceResponse<Batch | null>> => {
-  try {
-    const batchs = await BatchModel.getManyByRecipeIds(recipeIds);
+  const batchs = await BatchModel.getManyByRecipeIds(recipeIds);
 
-    if (batchs === null) return { data: null };
+  if (batchs === null) return { data: null };
 
-    if (batchs.length > 1) {
-      throw new Error("Batch is not unique");
-    }
-
-    return { data: batchs[0] };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}getBatchByRecipeIds`);
+  if (batchs.length > 1) {
+    throw new Error("Batch is not unique");
   }
+
+  return { data: batchs[0] };
 };
 
 const updateOneRecipeFromUserBatch = async (
   index: number
 ): Promise<ServiceResponse<User>> => {
-  try {
-    const { data: user } = await userService.getSessionUser();
+  const { data: user } = await userService.getSessionUser();
 
-    if (!user) {
-      throw new Error("No user found");
-    }
+  const batch = user.batch;
 
-    const batch = user.batch;
+  const recipes = await RecipeModel.getManyRandom(1, batch);
 
-    const recipes = await RecipeModel.getManyRandom(1, batch);
-
-    const newRecipe = recipes[0];
-
-    batch[index] = newRecipe.id;
-
-    const { data: updatedUser } = await userService.updateById(user.id, {
-      batch,
-    });
-
-    return {
-      data: updatedUser,
-      success: `User ${user.id} batch recipe at index ${index} succesfully updated`,
-    };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}updateOneRecipeFromUserBatch`);
+  if (!recipes) {
+    throw new Error(
+      `${ERROR_MESSAGE} No recipe found on updateOneRecipeFromUserBatch`
+    );
   }
+
+  const newRecipe = recipes[0];
+
+  batch[index] = newRecipe.id;
+
+  const { data: updatedUser } = await userService.updateById(user.id, {
+    batch,
+  });
+
+  return {
+    data: updatedUser,
+    success: `User ${user.id} batch recipe at index ${index} succesfully updated`,
+  };
 };
 
 const checkExistingBatch = async (): Promise<
   ServiceResponse<{ batchId?: string; isBatchLocked: boolean }>
 > => {
-  try {
-    const { data: user } = await userService.getSessionUser();
+  const { data: user } = await userService.getSessionUser();
 
-    if (!user) {
-      throw new Error("No user found");
-    }
+  const { data } = await getRecipesFromBatch();
 
-    const { data } = await getRecipesFromBatch();
-
-    if (!data?.recipes || !data?.recipeIds) {
-      throw new Error("No recipes found");
-    }
-
-    const { recipeIds } = data;
-
-    if (hasDuplicates(recipeIds)) {
-      throw new Error("Batchs has duplicated recipe");
-    }
-
-    const { data: alreadyBatch } = await getBatchByRecipeIds(recipeIds);
-
-    const batchId = alreadyBatch?.id ?? undefined;
-
-    if (batchId) {
-      console.log("This batch already exists");
-    } else {
-      console.log("This batch does not exist");
-    }
-
-    const isBatchLocked = isDateExpired(user.lockBatchExpiresAt);
-
-    return { data: { batchId, isBatchLocked } };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}checkExistingBatch`);
+  if (!data?.recipes || !data?.recipeIds) {
+    throw new Error(`${ERROR_MESSAGE} No recipe found on checkExistingBatch`);
   }
+
+  const { recipeIds } = data;
+
+  if (hasDuplicates(recipeIds)) {
+    throw new Error(
+      `${ERROR_MESSAGE} Batchs has duplicated recipe on checkExistingBatch`
+    );
+  }
+
+  const { data: alreadyBatch } = await getBatchByRecipeIds(recipeIds);
+
+  const batchId = alreadyBatch?.id ?? undefined;
+
+  if (batchId) {
+    console.log("This batch already exists");
+  } else {
+    console.log("This batch does not exist");
+  }
+
+  const isBatchLocked = isDateExpired(user.lockBatchExpiresAt);
+
+  return { data: { batchId, isBatchLocked } };
 };
 
 const generateFromAi = async ({
@@ -238,64 +202,55 @@ const generateFromAi = async ({
 }: {
   qt: number;
 }): Promise<ServiceResponse<Batch>> => {
-  try {
-    const { data: user } = await userService.getSessionUser();
+  const { data: user } = await userService.getSessionUser();
 
-    if (!user) {
-      throw new Error("No user found");
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.BATCH.UNLIMITED_COOK)) {
+    const isBatchLocked = isDateExpired(user.lockBatchExpiresAt);
+
+    if (isBatchLocked) {
+      throw new Error(
+        `${ERROR_MESSAGE} User can not generate a new batch on generateFromAi`
+      );
     }
-    const permissions = getPermissions(user);
-
-    if (!permissions.includes(PERMISSIONS.BATCH.UNLIMITED_COOK)) {
-      const isBatchLocked = isDateExpired(user.lockBatchExpiresAt);
-
-      if (isBatchLocked) {
-        throw new Error("User can not generate a new batch");
-      }
-    }
-
-    const { data } = await getRecipesFromBatch();
-
-    if (!data?.recipes) {
-      throw new Error("No recipes found");
-    }
-
-    const { recipes } = data;
-
-    const createdBatchResponse = await AiService.createBatchFromAi({
-      userId: user.id,
-      qt,
-      recipes,
-    });
-
-    return createdBatchResponse;
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}cook`);
   }
+
+  const { data } = await getRecipesFromBatch();
+
+  if (!data?.recipes) {
+    throw new Error(`${ERROR_MESSAGE} No recipe found on generateFromAi`);
+  }
+
+  const { recipes } = data;
+
+  const createdBatchResponse = await AiService.createBatchFromAi({
+    userId: user.id,
+    qt,
+    recipes,
+  });
+
+  return createdBatchResponse;
 };
 
 const searchBatch = async (
   query: Query
-): Promise<ServiceResponse<{ data: Batch[]; total: number }>> => {
-  try {
-    const data = await BatchModel.search(query);
+): Promise<ServiceResponse<{ data: Batch[]; total: number } | null>> => {
+  const data = await BatchModel.search(query);
 
-    return { data };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}searchBatch`);
-  }
+  return { data };
 };
 
 const deleteBatchById = async (
   id: MongoId
-): Promise<ServiceResponse<Batch | null>> => {
-  try {
-    const data = await BatchModel.deleteById(id);
+): Promise<ServiceResponse<Batch>> => {
+  const data = await BatchModel.deleteById(id);
 
-    return { data };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}deleteBatchById`);
+  if (!data) {
+    throw new Error(`${ERROR_MESSAGE} No recipe deleted on deleteBatchById`);
   }
+
+  return { data };
 };
 
 const updateBatchById = async (
@@ -305,16 +260,16 @@ const updateBatchById = async (
     description?: string;
   }
 ): Promise<ServiceResponse<Batch | null>> => {
-  try {
-    const updatedRecipe = await BatchModel.updateById({
-      id,
-      data: updatedData,
-    });
+  const updatedRecipe = await BatchModel.updateById({
+    id,
+    data: updatedData,
+  });
 
-    return { data: updatedRecipe };
-  } catch (error) {
-    return errorMessage(error, `${ERROR_MESSAGE}updateBatchById`);
+  if (!updatedRecipe) {
+    throw new Error(`${ERROR_MESSAGE} No recipe updated on updateBatchById`);
   }
+
+  return { data: updatedRecipe };
 };
 
 const service = {

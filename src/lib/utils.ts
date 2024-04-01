@@ -1,3 +1,5 @@
+import { ServiceResponse } from "@/types/query";
+
 export const computeSHA256 = async (file: File) => {
   const buffer = await file.arrayBuffer();
   const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
@@ -8,9 +10,12 @@ export const computeSHA256 = async (file: File) => {
   return hashHex;
 };
 
-export const errorMessage = (error: any, msg: string) => {
-  console.error(error);
-  return { error: msg };
+export const errorMessage = (
+  error: Error,
+  msg: string
+): ServiceResponse<null> => {
+  console.error(error.message);
+  return { data: null, error: error.message + " " + msg };
 };
 
 export const isDateExpired = (date: Date | null): boolean =>
