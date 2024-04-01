@@ -1,7 +1,7 @@
 import { PERMISSIONS } from "@/lib/permission/const";
 import { User } from "@prisma/client";
 
-const { RECIPE, BATCH, ADMIN } = PERMISSIONS;
+const { RECIPE, BATCH, ADMIN, BASKET } = PERMISSIONS;
 
 export const getPermissions = (user: User | null): string[] => {
   const permissions: string[] = [];
@@ -28,6 +28,8 @@ export const getPermissions = (user: User | null): string[] => {
   }
 
   permissions.push(BATCH.COOK);
+  permissions.push(BASKET.READ);
+  permissions.push(BATCH.READ);
 
   return permissions;
 };

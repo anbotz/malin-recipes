@@ -1,6 +1,9 @@
 import { ServiceResponse } from "@/types/query";
 import RecipeModel from "../../model/recipe.model";
 import { IngredientLine } from "@prisma/client";
+import userService from "@/lib/user/service";
+import { getPermissions } from "../permission";
+import { PERMISSIONS } from "../permission/const";
 
 const ERROR_MESSAGE = "Basket.service :";
 
@@ -11,6 +14,16 @@ const getBasket = async ({
 }): Promise<
   ServiceResponse<{ ingredientLines: IngredientLine[]; recipeNames: string[] }>
 > => {
+  const { data: user } = await userService.getSessionUser();
+
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.BASKET.READ)) {
+    throw new Error(
+      `${ERROR_MESSAGE} User has not the permission to getBasket`
+    );
+  }
+
   const recipes = await RecipeModel.getManyRecipeByIds(basket); // ORM request
 
   if (!recipes) {

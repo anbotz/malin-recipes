@@ -7,6 +7,8 @@ import userService from "@/lib/user/service";
 import { Batch, Recipe } from "@prisma/client";
 import { DateTime } from "luxon";
 import { CreateRecipeDefaultValueType } from "@/types/recipe";
+import { getPermissions } from "../permission";
+import { PERMISSIONS } from "../permission/const";
 
 const ERROR_MESSAGE = "Ai.service :";
 
@@ -21,6 +23,16 @@ const createBatchFromAi = async ({
   recipes: Recipe[];
   qt: number;
 }): Promise<ServiceResponse<Batch>> => {
+  const { data: user } = await userService.getSessionUser();
+
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.BATCH.COOK)) {
+    throw new Error(
+      `${ERROR_MESSAGE} User has not the permission to createBatchFromAi`
+    );
+  }
+
   const recipeIds = recipes.map(({ id }) => id);
   const recipeNames = recipes.map(({ name }) => name);
 
@@ -68,12 +80,15 @@ const createBatchFromAi = async ({
 
   const qt_token_used = completion.usage?.total_tokens;
 
-  const { data: user } = await userService.updateById(userId, {
+  const { data: updatedUser } = await userService.updateById(userId, {
     lockBatchExpiresAt: DateTime.now().plus(LOCK).toJSDate(),
     qt_token_used,
   });
 
-  const createdBy = { creator: user?.name ?? "Malin", userId: user.id };
+  const createdBy = {
+    creator: updatedUser?.name ?? "Malin",
+    userId: updatedUser.id,
+  };
 
   const { data: createdBatch } = await batchService.create({
     userId,
@@ -98,6 +113,14 @@ const scrapRecipeFromAi = async ({
   recipe: string;
 }): Promise<ServiceResponse<CreateRecipeDefaultValueType>> => {
   const { data: user } = await userService.getSessionUser();
+
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.RECIPE.SCRAP)) {
+    throw new Error(
+      `${ERROR_MESSAGE} User has not the permission to scrapRecipeFromAi`
+    );
+  }
 
   const completion = await AIclient.chat.completions.create({
     messages: [

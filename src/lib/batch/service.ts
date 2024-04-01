@@ -5,7 +5,7 @@ import BatchModel from "../../model/batch.model";
 import AiService from "@/lib/ai/service";
 import userService from "@/lib/user/service";
 import { CreateBatchData } from "@/types/batch";
-import { errorMessage, hasDuplicates, isDateExpired } from "../utils";
+import { hasDuplicates, isDateExpired } from "../utils";
 import { getPermissions } from "../permission";
 import { PERMISSIONS } from "../permission/const";
 
@@ -15,6 +15,16 @@ const shuffleUserBatch = async (
   id: MongoId,
   size: number
 ): Promise<ServiceResponse<string[]>> => {
+  const { data: user } = await userService.getSessionUser();
+
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.BATCH.READ)) {
+    throw new Error(
+      `${ERROR_MESSAGE} User has not the permission to shuffleUserBatch`
+    );
+  }
+
   const recipes = await RecipeModel.getManyRandom(size);
 
   if (!recipes) {
@@ -38,6 +48,14 @@ const getUserBatch = async (
   }>
 > => {
   const { data: user } = await userService.getSessionUser();
+
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.BATCH.READ)) {
+    throw new Error(
+      `${ERROR_MESSAGE} User has not the permission to getUserBatch`
+    );
+  }
 
   const batch = user.batch;
   const isBatchLocked = isDateExpired(user.lockBatchExpiresAt);
@@ -67,6 +85,14 @@ const getRecipesFromBatch = async (): Promise<
 > => {
   const { data: user } = await userService.getSessionUser();
 
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.BATCH.READ)) {
+    throw new Error(
+      `${ERROR_MESSAGE} User has not the permission to getRecipesFromBatch`
+    );
+  }
+
   const batch = user.batch;
 
   if (batch.length === 0) {
@@ -85,6 +111,16 @@ const getRecipesFromBatch = async (): Promise<
 const getBatchById = async (
   id: MongoId
 ): Promise<ServiceResponse<Batch | null>> => {
+  const { data: user } = await userService.getSessionUser();
+
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.BATCH.READ)) {
+    throw new Error(
+      `${ERROR_MESSAGE} User has not the permission to getBatchById`
+    );
+  }
+
   const data = await BatchModel.getById(id);
 
   return { data };
@@ -100,6 +136,12 @@ const create = async ({
 }: CreateBatchData): Promise<ServiceResponse<Batch>> => {
   console.log("creating batch ...");
   const { data: user } = await userService.getSessionUser();
+
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.BATCH.COOK)) {
+    throw new Error(`${ERROR_MESSAGE} User has not the permission to create`);
+  }
 
   const createdBy = { creator: user.name ?? "Malin", userId: user.id };
 
@@ -123,6 +165,16 @@ const create = async ({
 const getBatchByRecipeIds = async (
   recipeIds: MongoId[]
 ): Promise<ServiceResponse<Batch | null>> => {
+  const { data: user } = await userService.getSessionUser();
+
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.BATCH.READ)) {
+    throw new Error(
+      `${ERROR_MESSAGE} User has not the permission to getBatchByRecipeIds`
+    );
+  }
+
   const batchs = await BatchModel.getManyByRecipeIds(recipeIds);
 
   if (batchs === null) return { data: null };
@@ -168,6 +220,14 @@ const checkExistingBatch = async (): Promise<
 > => {
   const { data: user } = await userService.getSessionUser();
 
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.BATCH.COOK)) {
+    throw new Error(
+      `${ERROR_MESSAGE} User has not the permission to checkExistingBatch`
+    );
+  }
+
   const { data } = await getRecipesFromBatch();
 
   if (!data?.recipes || !data?.recipeIds) {
@@ -207,6 +267,12 @@ const generateFromAi = async ({
   const permissions = getPermissions(user);
 
   if (!permissions.includes(PERMISSIONS.BATCH.UNLIMITED_COOK)) {
+    if (!permissions.includes(PERMISSIONS.BATCH.COOK)) {
+      throw new Error(
+        `${ERROR_MESSAGE} User has not the permission to generateFromAi`
+      );
+    }
+
     const isBatchLocked = isDateExpired(user.lockBatchExpiresAt);
 
     if (isBatchLocked) {
@@ -236,6 +302,16 @@ const generateFromAi = async ({
 const searchBatch = async (
   query: Query
 ): Promise<ServiceResponse<{ data: Batch[]; total: number } | null>> => {
+  const { data: user } = await userService.getSessionUser();
+
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.BATCH.READ)) {
+    throw new Error(
+      `${ERROR_MESSAGE} User has not the permission to searchBatch`
+    );
+  }
+
   const data = await BatchModel.search(query);
 
   return { data };
@@ -244,6 +320,16 @@ const searchBatch = async (
 const deleteBatchById = async (
   id: MongoId
 ): Promise<ServiceResponse<Batch>> => {
+  const { data: user } = await userService.getSessionUser();
+
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.BATCH.DELETE)) {
+    throw new Error(
+      `${ERROR_MESSAGE} User has not the permission to deleteBatchById`
+    );
+  }
+
   const data = await BatchModel.deleteById(id);
 
   if (!data) {
@@ -260,6 +346,16 @@ const updateBatchById = async (
     description?: string;
   }
 ): Promise<ServiceResponse<Batch | null>> => {
+  const { data: user } = await userService.getSessionUser();
+
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.BATCH.BASIC_UPDATE)) {
+    throw new Error(
+      `${ERROR_MESSAGE} User has not the permission to updateBatchById`
+    );
+  }
+
   const updatedRecipe = await BatchModel.updateById({
     id,
     data: updatedData,

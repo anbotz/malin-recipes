@@ -5,6 +5,8 @@ import { s3Client } from "@/lib/s3/s3client";
 import userService from "@/lib/user/service";
 
 import { Health, IngredientLine, Recipe } from "@prisma/client";
+import { getPermissions } from "../permission";
+import { PERMISSIONS } from "../permission/const";
 
 const ERROR_MESSAGE = "Recipe.service :";
 
@@ -22,6 +24,14 @@ const createRecipe = async ({
   health: Health[];
 }): Promise<ServiceResponse<Recipe>> => {
   const { data: user } = await userService.getSessionUser();
+
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.RECIPE.CREATE)) {
+    throw new Error(
+      `${ERROR_MESSAGE} User has not the permission to createRecipe`
+    );
+  }
 
   const ingredients = ingredientLines.map(
     ({ quantity, unit, ingredient }) => `${quantity}${unit} ${ingredient}`
@@ -74,6 +84,16 @@ const getRecipeById = async (
 const deleteRecipeById = async (
   id: MongoId
 ): Promise<ServiceResponse<Recipe>> => {
+  const { data: user } = await userService.getSessionUser();
+
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.RECIPE.DELETE)) {
+    throw new Error(
+      `${ERROR_MESSAGE} User has not the permission to deleteRecipeById`
+    );
+  }
+
   const data = await RecipeModel.deleteById(id);
 
   if (!data) {
@@ -100,6 +120,16 @@ const updateRecipeById = async (
     qtCounter?: number;
   }
 ): Promise<ServiceResponse<Recipe>> => {
+  const { data: user } = await userService.getSessionUser();
+
+  const permissions = getPermissions(user);
+
+  if (!permissions.includes(PERMISSIONS.RECIPE.UPDATE)) {
+    throw new Error(
+      `${ERROR_MESSAGE} User has not the permission to updateRecipeById`
+    );
+  }
+
   const ingredients =
     updatedData.ingredientsStr && updatedData.ingredientsStr.length > 0
       ? updatedData.ingredientsStr?.split("\n")

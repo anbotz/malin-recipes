@@ -6,10 +6,13 @@ const RECIPE = {
 };
 
 const BATCH = {
+  READ: "BATCH.READ",
   COOK: "BATCH.COOK",
   UNLIMITED_COOK: "BATCH.UNLIMITED_COOK",
   BASIC_UPDATE: "BATCH.BASIC_UPDATE",
   DELETE: "BATCH.DELETE",
 };
 
-export const PERMISSIONS = { RECIPE, BATCH, ADMIN: "admin" };
+const BASKET = { READ: "BASKET.READ" };
+
+export const PERMISSIONS = { RECIPE, BATCH, BASKET, ADMIN: "admin" };

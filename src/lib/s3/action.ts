@@ -6,6 +6,8 @@ import { v4 } from "uuid";
 
 import { s3Client } from "./s3client";
 import { ServiceResponse } from "@/types/query";
+import { getPermissions } from "../permission";
+import { PERMISSIONS } from "../permission/const";
 
 const ERROR_MESSAGE = "S3.service :";
 
@@ -33,6 +35,13 @@ export const getSignedURL = async ({
   return new Promise(async (resolve, reject) => {
     try {
       const { data: user } = await userService.getSessionUser();
+      const permissions = getPermissions(user);
+
+      if (!permissions.includes(PERMISSIONS.RECIPE.UPDATE)) {
+        throw new Error(
+          `${ERROR_MESSAGE} User has not the permission to getSignedURL`
+        );
+      }
 
       if (!allowedFileTypes.includes(fileType)) {
         throw new Error(`${ERROR_MESSAGE} File type not allowed`);
