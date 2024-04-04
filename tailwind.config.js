@@ -6,6 +6,14 @@ module.exports = {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["forest", "lemonade"],
+    themes: [
+      {
+        forest: {
+          ...require("daisyui/src/theming/themes")["forest"],
+          "--rounded-btn": "0.5rem", // border radius rounded-btn utility class, used in buttons and similar element
+        },
+      },
+      "lemonade",
+    ],
   },
 };

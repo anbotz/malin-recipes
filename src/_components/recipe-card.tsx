@@ -30,7 +30,8 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
     setSelected(currentBasket.some((cbid) => cbid === recipe.id));
   }, [recipe.id]);
 
-  const onBasketClick = () => {
+  const onBasketClick = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     const currentBasket: string[] = JSON.parse(
       localStorage.getItem("basket") || "[]"
     );
@@ -42,18 +43,41 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
   };
 
   return (
-    <div className="indicator">
+    <div className="indicator hover:scale-105	ease-in-out duration-200 cursor-pointer">
       {isNew && (
         <span className="indicator-item badge badge-accent z-20 badge-lg text-wrap">
           <NewSvg />
         </span>
       )}
-      <div className="card card-compact image-full size-64">
-        <figure className="relative">
+      <div
+        className="card size-64 bg-base-300"
+        onClick={() => push("/recipe/" + recipe.id)}
+      >
+        {permissions.includes(ADMIN) && (
+          <div className="group absolute right-3 top-3 z-10">
+            <button
+              className={`btn flex group-hover:hidden ${
+                isSelected ? "btn-info hover:btn-error" : "btn-neutral"
+              }`}
+              onClick={onBasketClick}
+            >
+              <BasketSvg />
+            </button>
+            <button
+              className={`btn hidden group-hover:flex ${
+                isSelected ? "btn-info hover:btn-error" : "btn-success"
+              }`}
+              onClick={onBasketClick}
+            >
+              {isSelected ? <Remove /> : <Add />}
+            </button>
+          </div>
+        )}
+        <figure className="relative h-full">
           {imageUrl ? (
             <Image
               fill
-              style={{ objectFit: "contain", borderRadius: "1rem" }}
+              style={{ objectFit: "cover", borderRadius: "1rem 1rem 0 0" }}
               src={imageUrl}
               alt={`${name} image`}
               sizes="(min-width: 808px) 50vw, 100vw"
@@ -62,38 +86,10 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
             <DishSvg size={150} />
           )}
         </figure>
-        <div className="card-body flex justify-between w-64 min-w-0">
-          <h5 className="card-title line-clamp-1 hover:line-clamp-none hover:text-wrap hover:overflow-hidden">
+        <div className="flex">
+          <h5 className="font-semibold line-clamp-3 w-64 min-w-0 m-3 hover:text-wrap hover:overflow-hidden ">
             {name}
           </h5>
-          <div className="card-actions justify-end">
-            <button
-              className="btn btn-secondary"
-              onClick={() => push("/recipe/" + recipe.id)}
-            >
-              Accéder
-            </button>
-            {permissions.includes(ADMIN) && (
-              <div className="group">
-                <button
-                  className={`btn flex group-hover:hidden ${
-                    isSelected ? "btn-info hover:btn-error" : "btn-neutral"
-                  }`}
-                  onClick={onBasketClick}
-                >
-                  <BasketSvg />
-                </button>
-                <button
-                  className={`btn hidden group-hover:flex ${
-                    isSelected ? "btn-info hover:btn-error" : "btn-success"
-                  }`}
-                  onClick={onBasketClick}
-                >
-                  {isSelected ? <Remove /> : <Add />}
-                </button>
-              </div>
-            )}
-          </div>
         </div>
       </div>
     </div>
