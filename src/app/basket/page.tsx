@@ -6,6 +6,7 @@ import axios from "axios";
 import { IngredientLine } from "@prisma/client";
 
 import { v4 } from "uuid";
+import { Remove } from "@mui/icons-material";
 
 const IngredientList = ({
   lines,
@@ -52,10 +53,33 @@ const BasketPage = () => {
     });
   }, []);
 
+  const onEmpty = () => {
+    localStorage.setItem("basket", JSON.stringify([]));
+    setIngredients([]);
+    setRecipes([]);
+  };
+
   return (
-    <PageLayoutComponent title="Liste de course">
+    <PageLayoutComponent
+      title="Liste de course"
+      buttons={
+        <button
+          className={"btn  btn-error"}
+          onClick={onEmpty}
+          disabled={!recipes.length}
+        >
+          <Remove />
+          Vider le panier
+        </button>
+      }
+    >
       <Badges items={recipes} />
-      {ingredients && <IngredientList lines={ingredients} noContent="euh" />}
+      {ingredients && (
+        <IngredientList
+          lines={ingredients}
+          noContent="Selectionnez des recettes pour créer une liste de course"
+        />
+      )}
     </PageLayoutComponent>
   );
 };
