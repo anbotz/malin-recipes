@@ -9,25 +9,36 @@ import Image from "next/image";
 import { computeSHA256 } from "@/lib/utils";
 import { toast } from "sonner";
 import { Recipe } from "@prisma/client";
-
-const IMAGE_FILE_TYPE = ["image/jpeg", "image/png"];
+import { ALLOWED_IMAGE_TYPES, MAX_FILE_SIZE } from "@/lib/s3/upload.const";
+import { Alert } from "../alert";
 
 export const UploadImageForm = ({ recipe }: { recipe: Recipe }) => {
   const { back, push } = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string>("");
 
-  const accept = IMAGE_FILE_TYPE.join(",");
+  const accept = ALLOWED_IMAGE_TYPES.join(",");
 
   const { id } = recipe;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
+
     setFile(file);
+
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
     }
     if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+        return setError("Le fichier est trop lourd (1Mo max)");
+      } else if (!ALLOWED_IMAGE_TYPES.find((type) => type === file.type)) {
+        return setError("Le ficher n'est pas une image");
+      } else {
+        setError("");
+      }
+
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
     } else {
@@ -85,7 +96,8 @@ export const UploadImageForm = ({ recipe }: { recipe: Recipe }) => {
             className="btn btn-primary"
             type="submit"
             disabled={
-              (file && !IMAGE_FILE_TYPE.find((type) => type === file.type)) ??
+              (file &&
+                !ALLOWED_IMAGE_TYPES.find((type) => type === file.type)) ??
               false
             }
           >
@@ -111,6 +123,7 @@ export const UploadImageForm = ({ recipe }: { recipe: Recipe }) => {
           ) : null}
         </div>
       )}
+      {error.length > 0 && <Alert variant="error" message={error} />}
     </FormLayoutComponent>
   );
 };

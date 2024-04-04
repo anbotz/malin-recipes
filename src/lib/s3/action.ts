@@ -8,12 +8,9 @@ import { s3Client } from "./s3client";
 import { ServiceResponse } from "@/types/query";
 import { getPermissions } from "../permission";
 import { PERMISSIONS } from "../permission/const";
+import { ALLOWED_IMAGE_TYPES, MAX_FILE_SIZE } from "./upload.const";
 
 const ERROR_MESSAGE = "S3.service :";
-
-const allowedFileTypes = ["image/jpeg", "image/png"];
-
-const maxFileSize = 1048576 * 10; // 1 MB
 
 type GetSignedURLParams = {
   fileType: string;
@@ -43,11 +40,11 @@ export const getSignedURL = async ({
         );
       }
 
-      if (!allowedFileTypes.includes(fileType)) {
+      if (!ALLOWED_IMAGE_TYPES.includes(fileType)) {
         throw new Error(`${ERROR_MESSAGE} File type not allowed`);
       }
 
-      if (fileSize > maxFileSize) {
+      if (fileSize > MAX_FILE_SIZE) {
         throw new Error(`${ERROR_MESSAGE} File size too large`);
       }
 
