@@ -54,14 +54,14 @@ export const EditModal = ({
           label="Nom"
           placeholder="Nom du batch"
           name="name"
-          defaultValue={name ?? undefined}
+          defaultValue={name ?? ""}
           required
         />
         <MultilineTextFieldComponent
           label="Description"
           placeholder="Courte description du batch"
           name="description"
-          defaultValue={description ?? undefined}
+          defaultValue={description ?? ""}
         />
       </FormLayoutComponent>
     </ModalComponent>
