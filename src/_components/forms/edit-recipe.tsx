@@ -7,11 +7,12 @@ import { updateRecipeAction } from "@/lib/recipe/action";
 import { toast } from "sonner";
 import { NumberFieldComponent } from "../inputs/number-field";
 import { Recipe } from "@prisma/client";
+import { HealthFieldComponent } from "../inputs/health-field";
 
 export const EditRecipeForm = ({ recipe }: { recipe: Recipe }) => {
   const { back, push } = useRouter();
 
-  const { id, name, ingredients, instructions, qtCounter } = recipe;
+  const { id, name, ingredients, instructions, qtCounter, health } = recipe;
 
   const initialStringifiedIngredients = ingredients.join("\n");
   const initialStringifiedInstructions = instructions.join("\n");
@@ -54,6 +55,7 @@ export const EditRecipeForm = ({ recipe }: { recipe: Recipe }) => {
         name="qtCounter"
         required
       />
+      <HealthFieldComponent defaultValue={health} />
       <MultilineTextFieldComponent
         label="Ingrédients"
         name="ingredients"

@@ -118,6 +118,7 @@ const updateRecipeById = async (
     instructionsStr?: string;
     imageUrl?: string;
     qtCounter?: number;
+    health?: Health[];
   }
 ): Promise<ServiceResponse<Recipe>> => {
   const { data: user } = await userService.getSessionUser();
@@ -146,6 +147,7 @@ const updateRecipeById = async (
     instructions,
     imageUrl: updatedData.imageUrl,
     qtCounter: updatedData.qtCounter,
+    health: updatedData.health,
   };
 
   const updatedRecipe = await RecipeModel.updateById({ id, data });

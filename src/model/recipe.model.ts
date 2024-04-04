@@ -47,6 +47,7 @@ const getManyRandom = async (
   const pipeline = [];
 
   if (excludeIds && excludeIds.length > 0) {
+    // exclude current selected recipe
     const excludeObjectIds = excludeIds.map((id) => ({ $oid: id }));
 
     pipeline.push({
@@ -55,6 +56,15 @@ const getManyRandom = async (
       },
     });
   }
+
+  // exclude starter and dessert from batch
+  const excludedHealths: Health[] = ["starter", "dessert"];
+
+  pipeline.push({
+    $match: {
+      health: { $not: { $elemMatch: { $in: excludedHealths } } },
+    },
+  });
 
   pipeline.push({ $sample: { size } });
 

@@ -47,12 +47,14 @@ export const updateRecipeAction = async (
       const ingredientsStr = formData.get("ingredients") as string;
       const instructionsStr = formData.get("instructions") as string;
       const qtCounter = parseInt(formData.get("qtCounter") as string);
+      const health = HEALTHS.filter((h) => !!formData.get(`health.${h}`));
 
       await service.updateRecipeById(id, {
         name,
         ingredientsStr,
         instructionsStr,
         qtCounter,
+        health,
       });
 
       resolve(revalidatePath("/"));
