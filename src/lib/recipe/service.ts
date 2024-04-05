@@ -33,10 +33,6 @@ const createRecipe = async ({
     );
   }
 
-  const ingredients = ingredientLines.map(
-    ({ quantity, unit, ingredient }) => `${quantity}${unit} ${ingredient}`
-  );
-
   const instructions =
     instructionsStr.length > 0 ? instructionsStr.split("\n") : [];
 
@@ -44,7 +40,6 @@ const createRecipe = async ({
 
   const data = await RecipeModel.create({
     name,
-    ingredients,
     instructions,
     ingredientLines,
     qtCounter,
@@ -114,7 +109,6 @@ const updateRecipeById = async (
   id: MongoId,
   updatedData: {
     name?: string;
-    ingredientsStr?: string;
     instructionsStr?: string;
     imageUrl?: string;
     qtCounter?: number;
@@ -132,12 +126,7 @@ const updateRecipeById = async (
     );
   }
 
-  const { ingredientsStr, instructionsStr, ...rest } = updatedData;
-
-  const ingredients =
-    ingredientsStr && ingredientsStr.length > 0
-      ? updatedData.ingredientsStr?.split("\n")
-      : undefined;
+  const { instructionsStr, ...rest } = updatedData;
 
   const instructions =
     instructionsStr && instructionsStr.length > 0
@@ -145,7 +134,6 @@ const updateRecipeById = async (
       : undefined;
 
   const data = {
-    ingredients,
     instructions,
     ...rest,
   };

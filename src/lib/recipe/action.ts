@@ -45,7 +45,6 @@ export const updateRecipeAction = async (
   return new Promise(async (resolve, reject) => {
     try {
       const name = formData.get("name") as string;
-      const ingredientsStr = formData.get("ingredients") as string;
       const instructionsStr = formData.get("instructions") as string;
       const qtCounter = parseInt(formData.get("qtCounter") as string);
       const health = HEALTHS.filter((h) => !!formData.get(`health.${h}`));
@@ -58,7 +57,6 @@ export const updateRecipeAction = async (
 
       await service.updateRecipeById(id, {
         name,
-        ingredientsStr,
         instructionsStr,
         qtCounter,
         health,

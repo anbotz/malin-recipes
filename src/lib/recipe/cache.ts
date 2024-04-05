@@ -2,6 +2,7 @@ import { cache } from "react";
 import { MongoId } from "@/types/query";
 import service from "./service";
 import { Recipe } from "@prisma/client";
+import { ingredientLinesToString } from "../utils";
 
 const getCachedRecipes = cache(
   async ({
@@ -33,9 +34,7 @@ const getCachedRecipeById = cache(
 
         if (!data) return resolve(null);
 
-        const ingredients = data.ingredientLines.map(
-          ({ quantity, unit, ingredient }) => `${quantity}${unit} ${ingredient}`
-        );
+        const ingredients = ingredientLinesToString(data.ingredientLines);
 
         resolve({ ...data, ingredients });
       } catch (error: any) {

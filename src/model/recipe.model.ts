@@ -13,7 +13,6 @@ type RawRecipe = Recipe & {
 
 const create = async (recipe: {
   name: string;
-  ingredients: string[];
   instructions: string[];
   ingredientLines: IngredientLine[];
   qtCounter: number;

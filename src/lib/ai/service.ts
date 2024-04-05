@@ -9,6 +9,7 @@ import { DateTime } from "luxon";
 import { CreateRecipeDefaultValueType } from "@/types/recipe";
 import { getPermissions } from "../permission";
 import { PERMISSIONS } from "../permission/const";
+import { ingredientLinesToString } from "../utils";
 
 const ERROR_MESSAGE = "Ai.service :";
 
@@ -37,10 +38,10 @@ const createBatchFromAi = async ({
   const recipeNames = recipes.map(({ name }) => name);
 
   const formattedRecipes = recipes.map(
-    ({ name, ingredients, instructions, qtCounter }, index) => ({
+    ({ name, ingredientLines, instructions, qtCounter }, index) => ({
       index,
       name,
-      ingredients,
+      ingredients: ingredientLinesToString(ingredientLines),
       instructions,
       qtCounter,
     })

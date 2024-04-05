@@ -24,23 +24,21 @@ export const IngredientsFieldComponent = ({
           onClick={() =>
             setLines([
               ...lines,
-              // FIXME
               { uuid: v4(), quantity: 0, unit: "", ingredient: "" },
             ])
           }
           type="button"
-          className="btn btn-circle btn-xs ml-1"
+          className="btn btn-xs  "
         >
+          Ajouter
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-4 w-4"
-            fill="none"
             viewBox="0 0 24 24"
-            stroke="currentColor"
           >
             <path
               d="M4 12H20M12 4V20"
-              stroke="#000000"
+              stroke="currentColor"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"

@@ -1,4 +1,5 @@
 import { ServiceResponse } from "@/types/query";
+import { IngredientLine } from "@prisma/client";
 
 export const computeSHA256 = async (file: File) => {
   const buffer = await file.arrayBuffer();
@@ -24,3 +25,10 @@ export const isDateExpired = (date: Date | null): boolean =>
 export const hasDuplicates = (array: any[]): boolean => {
   return new Set(array).size !== array.length;
 };
+
+export const ingredientLinesToString = (
+  ingredientLines: IngredientLine[]
+): string[] =>
+  ingredientLines.map(
+    ({ quantity, unit, ingredient }) => `${quantity} ${unit} ${ingredient}`
+  );
