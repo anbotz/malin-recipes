@@ -119,6 +119,7 @@ const updateRecipeById = async (
     imageUrl?: string;
     qtCounter?: number;
     health?: Health[];
+    ingredientLines?: IngredientLine[];
   }
 ): Promise<ServiceResponse<Recipe>> => {
   const { data: user } = await userService.getSessionUser();
@@ -131,23 +132,22 @@ const updateRecipeById = async (
     );
   }
 
+  const { ingredientsStr, instructionsStr, ...rest } = updatedData;
+
   const ingredients =
-    updatedData.ingredientsStr && updatedData.ingredientsStr.length > 0
+    ingredientsStr && ingredientsStr.length > 0
       ? updatedData.ingredientsStr?.split("\n")
       : undefined;
 
   const instructions =
-    updatedData.instructionsStr && updatedData.instructionsStr.length > 0
+    instructionsStr && instructionsStr.length > 0
       ? updatedData.instructionsStr?.split("\n")
       : undefined;
 
   const data = {
-    name: updatedData.name,
     ingredients,
     instructions,
-    imageUrl: updatedData.imageUrl,
-    qtCounter: updatedData.qtCounter,
-    health: updatedData.health,
+    ...rest,
   };
 
   const updatedRecipe = await RecipeModel.updateById({ id, data });

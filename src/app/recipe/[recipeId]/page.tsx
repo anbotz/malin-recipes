@@ -27,6 +27,9 @@ export default async function RecipePage({
   const recipe = await recipeCache.getCachedRecipeById(recipeId);
 
   if (recipe === null) return notFound();
+
+  const { name, imageUrl, health, instructions, ingredients } = recipe;
+
   const {
     permissions,
     user: { id },
@@ -43,7 +46,7 @@ export default async function RecipePage({
   return (
     <PageLayoutComponent
       back
-      title={recipe.name}
+      title={name}
       buttons={
         <ManageRecipeComponent
           recipeId={recipeId}
@@ -52,35 +55,35 @@ export default async function RecipePage({
       }
     >
       <div className="relative">
-        {recipe.imageUrl && (
+        {imageUrl && (
           <Image
             className="absolute hidden lg:block right-0 mr-3"
-            src={recipe.imageUrl}
+            src={imageUrl}
             alt="recipe image"
             width="200"
             height="200"
           />
         )}
         <div className="flex -flex-row">
-          {recipe.health.includes("vegan") && <VeganSvg />}
-          {recipe.health.includes("vegetarian") && <VegetarianSvg />}
-          {recipe.health.includes("dessert") && <IceCreamSvg />}
+          {health.includes("vegan") && <VeganSvg />}
+          {health.includes("vegetarian") && <VegetarianSvg />}
+          {health.includes("dessert") && <IceCreamSvg />}
         </div>
 
         <ListLayout
-          items={recipe.ingredients}
+          items={ingredients}
           title="Ingrédients :"
           noContent="Aucun ingrédient indiqué"
           isGrid
         />
         <ListLayout
-          items={recipe.instructions}
+          items={instructions}
           title="Instructions :"
           noContent="Aucune instruction indiquée"
         />
         {userPermissions.delete && show && (
           <DeleteModal
-            deletedItemName={recipe.name}
+            deletedItemName={name}
             id={recipeId}
             deleteAction={deleteRecipeAction}
           />

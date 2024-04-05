@@ -39,7 +39,8 @@ export const createRecipeAction = async (
 
 export const updateRecipeAction = async (
   id: MongoId,
-  formData: FormData
+  formData: FormData,
+  lineUuids: string[]
 ): Promise<void> => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -49,12 +50,19 @@ export const updateRecipeAction = async (
       const qtCounter = parseInt(formData.get("qtCounter") as string);
       const health = HEALTHS.filter((h) => !!formData.get(`health.${h}`));
 
+      const ingredientLines: IngredientLine[] = lineUuids.map((uuid) => ({
+        quantity: parseInt(formData.get(`quantity-${uuid}`) as string),
+        unit: formData.get(`unit-${uuid}`) as string,
+        ingredient: formData.get(`ingredient-${uuid}`) as string,
+      }));
+
       await service.updateRecipeById(id, {
         name,
         ingredientsStr,
         instructionsStr,
         qtCounter,
         health,
+        ingredientLines,
       });
 
       resolve(revalidatePath("/"));

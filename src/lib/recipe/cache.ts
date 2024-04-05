@@ -31,7 +31,13 @@ const getCachedRecipeById = cache(
       try {
         const { data } = await service.getRecipeById(id);
 
-        resolve(data);
+        if (!data) return resolve(null);
+
+        const ingredients = data.ingredientLines.map(
+          ({ quantity, unit, ingredient }) => `${quantity}${unit} ${ingredient}`
+        );
+
+        resolve({ ...data, ingredients });
       } catch (error: any) {
         reject(new Error(error.message + " on getCachedRecipeById"));
       }

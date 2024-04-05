@@ -8,17 +8,28 @@ import { toast } from "sonner";
 import { NumberFieldComponent } from "../inputs/number-field";
 import { Recipe } from "@prisma/client";
 import { HealthFieldComponent } from "../inputs/health-field";
+import { useState } from "react";
+import {
+  IngredientLineUuid,
+  IngredientsFieldComponent,
+} from "../inputs/ingredients-field";
+import { v4 } from "uuid";
 
 export const EditRecipeForm = ({ recipe }: { recipe: Recipe }) => {
   const { back, push } = useRouter();
 
-  const { id, name, ingredients, instructions, qtCounter, health } = recipe;
+  const { id, name, instructions, qtCounter, health, ingredientLines } = recipe;
 
-  const initialStringifiedIngredients = ingredients.join("\n");
+  const [ingredientLinesUuid, setIngredientLinesUuid] = useState<
+    IngredientLineUuid[]
+  >(ingredientLines?.map((v) => ({ ...v, uuid: v4() })));
+
   const initialStringifiedInstructions = instructions.join("\n");
 
   const update = async (formData: FormData) => {
-    toast.promise(updateRecipeAction(id, formData), {
+    const uuids: string[] = ingredientLinesUuid.map(({ uuid }) => uuid);
+
+    toast.promise(updateRecipeAction(id, formData, uuids), {
       loading: "Modification...",
       success: "Recette modifiée",
       error: "Erreur lors de la modification de la recette",
@@ -55,14 +66,11 @@ export const EditRecipeForm = ({ recipe }: { recipe: Recipe }) => {
         name="qtCounter"
         required
       />
-      <HealthFieldComponent defaultValue={health} />
-      <MultilineTextFieldComponent
-        label="Ingrédients"
-        name="ingredients"
-        placeholder=""
-        defaultValue={initialStringifiedIngredients}
-        required
+      <IngredientsFieldComponent
+        lines={ingredientLinesUuid}
+        setLines={setIngredientLinesUuid}
       />
+      <HealthFieldComponent defaultValue={health} />
       <MultilineTextFieldComponent
         label="Instructions"
         name="instructions"
