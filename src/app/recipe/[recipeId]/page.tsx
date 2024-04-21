@@ -30,16 +30,15 @@ export default async function RecipePage({
 
   const { name, imageUrl, health, instructions, ingredients } = recipe;
 
-  const {
-    permissions,
-    user: { id },
-  } = await getAuthSession();
+  const { permissions, user } = await getAuthSession();
 
   const userPermissions = {
     update:
-      recipe?.createdBy?.userId === id || permissions.includes(RECIPE.UPDATE),
+      (user?.id && recipe?.createdBy?.userId === user.id) ||
+      permissions.includes(RECIPE.UPDATE),
     delete:
-      recipe?.createdBy?.userId === id || permissions.includes(RECIPE.DELETE),
+      (user?.id && recipe?.createdBy?.userId === user.id) ||
+      permissions.includes(RECIPE.DELETE),
     uploadImage: permissions.includes(RECIPE.UPDATE),
   };
 
